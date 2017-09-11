@@ -142,11 +142,11 @@ public class LoginBean implements Serializable {
 	public RedirectView logout() {
 		System.out.println("Fez Logout!!!!!!!!!!");
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("userLogged");
-		return new RedirectView("login");
+		return new RedirectView("/index");
 	}
 
 	public RedirectView redirectTologin() {
 		System.out.println("redirecionou p/ login");
-		return new RedirectView("login");
+		return new RedirectView("index");
 	}
 }

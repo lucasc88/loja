@@ -16,9 +16,12 @@ public class Authorizer implements PhaseListener {
 	public void afterPhase(PhaseEvent evento) {
 		FacesContext context = evento.getFacesContext();
 		String nomePagina = context.getViewRoot().getViewId();
+		
+		//pages without login
 		if (nomePagina.equals("/login.xhtml") || nomePagina.equals("/index.xhtml")) {
 			return;
 		}
+		
 		Client userLogged = (Client) context.getExternalContext().getSessionMap().get("userLogged");
 		if (userLogged != null) {
 			return;

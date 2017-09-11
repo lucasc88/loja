@@ -15,7 +15,7 @@
 				<div class="ui-g-12 ui-md-3 ui-lg-3">
 					<p:outputLabel value="Digite seu Email:" for="email" />
 					<p:inputText id="email" value="#{loginBean.user.email}"
-						required="true" requiredMessage="Email obrigatório"
+						required="true"
 						validatorMessage="Insira um formato correto de Email">
 						<f:validateRegex
 							pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
@@ -29,8 +29,7 @@
 					<p:outputLabel value="Digite sua Senha:" for="pass"
 						rendered="#{loginBean.showPasswordField}" />
 					<p:password id="pass" rendered="#{loginBean.showPasswordField}"
-						required="true" requiredMessage="Senha obrigatória"
-						value="#{loginBean.user.password}" />
+						required="true" value="#{loginBean.user.password}" />
 					<p:message for="pass" />
 				</div>
 
