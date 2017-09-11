@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="_template.xhtml">
+
+	<ui:define name="content">
+		<p:messages globalOnly="true" />
+
+		<h:form id="login">
+			<p:fieldset legend="Bem Vindo">
+				<div class="ui-g-12 ui-md-3 ui-lg-3">
+					<p:outputLabel value="Digite seu Email:" for="email" />
+					<p:inputText id="email" value="#{loginBean.user.email}"
+						required="true" requiredMessage="Email obrigatório"
+						validatorMessage="Insira um formato correto de Email">
+						<f:validateRegex
+							pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+					</p:inputText>
+					<br />
+					<p:message id="messageEmail" for="email" />
+					<p:commandButton value="Verificar Email" process="@this email"
+						actionListener="#{loginBean.checkUser}" update="@form"
+						rendered="#{!loginBean.showPasswordField and !loginBean.newUser}" />
+
+					<p:outputLabel value="Digite sua Senha:" for="pass"
+						rendered="#{loginBean.showPasswordField}" />
+					<p:password id="pass" rendered="#{loginBean.showPasswordField}"
+						required="true" requiredMessage="Senha obrigatória"
+						value="#{loginBean.user.password}" />
+					<p:message for="pass" />
+				</div>
+
+				<div class="ui-g-12 ui-md-9 ui-lg-9">
+					<p:outputPanel id="secondPart" rendered="#{loginBean.newUser}">
+						<p:wizard flowListener="#{loginBean.onFlowProcess}"
+							backLabel="Voltar" nextLabel="Próximo">
+							<p:tab id="personal" title="Pessoal">
+								<p:panel header="Dados Pessoais">
+									<h:panelGrid columns="3" columnClasses="value">
+										<p:outputLabel for="name" value="Nome: " />
+										<p:inputText id="name" value="#{loginBean.user.name}"
+											type="text" required="true"
+											requiredMessage="Nome obrigatório" label="Firstname" />
+										<p:message for="name" />
+
+										<p:outputLabel for="surname" value="Sobrenome: " />
+										<p:inputText id="surname" value="#{loginBean.user.lastName}"
+											type="text" required="true"
+											requiredMessage="Sobrenome obrigatório" label="Lastname" />
+										<p:message for="surname" />
+
+										<p:outputLabel for="birth" value="Data de Nascimento: " />
+										<p:calendar id="birth" value="#{loginBean.user.dateBirth}"
+											effect="fold" pattern="dd/MM/yyyy" mask="true"
+											timeZone="America/Sao_Paulo" required="true"
+											requiredMessage="Data obrigatória" />
+										<p:message for="birth" />
+
+										<p:outputLabel for="cpf" value="CPF: " />
+										<p:inputMask id="cpf" value="#{loginBean.user.cpf}"
+											mask="999.999.999-99" required="true"
+											requiredMessage="CPF obrigatória"
+											validator="#{userBean.isCpfValid}" />
+										<p:message for="cpf" />
+
+										<p:outputLabel id="announcement"
+											value="Deseja ser um anunciante? " />
+										<h:selectBooleanCheckbox value="#{loginBean.skip}" />
+										<p:tooltip for="announcement"
+											value="Anuncie os planos de assinatura de sua Empresa" />
+
+										<p:outputLabel for="pwd1" value="Senha: *" />
+										<p:password id="pwd1" value="#{loginBean.user.password}"
+											match="pwd2" label="Password 1" required="true"
+											requiredMessage="Senha obrigatória" feedback="true" />
+										<p:message for="pwd1" />
+										<p:outputLabel for="pwd2" value="Confirme a Senha: *" />
+										<p:password id="pwd2" value="#{loginBean.user.password}"
+											label="Password 2" required="true" feedback="true"
+											requiredMessage="Senha obrigatória" />
+										<p:message for="pwd2" />
+									</h:panelGrid>
+								</p:panel>
+							</p:tab>
+
+							<p:tab id="company" title="Empresa">
+								<p:panel header="Cadastro da sua Empresa">
+									<h:panelGrid columns="3" columnClasses="value">
+										<p:outputLabel value="Nome Fantasia: " for="nameFantasy" />
+										<p:inputText id="nameFantasy"
+											value="#{loginBean.company.nameFantasy}" required="true"
+											requiredMessage="Nome Obrigatório" />
+										<p:message for="nameFantasy" />
+
+										<p:outputLabel value="Razão Social: " for="reasonSocial" />
+										<p:inputText id="reasonSocial"
+											value="#{loginBean.company.reasonSocial}" required="true"
+											requiredMessage="Campo Obrigatório" />
+										<p:message for="reasonSocial" />
+
+										<p:outputLabel value="CNPJ: " for="cnpj" />
+										<p:inputText id="cnpj" value="#{loginBean.company.cnpj}"
+											required="true" requiredMessage="Campo Obrigatório"
+											validator="#{companyBean.isCnpjValid}" />
+										<p:message for="cnpj" />
+
+										<p:outputLabel value="Rua: " for="street" />
+										<p:inputText id="street" value="#{loginBean.company.street}"
+											required="true" requiredMessage="Campo Obrigatório" />
+										<p:message for="street" />
+
+										<p:outputLabel value="CEP: " for="cep" />
+										<p:inputText id="cep" value="#{loginBean.company.cep}"
+											required="true" requiredMessage="Campo Obrigatório" />
+										<p:message for="cep" />
+
+										<p:outputLabel value="Cidade: " for="city" />
+										<p:inputText id="city" value="#{loginBean.company.city}"
+											required="true" requiredMessage="Campo Obrigatório" />
+										<p:message for="city" />
+
+										<p:outputLabel value="Estado: " for="state" />
+										<p:inputText id="state" value="#{loginBean.company.state}"
+											required="true" requiredMessage="Campo Obrigatório" />
+										<p:message for="state" />
+									</h:panelGrid>
+								</p:panel>
+							</p:tab>
+
+							<p:tab id="confirm" title="Confirmação">
+								<p:panel header="Confirme seus Dados">
+									<div class="ui-g-12">
+										<div class="ui-g-12 ui-md-6">
+											<h3 style="font-weight: 900;">Dados Pessoais</h3>
+											<h:panelGrid columns="2" columnClasses="value">
+												<p:outputLabel value="Nome: " />
+												<h:outputText value="#{loginBean.user.name}"
+													styleClass="outputLabel" />
+
+												<p:outputLabel value="Sobrenome: " />
+												<h:outputText value="#{loginBean.user.lastName}"
+													styleClass="outputLabel" />
+
+												<p:outputLabel value="Email: " />
+												<h:outputText value="#{loginBean.user.email}"
+													styleClass="outputLabel" />
+
+												<p:outputLabel value="Nascimento: " />
+												<h:outputText value="#{loginBean.user.dateBirth}"
+													styleClass="outputLabel" />
+
+												<p:outputLabel value="CPF: " />
+												<h:outputText value="#{loginBean.user.cpf}"
+													styleClass="outputLabel" />
+											</h:panelGrid>
+										</div>
+										<div class="ui-g-12">
+											<p:separator />
+										</div>
+										<div class="ui-g-12 ui-md-6">
+											<h:panelGrid rendered="#{loginBean.company.cnpj != null}">
+												<h3 style="font-weight: 900;">Dados da Empresa</h3>
+											</h:panelGrid>
+											<h:panelGrid columns="2" columnClasses="value"
+												rendered="#{loginBean.company.cnpj != null}">
+												<p:outputLabel value="Nome Fantasia: " />
+												<h:outputText value="#{loginBean.company.nameFantasy}"
+													styleClass="outputLabel" />
+
+												<p:outputLabel value="Razão Social: " />
+												<h:outputText value="#{loginBean.company.reasonSocial}"
+													styleClass="outputLabel" />
+
+												<p:outputLabel value="CNPJ: " />
+												<h:outputText value="#{loginBean.company.cnpj}"
+													styleClass="outputLabel" />
+
+												<p:outputLabel value="Rua: " />
+												<h:outputText value="#{loginBean.company.street}"
+													styleClass="outputLabel" />
+
+												<p:outputLabel value="CEP: " />
+												<h:outputText value="#{loginBean.company.cep}"
+													styleClass="outputLabel" />
+
+												<p:outputLabel value="Cidade: " />
+												<h:outputText value="#{loginBean.company.city}"
+													styleClass="outputLabel" />
+
+												<p:outputLabel value="Estado: " />
+												<h:outputText value="#{loginBean.company.state}"
+													styleClass="outputLabel" />
+											</h:panelGrid>
+										</div>
+									</div>
+
+									<p:commandButton value="Salvar" process="@this"
+										style="width: 160px;"
+										disabled="#{loginBean.userAlreadyExists}"
+										actionListener="#{loginBean.save}" update="@form" />
+								</p:panel>
+							</p:tab>
+						</p:wizard>
+					</p:outputPanel>
+				</div>
+				<div class="ui-g-12">
+					<center>
+						<p:commandButton id="btnLogin" value="Efetuar Login"
+							style="width: 300px;height: 60px;" action="#{loginBean.login}"
+							update="@form" process="@form"
+							rendered="#{loginBean.userAlreadyExists}" />
+					</center>
+				</div>
+			</p:fieldset>
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+
+</html>

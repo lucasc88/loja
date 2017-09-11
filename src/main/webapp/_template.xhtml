@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:b="http://bootsfaces.net/ui">
+
+<h:head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	<title>Central da Assinatura</title>
+	<h:outputStylesheet library="bootstrap" name="css/bootstrap.min..css" />
+	<style>
+		.ui-widget-content {
+			border: none !important;
+		}
+	</style>
+</h:head>
+
+<h:body>
+
+	<div id="header">
+		<ui:insert name="header">
+			
+				<b:navBar brandImg="#{request.contextPath}/resources/img/logo.png" brandHref="#" brandImgStyle="max-width: 76px;margin-top: -20px;">
+					<b:navbarLinks>
+						<b:navLink value="Sobre" href="#" iconAwesome="fa-building-o"></b:navLink>
+						<b:dropMenu value="Dropdown" iconAwesome="birthday-cake">
+							<b:navLink value="Action" href="#"></b:navLink>
+							<b:navLink value="Another action" href="#"></b:navLink>
+							<b:navLink value="Something else here" href="#"></b:navLink>
+							<b:navLink></b:navLink>
+							<b:navLink header="Nav header"></b:navLink>
+							<b:navLink value="Separated link" href="#"></b:navLink>
+							<b:dropMenu value="Nested submenu" iconAwesome="birthday-cake"
+								iconAlign="right">
+								<b:navLink value="You can nest menus" href="#"></b:navLink>
+								<b:dropMenu value="Nested sub-submenu">
+									<b:navLink value="... as deep as ..." href="#"></b:navLink>
+									<b:dropMenu value="Nested sub-sub-submenu">
+										<b:navLink value="... you want!" href="#"></b:navLink>
+									</b:dropMenu>
+								</b:dropMenu>
+	
+							</b:dropMenu>
+							<b:navLink value="One more separated link" href="#"></b:navLink>
+						</b:dropMenu>
+					</b:navbarLinks>
+					<form class="navbar-form navbar-left hidden-md hidden-sm hidden-xs"
+						role="search">
+						<div class="form-group">
+							<input type="text" class="form-control" placeholder="O que procuras?" />
+						</div>
+						<p:button class="btn btn-default" icon="fa fa-fw fa-search"></p:button>
+					</form>
+					<!-- Following line is needed for TBS 3.0.1 (panel content overflow issue) -->
+					<b:navbarLinks pull="right">
+						<b:navLink value="    " href="#"></b:navLink>
+					</b:navbarLinks>
+					<b:navbarLinks pull="right">
+						<b:navLink >
+							<p:graphicImage library="img" name="carrinho.png" style="width: 40px;"/>
+						</b:navLink>
+						<b:dropMenu value="Minha Conta" iconAwesome="fa-user-o">
+							<b:navLink value="Action" href="#"></b:navLink>
+							<b:navLink value="Another action" href="#"></b:navLink>
+							<b:navLink value="Something else here" href="#"></b:navLink>
+							<b:navLink></b:navLink>
+							<b:navLink header="Nav header"></b:navLink>
+							<b:navLink value="Separated link" href="#"></b:navLink>
+							<h:form>
+								<p:commandLink rendered="#{userLogged == null}" value="Login" action="#{loginBean.redirectTologin}"/>
+								<p:commandLink rendered="#{userLogged != null}" value="Logout" action="#{loginBean.logout}"/>
+							</h:form>
+						</b:dropMenu>
+					</b:navbarLinks>
+				</b:navBar>
+		</ui:insert>
+	</div>
+
+	<p:growl id="messages" showDetail="true" autoUpdate="true" />
+
+	<div id="content" style="margin-top: 60px;">
+		<ui:insert name="content">
+		</ui:insert>
+	</div>
+	
+	<div id="footer" class="ui-g-12">
+		<ui:insert name="footer">
+			<p:panelGrid columns="4" layout="grid">
+				<p:commandLink value="Dicas para Anunciantes" />
+				<p:commandLink value="Perguntas Frequentes" />
+				<p:commandLink value="Política de Privacidade" />
+				<p:commandLink value="Termos de Uso" />
+			</p:panelGrid>
+		</ui:insert>
+	</div>
+</h:body>
+
+</html>
