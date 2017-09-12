@@ -45,7 +45,6 @@ public class LoginBean implements Serializable {
 	}
 
 	public void setUserAlreadyExists(boolean userAlreadyExists) {
-		System.out.println("setUserAlreadyExists(" + userAlreadyExists + ")");
 		this.userAlreadyExists = userAlreadyExists;
 	}
 
@@ -90,9 +89,7 @@ public class LoginBean implements Serializable {
 	}
 
 	public void checkUser() {
-		System.out.println(user.getEmail());
 		Client c = usuerDao.findByEmail(user.getEmail());
-		System.out.println("achou? " + (c != null));
 		if (c != null) {
 			setUserAlreadyExists(true);
 			setShowPasswordField(true);
@@ -131,7 +128,6 @@ public class LoginBean implements Serializable {
 	}
 
 	public RedirectView login() {
-		System.out.println("Fez Login!!!!!!!!!!");
 		Client c = usuerDao.findByEmail(user.getEmail());
 		if (c.getPassword() != null && c.getPassword().equals(user.getPassword())) {
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userLogged", this.user);
@@ -140,13 +136,11 @@ public class LoginBean implements Serializable {
 	}
 
 	public RedirectView logout() {
-		System.out.println("Fez Logout!!!!!!!!!!");
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("userLogged");
 		return new RedirectView("/index");
 	}
 
 	public RedirectView redirectTologin() {
-		System.out.println("redirecionou p/ login");
-		return new RedirectView("index");
+		return new RedirectView("login");
 	}
 }

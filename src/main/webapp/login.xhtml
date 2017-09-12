@@ -13,24 +13,26 @@
 		<h:form id="login">
 			<p:fieldset legend="Bem Vindo">
 				<div class="ui-g-12 ui-md-3 ui-lg-3">
-					<p:outputLabel value="Digite seu Email:" for="email" />
-					<p:inputText id="email" value="#{loginBean.user.email}"
-						required="true"
-						validatorMessage="Insira um formato correto de Email">
-						<f:validateRegex
-							pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
-					</p:inputText>
-					<br />
-					<p:message id="messageEmail" for="email" />
-					<p:commandButton value="Verificar Email" process="@this email"
-						actionListener="#{loginBean.checkUser}" update="@form"
-						rendered="#{!loginBean.showPasswordField and !loginBean.newUser}" />
-
-					<p:outputLabel value="Digite sua Senha:" for="pass"
-						rendered="#{loginBean.showPasswordField}" />
-					<p:password id="pass" rendered="#{loginBean.showPasswordField}"
-						required="true" value="#{loginBean.user.password}" />
-					<p:message for="pass" />
+					<div class="ui-g-12 ui-md-12 ui-lg-12">
+						<p:outputLabel value="Digite seu Email:" for="email" />
+						<p:inputText id="email" value="#{loginBean.user.email}"
+							required="true"
+							validatorMessage="Insira um formato correto de Email">
+							<f:validateRegex
+								pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+						</p:inputText>
+						<p:message id="messageEmail" for="email" />
+					</div>
+						<p:commandButton value="Verificar Email" process="@this email"
+							actionListener="#{loginBean.checkUser}" update="@form"
+							rendered="#{!loginBean.showPasswordField and !loginBean.newUser}" />
+					<div class="ui-g-12 ui-md-12 ui-lg-12">
+						<p:outputLabel value="Digite sua Senha:" for="pass"
+							rendered="#{loginBean.showPasswordField}" />
+						<p:password id="pass" rendered="#{loginBean.showPasswordField}"
+							required="true" value="#{loginBean.user.password}" />
+						<p:message for="pass" />
+					</div>
 				</div>
 
 				<div class="ui-g-12 ui-md-9 ui-lg-9">
@@ -39,48 +41,52 @@
 							backLabel="Voltar" nextLabel="Próximo">
 							<p:tab id="personal" title="Pessoal">
 								<p:panel header="Dados Pessoais">
-									<h:panelGrid columns="3" columnClasses="value">
+									<h:panelGrid columns="2" columnClasses="value">
 										<p:outputLabel for="name" value="Nome: " />
 										<p:inputText id="name" value="#{loginBean.user.name}"
-											type="text" required="true"
-											requiredMessage="Nome obrigatório" label="Firstname" />
+											type="text" required="true" label="Firstname" />
+										<br/>
 										<p:message for="name" />
 
 										<p:outputLabel for="surname" value="Sobrenome: " />
 										<p:inputText id="surname" value="#{loginBean.user.lastName}"
-											type="text" required="true"
-											requiredMessage="Sobrenome obrigatório" label="Lastname" />
+											type="text" required="true" label="Lastname" />
+										<br/>
 										<p:message for="surname" />
-
+										
 										<p:outputLabel for="birth" value="Data de Nascimento: " />
 										<p:calendar id="birth" value="#{loginBean.user.dateBirth}"
 											effect="fold" pattern="dd/MM/yyyy" mask="true"
-											timeZone="America/Sao_Paulo" required="true"
-											requiredMessage="Data obrigatória" />
+											timeZone="America/Sao_Paulo" required="true"/>
+										<br/>
 										<p:message for="birth" />
-
+										
+										
 										<p:outputLabel for="cpf" value="CPF: " />
 										<p:inputMask id="cpf" value="#{loginBean.user.cpf}"
 											mask="999.999.999-99" required="true"
-											requiredMessage="CPF obrigatória"
 											validator="#{userBean.isCpfValid}" />
+										<br/>
 										<p:message for="cpf" />
-
+										
+										
 										<p:outputLabel id="announcement"
 											value="Deseja ser um anunciante? " />
 										<h:selectBooleanCheckbox value="#{loginBean.skip}" />
 										<p:tooltip for="announcement"
 											value="Anuncie os planos de assinatura de sua Empresa" />
-
+										<br/>
+										
 										<p:outputLabel for="pwd1" value="Senha: *" />
 										<p:password id="pwd1" value="#{loginBean.user.password}"
-											match="pwd2" label="Password 1" required="true"
-											requiredMessage="Senha obrigatória" feedback="true" />
+											match="pwd2" label="Password 1" required="true" feedback="true" />
+										<br/>
 										<p:message for="pwd1" />
+										
 										<p:outputLabel for="pwd2" value="Confirme a Senha: *" />
 										<p:password id="pwd2" value="#{loginBean.user.password}"
-											label="Password 2" required="true" feedback="true"
-											requiredMessage="Senha obrigatória" />
+											label="Password 2" required="true" feedback="true"/>
+										<br/>
 										<p:message for="pwd2" />
 									</h:panelGrid>
 								</p:panel>
@@ -150,7 +156,9 @@
 
 												<p:outputLabel value="Nascimento: " />
 												<h:outputText value="#{loginBean.user.dateBirth}"
-													styleClass="outputLabel" />
+													styleClass="outputLabel">
+													<f:convertDateTime pattern="dd/MM/yyyy"/>	
+												</h:outputText>
 
 												<p:outputLabel value="CPF: " />
 												<h:outputText value="#{loginBean.user.cpf}"

@@ -15,6 +15,7 @@
 	</lifecycle>
 	
 	<application>
+		<!--Diz qual será o arquivo de validacoes de mensagens-->
 		<message-bundle>jsf_messages</message-bundle>
 	</application>
 
