@@ -1,8 +1,6 @@
 package br.com.centraldaassinatura.loja.bean.login;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -14,7 +12,6 @@ import org.primefaces.event.FlowEvent;
 
 import br.com.centraldaassinatura.loja.dao.client.ClientService;
 import br.com.centraldaassinatura.loja.model.Client;
-import br.com.centraldaassinatura.loja.model.Company;
 import br.com.centraldaassinatura.loja.util.RedirectView;
 
 @Named
@@ -30,7 +27,6 @@ public class LoginBean implements Serializable {
 	private boolean showPasswordField;
 	private String password;
 	private Client user = new Client();
-	private Company company = new Company();
 
 	public boolean isNewUser() {
 		return newUser;
@@ -80,14 +76,6 @@ public class LoginBean implements Serializable {
 		this.password = password;
 	}
 
-	public Company getCompany() {
-		return company;
-	}
-
-	public void setCompany(Company company) {
-		this.company = company;
-	}
-
 	public void checkUser() {
 		Client c = usuerDao.findByEmail(user.getEmail());
 		if (c != null) {
@@ -106,25 +94,7 @@ public class LoginBean implements Serializable {
 	}
 
 	public String onFlowProcess(FlowEvent event) {
-		if (!skip) {
-			// reset in case user goes back
-			skip = false;
-			user.setCompany(null);
-			company = new Company();
-			if (event.getNewStep().equals("company") && event.getOldStep().equals("confirm")
-					&& !isUserAlreadyExists()) {
-				return "personal";
-			}
-			return "confirm";
-		} else {
-			List<Company> list = new ArrayList<>();
-			list.add(company);
-			user.setCompany(list);
-			if (!isUserAlreadyExists()) {
-				return event.getNewStep();
-			}
-			return "confirm";
-		}
+		return event.getNewStep();
 	}
 
 	public RedirectView login() {

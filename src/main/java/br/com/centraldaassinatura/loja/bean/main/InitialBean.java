@@ -1,14 +1,17 @@
-package br.com.centraldaassinatura.loja.bean;
+package br.com.centraldaassinatura.loja.bean.main;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.inject.Model;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 import br.com.centraldaassinatura.loja.dao.category.CategoryService;
 import br.com.centraldaassinatura.loja.model.Category;
+import br.com.centraldaassinatura.loja.model.Client;
+import br.com.centraldaassinatura.loja.util.RedirectView;
 
 @Model
 public class InitialBean implements Serializable {
@@ -36,5 +39,14 @@ public class InitialBean implements Serializable {
 
 	public void setCategoriesSelected(List<Category> categoriesSelected) {
 		this.categoriesSelected = categoriesSelected;
+	}
+	
+	public RedirectView redirectAnnouncement(){
+		Client userLogged = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userLogged");
+		if (userLogged != null && userLogged.getCompany() != null && userLogged.getCompany().getValid() == true) {
+			return new RedirectView("/restrict/announcement");
+		} else {
+			return new RedirectView("/restrict/registerCompany");
+		}
 	}
 }

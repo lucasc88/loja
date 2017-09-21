@@ -67,6 +67,11 @@
 						<b:navLink >
 							<p:graphicImage library="img" name="carrinho.png" style="width: 40px;"/>
 						</b:navLink>
+						<b:navLink >
+							<h:form>
+								<p:commandButton rendered="#{userLogged != null}" value="Anunciar" action="#{initialBean.redirectAnnouncement}"/>
+							</h:form>
+						</b:navLink>
 						<b:dropMenu value="Minha Conta" iconAwesome="fa-user-o">
 							<b:navLink value="Action" href="#"></b:navLink>
 							<b:navLink value="Another action" href="#"></b:navLink>
@@ -75,8 +80,8 @@
 							<b:navLink header="Nav header"></b:navLink>
 							<b:navLink value="Separated link" href="#"></b:navLink>
 							<h:form>
-								<p:commandLink rendered="#{userLogged == null}" value="Login" action="#{loginBean.redirectTologin}"/>
-								<p:commandLink rendered="#{userLogged != null}" value="Logout" action="#{loginBean.logout}"/>
+								<p:commandButton rendered="#{userLogged == null}" value="Login" action="#{loginBean.redirectTologin}"/>
+								<p:commandButton rendered="#{userLogged != null}" value="Logout" action="#{loginBean.logout}"/>
 							</h:form>
 						</b:dropMenu>
 					</b:navbarLinks>
@@ -87,6 +92,7 @@
 	<p:growl id="messages" showDetail="true" autoUpdate="true" />
 
 	<div id="content" style="margin-top: 60px;">
+		<p:messages globalOnly="true" />
 		<ui:insert name="content">
 		</ui:insert>
 	</div>

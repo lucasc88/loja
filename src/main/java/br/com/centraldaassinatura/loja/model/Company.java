@@ -1,11 +1,12 @@
 package br.com.centraldaassinatura.loja.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Company {
@@ -17,10 +18,14 @@ public class Company {
 	private String reasonSocial;
 	private String cnpj;
 	private String street;
+	private String neighborhood;
 	private String cep;
 	private String city;
+	@Enumerated(EnumType.STRING)
+	private NaturesLegals legalNature;
 	private String state;
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	private Boolean valid;
+	@OneToOne
 	private Client client;
 
 	public Integer getId() {
@@ -59,6 +64,14 @@ public class Company {
 		this.street = street;
 	}
 
+	public String getNeighborhood() {
+		return neighborhood;
+	}
+
+	public void setNeighborhood(String neighborhood) {
+		this.neighborhood = neighborhood;
+	}
+
 	public String getCep() {
 		return cep;
 	}
@@ -81,6 +94,37 @@ public class Company {
 
 	public void setState(String state) {
 		this.state = state;
+	}
+
+	public Boolean getValid() {
+		return valid;
+	}
+
+	public void setValid(Boolean valid) {
+		this.valid = valid;
+	}
+
+	public NaturesLegals getLegalNature() {
+		return legalNature;
+	}
+
+	public void setLegalNature(NaturesLegals legalNature) {
+		this.legalNature = legalNature;
+	}
+
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
+	}
+
+	@Override
+	public String toString() {
+		return "Company: nameFantasy: " + nameFantasy + ", reasonSocial: " + reasonSocial + ", cnpj: " + cnpj
+				+ ", street: " + street + ", neighborhood: " + neighborhood + ", cep: " + cep + ", city: " + city
+				+ ", legalNature: " + legalNature + ", state: " + state + ", valid: " + valid + ", client: " + client;
 	}
 
 }

@@ -10,8 +10,8 @@
 		<!-- Login -->
 		<phase-listener>br.com.centraldaassinatura.loja.bean.login.Authorizer</phase-listener>
 
-		<!-- Define qual é a classe q captará o ciclo de vida JSF -->
-<!-- 		<phase-listener>br.com.centraldaassinatura.util.LogPhaseListener</phase-listener> -->
+<!-- 		Define qual é a classe q captará o ciclo de vida JSF -->
+		<phase-listener>br.com.centraldaassinatura.loja.util.LogPhaseListener</phase-listener>
 	</lifecycle>
 	
 	<application>

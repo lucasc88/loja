@@ -16,7 +16,7 @@ public class Announcement {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private String name;
+	private String title;
 	private String description;
 	private BigDecimal price;
 	@ManyToOne
@@ -26,12 +26,12 @@ public class Announcement {
 		return this.id;
 	}
 
-	public String getName() {
-		return this.name;
+	public String getTitle() {
+		return this.title;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setTitle(String name) {
+		this.title = name;
 	}
 
 	public String getDescription() {
@@ -64,7 +64,7 @@ public class Announcement {
 		int result = 1;
 		result = prime * result + ((category == null) ? 0 : category.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		return result;
 	}
 
@@ -87,17 +87,17 @@ public class Announcement {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (name == null) {
-			if (other.name != null)
+		if (title == null) {
+			if (other.title != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!title.equals(other.title))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Announcement: name: " + name + ", description: " + description + ", price: " + price + ", category: "
+		return "Announcement: title: " + title + ", description: " + description + ", price: " + price + ", category: "
 				+ category;
 	}
 
