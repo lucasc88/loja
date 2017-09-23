@@ -19,8 +19,15 @@ public enum NaturesLegals {
 	EMPRESA_DOMICILIADA_EXTERIOR("221-6", "Empresa Domiciliada no Exterior"),
 	FUNDO_INVESTIMENTO("222-4", "Clube/Fundo de Investimento"),
 	SOCIEDADE_SIMPLES_PURA("223-2", "Sociedade Simples Pura"),
-	SOCIEDADE_SIMPLES_LIMITADA("224-0", "Sociedade Simples Limitada");
-
+	SOCIEDADE_SIMPLES_LIMITADA("224-0", "Sociedade Simples Limitada"),
+	SOCIEDADE_SIMPLES_NOME_COLETIVO("225-9", "Sociedade Simples em Nome Coletivo"),
+	SOCIEDADE_SIMPLES_COMANDITA_SIMPLES("226-7", "Sociedade Simples em Comandita Simples"),
+	EMPRESA_BINACIONAL("227-5", "Empresa Binacional"),
+	CONSORCIO_EMPREGADOS("228-3", "Consórcio de Empregadores"),
+	CONSORCIO_SIMPLES("229-1", "Consórcio Simples"),
+	EMPRESA_INDIVIDUAL_EMPRESARIA("230-5", "Empresa Individual de Responsabilidade Limitada (de Natureza Empresária)"),
+	EMPRESA_INDIVIDUAL_SIMPLES("231-3", "Empresa Individual de Responsabilidade Limitada (de Natureza Simples)");
+	
     private String cod, name;
 
     NaturesLegals(String cod, String name){ 

@@ -100,7 +100,7 @@ public class LoginBean implements Serializable {
 	public RedirectView login() {
 		Client c = usuerDao.findByEmail(user.getEmail());
 		if (c.getPassword() != null && c.getPassword().equals(user.getPassword())) {
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userLogged", this.user);
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userLogged", c);
 		}
 		return new RedirectView("index");
 	}
