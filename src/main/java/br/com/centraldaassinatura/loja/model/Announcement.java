@@ -19,6 +19,9 @@ public class Announcement {
 	private String title;
 	private String description;
 	private BigDecimal price;
+	private String path;
+	@ManyToOne
+	private Company company;
 	@ManyToOne
 	private Category category;
 
@@ -48,6 +51,22 @@ public class Announcement {
 
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 
 	public Category getCategory() {

@@ -33,4 +33,9 @@ public class ClientService {
 		return clientDao.findByEmail(email);
 	}
 	
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public Client findById(Integer id) {
+		return clientDao.findById(id);
+	}
+	
 }

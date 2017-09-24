@@ -38,9 +38,13 @@ public class ClientDao {
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void persist(Client user) {
 		dao.persist(user);
-		;
 	}
 
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public Client findById(Integer id) {
+		return dao.findById(id);
+	}
+	
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public Client findByEmail(String email) {
 		TypedQuery<Client> query = em.createQuery("SELECT c FROM Client c WHERE c.email LIKE :email", Client.class);

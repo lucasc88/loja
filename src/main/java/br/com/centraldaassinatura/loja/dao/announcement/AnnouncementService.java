@@ -1,0 +1,30 @@
+package br.com.centraldaassinatura.loja.dao.announcement;
+
+import java.util.List;
+
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
+
+import br.com.centraldaassinatura.loja.model.Announcement;
+
+@Stateless
+@TransactionManagement(TransactionManagementType.CONTAINER)
+public class AnnouncementService {
+
+	@Inject
+	private AnnouncementDao announcementDao;
+	
+	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+	public List<Announcement> allCategories() {
+		return announcementDao.allCategories();
+	}
+
+	public void save(Announcement announcement) {
+		announcementDao.persist(announcement);
+	}
+	
+}

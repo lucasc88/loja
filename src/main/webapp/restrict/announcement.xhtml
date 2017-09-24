@@ -9,52 +9,47 @@
 <ui:composition template="../_template.xhtml">
 
 	<ui:define name="content">
-		<h:form id="formAnnouncement">
-			
-			<p:tab title="Dados da Empresa" rendered="#{!announcementBean.hasCompany}">
-	            <p:panel header="Preencha os dados da sua empresa">
-	            	<h3>Antes precisamos validar a sua empresa. É rápido!</h3>
-	            	<h3>usar webservice de validação de CNPJ p/ bater os dados q o usuario preencheu e pedir scaneamento do alvará!</h3>
-	            	<h3>Bolar uma leitura dessa foto de alvará para validar com o que consta no webservice</h3>
-	                <h:panelGrid columns="2" columnClasses="value">
-				        <p:outputLabel for="asd" value="CEP: " title="o CEP servirá como base p/ calcular o frete p/ o cliente"/>
-				        <p:inputMask id="asd" value="" mask="99999-999"/>
-				        <p:outputLabel value="#{}"/>
-	                </h:panelGrid>
-	            </p:panel>
-	        </p:tab>
-			
-			<p:wizard flowListener="#{announcementBean.onFlowProcess}" rendered="#{announcementBean.hasCompany}">
-		        <p:tab id="announcement1" title="Dados do Anúncio">
-		            <p:panel header="O que você quer anunciar?">
-		                <h:panelGrid columns="2" columnClasses="value">
-					        <p:outputLabel for="titulo" value="Título:" />
-					        <p:inputText id="titulo" value="#{announcementBean.announcement.title}"/>
-					        
-					        <p:outputLabel for="desc" value="Descrição:" />
-					        <p:inputTextarea id="desc" value="#{announcementBean.announcement.description}"/>
-					        
-					        <p:outputLabel for="price" value="Preço:" />
-					        <p:inputNumber id="price" value="#{announcementBean.announcement.price}"/>
-					        
-					        <p:outputLabel for="category" value="Categoria:" />
-					        <p:selectOneMenu id="category" value="#{announcementBean.announcement.category}" style="width:125px">
-					            <f:selectItem itemLabel="Selecione uma" itemValue="" />
-					            <f:selectItems value="#{announcementBean.categories}" />
-					        </p:selectOneMenu>
-					        
-					        <p:outputLabel for="img" value="Imagens: " />
-					        <p:fileUpload id="img" value="#{announcementBean.file}" mode="advanced" sizeLimit="6" />
-					        
-					        <p:outputLabel for="cep" value="CEP: " title="o CEP servirá como base p/ calcular o frete p/ o cliente"/>
-					        <p:inputMask id="cep" value="" mask="99999-999"/>
-		                </h:panelGrid>
-		            </p:panel>
-		        </p:tab>
-		    </p:wizard>
-		    
+		<h:form id="formAnnouncement" enctype="multipart/form-data">
+			<p:tab id="announcement1" title="Dados do Anúncio">
+				<p:panel header="O que você quer anunciar?">
+					<h:panelGrid columns="2" columnClasses="value">
+						<p:outputLabel for="titulo" value="Título:" />
+						<p:inputText id="titulo" required="true"
+							value="#{announcementBean.announcement.title}" />
+						<br/>
+						<p:message for="titulo"/>
+
+						<p:outputLabel for="desc" value="Descrição:" />
+						<p:inputTextarea id="desc" required="true"
+							value="#{announcementBean.announcement.description}" />
+						<br/>
+						<p:message for="desc"/>
+						
+						<p:outputLabel for="price" value="Preço:" />
+						<p:inputNumber id="price" required="true"
+							value="#{announcementBean.announcement.price}" />
+						<br/>
+						<p:message for="price"/>
+						
+						<p:outputLabel for="category" value="Categoria:" />
+						<p:selectOneMenu id="category" required="true" converter="categoryConverter"
+							value="#{announcementBean.announcement.category}"
+							style="width:125px">
+							<f:selectItem itemLabel="Selecione uma" itemValue="#{null}" />
+							<f:selectItems value="#{announcementBean.categories}" var="c"
+								itemLabel="#{c.name}" itemValue="#{c}"/>
+						</p:selectOneMenu>
+						<br/>
+						<p:message for="category"/>
+						
+						<p:outputLabel value="Imagens: " />
+						<h:inputFile id="img" value="#{announcementBean.images}"/>
+						<br/>
+					</h:panelGrid>
+				</p:panel>
+			</p:tab>
+			<p:commandButton value="Salvar" action="#{announcementBean.save}" ajax="false"/>
 		</h:form>
 	</ui:define>
-
 </ui:composition>
 </html>

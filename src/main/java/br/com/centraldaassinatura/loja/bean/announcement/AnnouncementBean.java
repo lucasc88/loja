@@ -1,22 +1,23 @@
 package br.com.centraldaassinatura.loja.bean.announcement;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.Part;
 
-import org.primefaces.event.FlowEvent;
-import org.primefaces.model.UploadedFile;
-
+import br.com.centraldaassinatura.loja.dao.announcement.AnnouncementService;
 import br.com.centraldaassinatura.loja.dao.category.CategoryService;
 import br.com.centraldaassinatura.loja.model.Announcement;
 import br.com.centraldaassinatura.loja.model.Category;
 import br.com.centraldaassinatura.loja.model.Client;
+import br.com.centraldaassinatura.loja.model.Company;
+import br.com.centraldaassinatura.loja.util.RedirectView;
 
 @Named
 @ViewScoped
@@ -26,19 +27,23 @@ public class AnnouncementBean implements Serializable {
 	private List<Category> categories;
 	private Category categorySelected;
 	private Announcement announcement = new Announcement();
-	private UploadedFile file;
-	private boolean hasCompany;
+//	private UploadedFile file;
+	private Part images;
+	private Company company;
 	@Inject
 	private CategoryService categoryService;
+	@Inject
+	private AnnouncementService announcementService;
 
 	@PostConstruct
-	public void init(){
-		Client userLogged = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userLogged");
+	public void init() {
+		Client userLogged = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+				.get("userLogged");
 		if (userLogged != null && userLogged.getCompany() != null) {
-			hasCompany = true;
+			company = userLogged.getCompany();
 		}
 	}
-	
+
 	public List<Category> getCategories() {
 		if (categories == null) {
 			categories = categoryService.allCategories();
@@ -65,29 +70,46 @@ public class AnnouncementBean implements Serializable {
 	public void setAnnouncement(Announcement announcement) {
 		this.announcement = announcement;
 	}
-	public UploadedFile getFile() {
-        return file;
-    }
- 
-    public void setFile(UploadedFile file) {
-        this.file = file;
-    }
-     
-    public boolean isHasCompany() {
-		return hasCompany;
+
+//	public UploadedFile getFile() {
+//		return file;
+//	}
+//
+//	public void setFile(UploadedFile file) {
+//		this.file = file;
+//	}
+
+	public Company getCompany() {
+		return company;
 	}
 
-	public void setHasCompany(boolean hasCompany) {
-		this.hasCompany = hasCompany;
+	public Part getImages() {
+		return images;
 	}
 
-	public void upload() {
-        if(file != null) {
-            FacesMessage message = new FacesMessage("Succesful", file.getFileName() + " is uploaded.");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-        }
-    }
-	public String onFlowProcess(FlowEvent event) {
-		return event.getNewStep();
+	public void setImages(Part images) {
+		this.images = images;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+
+//	public void upload(FileUploadEvent event) {
+//		UploadedFile uploadedFile = event.getFile();
+//	}
+
+	public RedirectView save() {
+		try {
+			String path = "/imagens/" + images.getSubmittedFileName();
+			//save in the disk
+			images.write(path);
+			announcement.setPath(path);
+			announcement.setCompany(company);
+			announcementService.save(announcement);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return new RedirectView("/index");
 	}
 }

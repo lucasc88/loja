@@ -1,11 +1,15 @@
 package br.com.centraldaassinatura.loja.model;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -27,6 +31,8 @@ public class Company {
 	private Boolean valid;
 	@OneToOne
 	private Client client;
+	@OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+	private List<Announcement> announcement;
 
 	public Integer getId() {
 		return id;
@@ -118,6 +124,14 @@ public class Company {
 
 	public void setClient(Client client) {
 		this.client = client;
+	}
+
+	public List<Announcement> getAnnouncement() {
+		return announcement;
+	}
+
+	public void setAnnouncement(List<Announcement> announcement) {
+		this.announcement = announcement;
 	}
 
 	@Override

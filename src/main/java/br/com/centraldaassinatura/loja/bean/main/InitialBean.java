@@ -9,6 +9,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 import br.com.centraldaassinatura.loja.dao.category.CategoryService;
+import br.com.centraldaassinatura.loja.dao.client.ClientService;
 import br.com.centraldaassinatura.loja.model.Category;
 import br.com.centraldaassinatura.loja.model.Client;
 import br.com.centraldaassinatura.loja.util.RedirectView;
@@ -19,6 +20,8 @@ public class InitialBean implements Serializable {
 	private static final long serialVersionUID = 4548068412310165579L;
 	@Inject
 	private CategoryService categoryService;
+	@Inject
+	private ClientService clientService;
 	private List<Category> categories;
 	private List<Category> categoriesSelected = new ArrayList<>();
 
@@ -43,6 +46,7 @@ public class InitialBean implements Serializable {
 	
 	public RedirectView redirectAnnouncement(){
 		Client userLogged = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userLogged");
+		userLogged = clientService.findById(userLogged.getId());
 		if (userLogged != null && userLogged.getCompany() != null && userLogged.getCompany().getValid() == true) {
 			return new RedirectView("/restrict/announcement");
 		} else {

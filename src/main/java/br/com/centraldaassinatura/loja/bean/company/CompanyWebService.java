@@ -64,7 +64,6 @@ public class CompanyWebService {
 		company.setNameFantasy("");
 		Client userLogged = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.get("userLogged");
-		System.out.println(userLogged);
 		company.setClient(userLogged);
 		return company;
 	}

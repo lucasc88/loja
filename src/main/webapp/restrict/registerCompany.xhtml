@@ -55,8 +55,7 @@
 
 										<p:outputLabel for="legalNature" value="Natureza Jurídica: " />
 										<p:selectOneMenu id="legalNature" required="true"
-											value="#{companyBean.company.legalNature}"
-											style="width: 280px;">
+											value="#{companyBean.company.legalNature}" style="width: 280px;">
 											<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
 											<f:selectItems value="#{companyBean.legalsNatures}" var="nl"
 												itemLabel="#{nl.name}" itemValue="#{nl}" />
