@@ -11,6 +11,7 @@ import javax.faces.context.FacesContext;
 
 import org.primefaces.json.JSONObject;
 
+import br.com.centraldaassinatura.loja.model.Address;
 import br.com.centraldaassinatura.loja.model.Client;
 import br.com.centraldaassinatura.loja.model.Company;
 import br.com.centraldaassinatura.loja.model.NaturesLegals;
@@ -53,17 +54,25 @@ public class CompanyWebService {
 	private static Company buildCompany(JSONObject json) {
 		Company company = new Company();
 		company.setCnpj(json.getString("cnpj"));
-		company.setCep(json.getString("cep"));
-		company.setCity(json.getString("municipio"));
 		company.setLegalNature(findLegalNature(json));
-		company.setState(json.getString("uf"));
-		company.setStreet(json.getString("logradouro") + ", " + json.getString("numero"));
-		company.setNeighborhood(json.getString("bairro"));
 		company.setReasonSocial(json.getString("nome"));
 		company.setValid(true);
 		company.setNameFantasy("");
+		
 		Client userLogged = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.get("userLogged");
+		
+		Address address = new Address();
+		address.setCep(json.getString("cep"));
+		address.setCity(json.getString("municipio"));
+		address.setClient(userLogged);
+		address.setCompany(company);
+		address.setNeighborhood(json.getString("bairro"));
+		address.setNumber(Integer.parseInt(json.getString("numero")));
+		address.setState(json.getString("uf"));
+		address.setStreet(json.getString("logradouro"));
+		
+		company.setAddress(address);
 		company.setClient(userLogged);
 		return company;
 	}

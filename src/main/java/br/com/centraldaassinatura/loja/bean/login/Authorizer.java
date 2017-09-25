@@ -18,7 +18,7 @@ public class Authorizer implements PhaseListener {
 		String nomePagina = context.getViewRoot().getViewId();
 		
 		//pages without login
-		if (nomePagina.equals("/login.xhtml") || nomePagina.equals("/index.xhtml")) {
+		if (!nomePagina.contains("/restrict/")) {
 			return;
 		}
 		

@@ -81,7 +81,49 @@
 									</h:panelGrid>
 								</p:panel>
 							</p:tab>
-
+							
+							<p:tab id="address" title="Endereço">
+								<p:panel header="Endereço p/ Entrega">
+									<h:panelGrid columns="2" columnClasses="value">
+										<p:outputLabel for="street" value="Rua: " />
+										<p:inputText id="street" value="#{loginBean.address.street}"
+											type="text" required="true"/>
+										<br/>
+										<p:message for="street" />
+										
+										<p:outputLabel for="number" value="Número: "/>
+										<p:inputNumber id="number" required="true"
+											value="#{loginBean.address.number}"/>
+										<br/>
+										<p:message for="number" />
+										
+										<p:outputLabel for="neighborhood" value="Bairro: " />
+										<p:inputText id="neighborhood" required="true"
+											value="#{loginBean.address.neighborhood}"/>
+										<br/>
+										<p:message for="neighborhood" />
+										
+										<p:outputLabel for="cep" value="CEP: " />
+										<p:inputMask id="cep" value="#{loginBean.address.cep}"
+											mask="99.999-999" required="true"/>
+										<br/>
+										<p:message for="cep" />
+										
+										<p:outputLabel for="city" value="Cidade: " />
+										<p:inputText id="city" required="true"
+											value="#{loginBean.address.city}"/>
+										<br/>
+										<p:message for="city" />
+										
+										<p:outputLabel for="state" value="Estado: " />
+										<p:inputText id="state" required="true"
+											value="#{loginBean.address.state}"/>
+										<br/>
+										<p:message for="state" />
+									</h:panelGrid>
+								</p:panel>
+							</p:tab>
+							
 							<p:tab id="confirm" title="Confirmação">
 								<p:panel header="Confirme seus Dados">
 									<div class="ui-g-12">
@@ -109,6 +151,23 @@
 												<p:outputLabel value="CPF: " />
 												<h:outputText value="#{loginBean.user.cpf}"
 													styleClass="outputLabel" />
+													
+												<p:outputLabel value="Endereço: " />
+												<h:outputText value="#{loginBean.address.street}, #{loginBean.address.number}"
+													styleClass="outputLabel" />
+													
+												<p:outputLabel value="Bairro: " />
+												<h:outputText value="#{loginBean.address.neighborhood}"
+													styleClass="outputLabel" />
+													
+												<p:outputLabel value="Cidade: " />
+												<h:outputText value="#{loginBean.address.city}"
+													styleClass="outputLabel" />
+												
+												<p:outputLabel value="Estado: " />
+												<h:outputText value="#{loginBean.address.state}"
+													styleClass="outputLabel" />
+												
 											</h:panelGrid>
 										</div>
 									</div>

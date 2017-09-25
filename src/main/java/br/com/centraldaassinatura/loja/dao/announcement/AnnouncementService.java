@@ -19,12 +19,20 @@ public class AnnouncementService {
 	private AnnouncementDao announcementDao;
 	
 	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	public List<Announcement> allCategories() {
-		return announcementDao.allCategories();
+	public List<Announcement> allAnnouncement() {
+		return announcementDao.allAnnouncement();
 	}
 
+	public Announcement findById(Integer id) {
+		return announcementDao.findById(id);
+	}
+	
 	public void save(Announcement announcement) {
 		announcementDao.persist(announcement);
 	}
 	
+	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+	public List<Announcement> lastAnnouncements(){
+		return announcementDao.lastAnnouncements();
+	}
 }

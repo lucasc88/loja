@@ -1,12 +1,15 @@
 package br.com.centraldaassinatura.loja.model;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -26,6 +29,10 @@ public class Client {
 	private String password;
 	@OneToOne(mappedBy = "client", fetch = FetchType.EAGER)
 	private Company company;
+	@OneToOne(cascade = CascadeType.ALL)
+	private Address address;
+	@OneToMany(mappedBy = "client")
+	private List<Subscription> subscription;
 
 	public Integer getId() {
 		return id;
@@ -87,11 +94,26 @@ public class Client {
 		this.company = company;
 	}
 
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
+	public List<Subscription> getSubscription() {
+		return subscription;
+	}
+
+	public void setSubscription(List<Subscription> subscription) {
+		this.subscription = subscription;
+	}
+
 	@Override
 	public String toString() {
 		return "name: " + name + ", lastName: " + lastName + ", email: " + email + ", dateBirth: " + dateBirth
 				+ ", cpf: " + cpf + ", company: " + company;
 	}
-	
-	
+
 }

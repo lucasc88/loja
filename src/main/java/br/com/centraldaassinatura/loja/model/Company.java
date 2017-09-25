@@ -2,6 +2,7 @@ package br.com.centraldaassinatura.loja.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -21,14 +22,11 @@ public class Company {
 	private String nameFantasy;
 	private String reasonSocial;
 	private String cnpj;
-	private String street;
-	private String neighborhood;
-	private String cep;
-	private String city;
 	@Enumerated(EnumType.STRING)
 	private NaturesLegals legalNature;
-	private String state;
 	private Boolean valid;
+	@OneToOne(cascade = CascadeType.ALL)
+	private Address address;
 	@OneToOne
 	private Client client;
 	@OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
@@ -62,44 +60,12 @@ public class Company {
 		this.cnpj = cnpj;
 	}
 
-	public String getStreet() {
-		return street;
+	public Address getAddress() {
+		return address;
 	}
 
-	public void setStreet(String street) {
-		this.street = street;
-	}
-
-	public String getNeighborhood() {
-		return neighborhood;
-	}
-
-	public void setNeighborhood(String neighborhood) {
-		this.neighborhood = neighborhood;
-	}
-
-	public String getCep() {
-		return cep;
-	}
-
-	public void setCep(String cep) {
-		this.cep = cep;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
 	public Boolean getValid() {
@@ -137,8 +103,7 @@ public class Company {
 	@Override
 	public String toString() {
 		return "Company: nameFantasy: " + nameFantasy + ", reasonSocial: " + reasonSocial + ", cnpj: " + cnpj
-				+ ", street: " + street + ", neighborhood: " + neighborhood + ", cep: " + cep + ", city: " + city
-				+ ", legalNature: " + legalNature + ", state: " + state + ", valid: " + valid + ", client: " + client;
+				+ ", legalNature: " + legalNature + ", valid: " + valid + ", client: " + client;
 	}
 
 }

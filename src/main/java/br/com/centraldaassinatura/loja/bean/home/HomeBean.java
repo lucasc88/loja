@@ -1,27 +1,34 @@
-package br.com.centraldaassinatura.loja.bean.main;
+package br.com.centraldaassinatura.loja.bean.home;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.enterprise.inject.Model;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import br.com.centraldaassinatura.loja.dao.announcement.AnnouncementService;
 import br.com.centraldaassinatura.loja.dao.category.CategoryService;
 import br.com.centraldaassinatura.loja.dao.client.ClientService;
+import br.com.centraldaassinatura.loja.model.Announcement;
 import br.com.centraldaassinatura.loja.model.Category;
 import br.com.centraldaassinatura.loja.model.Client;
 import br.com.centraldaassinatura.loja.util.RedirectView;
 
-@Model
-public class InitialBean implements Serializable {
+@Named
+@ViewScoped
+public class HomeBean implements Serializable {
 
 	private static final long serialVersionUID = 4548068412310165579L;
 	@Inject
 	private CategoryService categoryService;
 	@Inject
 	private ClientService clientService;
+	@Inject
+	private AnnouncementService announcementService;
+	private List<Announcement> announcements;
 	private List<Category> categories;
 	private List<Category> categoriesSelected = new ArrayList<>();
 
@@ -34,6 +41,17 @@ public class InitialBean implements Serializable {
 			categories = categoryService.allCategories();
 		}
 		return categories;
+	}
+
+	public List<Announcement> getAnnouncements() {
+		if(announcements == null){
+			announcements = announcementService.lastAnnouncements();
+		}
+		return announcements;
+	}
+
+	public void setAnnouncements(List<Announcement> announcements) {
+		this.announcements = announcements;
 	}
 
 	public List<Category> getCategoriesSelected() {

@@ -11,6 +11,7 @@ import javax.inject.Named;
 import org.primefaces.event.FlowEvent;
 
 import br.com.centraldaassinatura.loja.dao.client.ClientService;
+import br.com.centraldaassinatura.loja.model.Address;
 import br.com.centraldaassinatura.loja.model.Client;
 import br.com.centraldaassinatura.loja.util.RedirectView;
 
@@ -27,6 +28,7 @@ public class LoginBean implements Serializable {
 	private boolean showPasswordField;
 	private String password;
 	private Client user = new Client();
+	private Address address = new Address();
 
 	public boolean isNewUser() {
 		return newUser;
@@ -50,6 +52,14 @@ public class LoginBean implements Serializable {
 
 	public void setUser(Client user) {
 		this.user = user;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
 	public boolean isSkip() {
@@ -87,6 +97,7 @@ public class LoginBean implements Serializable {
 	}
 
 	public void save() {
+		user.setAddress(address);
 		usuerDao.save(user);
 		setUserAlreadyExists(true);
 		FacesMessage msg = new FacesMessage("Salvo com Sucesso", "Já pode logar " + user.getEmail());

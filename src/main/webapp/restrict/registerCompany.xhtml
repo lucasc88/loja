@@ -10,10 +10,10 @@
 	<ui:define name="content">
 		<h:head>
 			<style>
-.inputFields {
-	min-width: 250px;
-}
-</style>
+				.inputFields {
+					min-width: 250px;
+				}
+			</style>
 		</h:head>
 
 		<h:form id="formAnnouncement">
@@ -64,35 +64,35 @@
 										<p:message for="legalNature" />
 
 										<p:outputLabel for="street" value="Logradouro: " />
-										<p:inputText id="street" value="#{companyBean.company.street}"
+										<p:inputText id="street" value="#{companyBean.company.address.street}"
 											type="text" required="true" styleClass="inputFields" />
 										<br />
 										<p:message for="street" />
 
 										<p:outputLabel for="neighborhood" value="Bairro: " />
 										<p:inputText id="neighborhood" styleClass="inputFields"
-											value="#{companyBean.company.neighborhood}" type="text"
+											value="#{companyBean.company.address.neighborhood}" type="text"
 											required="true" />
 										<br />
 										<p:message for="neighborhood" />
 
 										<p:outputLabel for="cep" value="CEP: " />
 										<p:inputText id="cep" styleClass="inputFields"
-											value="#{companyBean.company.cep}" type="text"
+											value="#{companyBean.company.address.cep}" type="text"
 											required="true" />
 										<br />
 										<p:message for="cep" />
 
 										<p:outputLabel for="city" value="Cidade: " />
 										<p:inputText id="city" styleClass="inputFields"
-											value="#{companyBean.company.city}" type="text"
+											value="#{companyBean.company.address.city}" type="text"
 											required="true" />
 										<br />
 										<p:message for="city" />
 
 										<p:outputLabel for="state" value="Estado: " />
 										<p:inputText id="state" styleClass="inputFields"
-											value="#{companyBean.company.state}" type="text"
+											value="#{companyBean.company.address.state}" type="text"
 											required="true" />
 										<br />
 										<p:message for="state" />
@@ -117,19 +117,19 @@
 													value="#{companyBean.company.legalNature.name}" />
 
 												<p:outputLabel value="Logradouro: " />
-												<p:outputLabel value="#{companyBean.company.street}" />
+												<p:outputLabel value="#{companyBean.company.address.street}, #{companyBean.company.address.number}" />
 
 												<p:outputLabel value="Bairro: " />
-												<p:outputLabel value="#{companyBean.company.neighborhood}" />
+												<p:outputLabel value="#{companyBean.company.address.neighborhood}" />
 
 												<p:outputLabel value="CEP: " />
-												<p:outputLabel value="#{companyBean.company.cep}" />
+												<p:outputLabel value="#{companyBean.company.address.cep}" />
 
 												<p:outputLabel value="Cidade: " />
-												<p:outputLabel value="#{companyBean.company.city}" />
+												<p:outputLabel value="#{companyBean.company.address.city}" />
 
 												<p:outputLabel value="Estado: " />
-												<p:outputLabel value="#{companyBean.company.state}" />
+												<p:outputLabel value="#{companyBean.company.address.state}" />
 
 												<p:outputLabel value="Responsável pela Empresa: " />
 												<p:outputLabel value="#{companyBean.company.client.cpf}" />

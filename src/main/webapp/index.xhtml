@@ -10,53 +10,52 @@
 
 	<ui:define name="content">
 		<div class="ui-g-12">
-			<div class="ui-g-12 ui-md-4 ui-lg-3">
-				<h:form>
+			<h:form id="formMain">
+				<div class="ui-g-12 ui-md-4 ui-lg-3">
 					<p:fieldset legend="Categorias" style="margin-bottom:20px"
 						toggleable="true" toggleSpeed="500">
 						<h:panelGrid columns="1" cellpadding="5">
 							<p:selectManyCheckbox id="grid2" layout="responsive"
-								value="#{initialBean.categoriesSelected}" columns="1">
-								<f:selectItems value="#{initialBean.categories}" var="cat"
+								value="#{homeBean.categoriesSelected}" columns="1">
+								<f:selectItems value="#{homeBean.categories}" var="cat"
 									itemLabel="#{cat.name}" itemValue="#{cat}" />
 							</p:selectManyCheckbox>
 						</h:panelGrid>
 					</p:fieldset>
-				</h:form>
-			</div>
-			<div class="ui-g-12 ui-md-8 ui-lg-9">
-				<p:dataGrid var="car" value="#{initialBean.categories}" columns="3" layout="grid" id="cars">
-			        <f:facet name="header">
-			            Últimos Anúncios
-			        </f:facet>
-			        <p:panel header="#{car.name}" style="text-align:center">
-			            <h:panelGrid columns="2" style="width:100%">
-			                <p:graphicImage library="img" name="logo.png" style="width: 30px;"/> 
-			                <h:outputText value="#{car.name}" />
-			            </h:panelGrid>
-			        </p:panel>
-			    </p:dataGrid>
-			</div>
-			
-			<div class="ui-g-12">
-				<p:carousel value="#{initialBean.categories}" circular="true"
-					headerText="Mais Vendidos" var="car" itemStyle="text-align:center"
-					responsive="true">
-					<p:panelGrid columns="2" style="width:100%;margin:10px 0px"
-						columnClasses="label,value" layout="grid"
-						styleClass="ui-panelgrid-blank">
-						<f:facet name="header">
-							<p:graphicImage library="img" name="logo.png"
-								style="width: 30px;" />
-						</f:facet>
-						<h:outputText value="#{car.name}" />
-						<h:outputText value="Descrição blá blá blábláblábláblá  bláblá" />
-					</p:panelGrid>
-				</p:carousel>
-			</div>
-		    
+				</div>
+				<div class="ui-g-12 ui-md-8 ui-lg-9">
+					<p:dataGrid id="announcements" value="#{homeBean.announcements}" var="a" columns="3" layout="grid">
+				        <f:facet name="header">
+				            Últimos Anúncios
+				        </f:facet>
+				        <a href="#{request.contextPath}/assinatura-detalhe.xhtml?id=#{a.id}">
+					        <p:panel header="#{a.title}" style="text-align:center">
+					            <h:panelGrid columns="1" style="width:100%">
+					                <img style="width: 250px;" src="#{request.contextPath}/file/#{a.path}" alt="#{a.title}"/>
+					                <h:outputText value="#{a.description}" />
+					            </h:panelGrid>
+					        </p:panel>
+						</a>
+				    </p:dataGrid>
+				</div>
+				
+				<div class="ui-g-12">
+					<p:carousel value="#{homeBean.announcements}" circular="true"
+						headerText="Mais Vendidos" var="a" itemStyle="text-align:center"
+						responsive="true">
+						<p:panelGrid columns="2" style="width:100%;margin:10px 0px"
+							columnClasses="label,value" layout="grid"
+							styleClass="ui-panelgrid-blank">
+							<f:facet name="header">
+								<img style="width: 250px;" src="#{request.contextPath}/file/#{a.path}" alt="#{a.title}"/>
+							</f:facet>
+							<h:outputText value="#{a.title}" />
+							<h:outputText value="#{a.description}" />
+						</p:panelGrid>
+					</p:carousel>
+				</div>
+			</h:form>
 		</div>
 	</ui:define>
-
 </ui:composition>
 </html>
