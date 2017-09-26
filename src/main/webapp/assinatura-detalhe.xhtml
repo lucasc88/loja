@@ -14,99 +14,97 @@
 	</f:metadata>
 
 	<ui:define name="content">
-		<div class="container">
+		<div class="jumbotron">
+			<h1>#{subscriptionDetailBean.ann.title}</h1>
+			<p>#{subscriptionDetailBean.ann.description}</p>
+		</div>
+		<div class="col-sm-7">
+			<img class="img-thumbnail img-responsive" style="margin: 0 auto;"
+				src="#{request.contextPath}/file/#{subscriptionDetailBean.ann.path}"
+				alt="#{subscriptionDetailBean.ann.title}" />
+		</div>
+		<div class="col-sm-5" style="background-color: #a2a2a2;">
 			<div class="jumbotron">
-				<h1>#{subscriptionDetailBean.ann.title}</h1>
-				<p>#{subscriptionDetailBean.ann.description}</p>
+				<h2>Valor Total: R$ #{subscriptionDetailBean.ann.price}</h2>
 			</div>
-			<div class="col-sm-7">
-				<img class="img-thumbnail img-responsive" style="margin: 0 auto;"
-					src="#{request.contextPath}/file/#{subscriptionDetailBean.ann.path}"
-					alt="#{subscriptionDetailBean.ann.title}" />
-			</div>
-			<div class="col-sm-5" style="background-color: #a2a2a2;">
-				<div class="jumbotron">
-					<h2>Valor Total: R$ #{subscriptionDetailBean.ann.price}</h2>
-				</div>
-				<h:form>
-					<p:wizard flowListener="#{subscriptionDetailBean.onFlowProcess}"
-							backLabel="Voltar" nextLabel="Próximo">
-						<p:tab id="personal" title="Dados Pessoais">
-							<p:panel header="Dados Pessoais">
-								<h:panelGrid columns="2" columnClasses="value">
-									<p:outputLabel for="name" value="Nome: " />
-									<p:inputText id="name" required="true"
-										value="#{subscriptionDetailBean.client.name}"/>
-									<br />
-									<p:message for="name" />
-	
-									<p:outputLabel for="surname" value="Sobrenome: " />
-									<p:inputText id="surname"
-										value="#{subscriptionDetailBean.client.lastName}"
-										required="true" label="Lastname" />
-									<br />
-									<p:message for="surname" />
-	
-									<p:outputLabel for="birth" value="Data de Nascimento: " />
-									<p:calendar id="birth"
-										value="#{subscriptionDetailBean.client.dateBirth}"
-										effect="fold" pattern="dd/MM/yyyy" mask="true"
-										timeZone="America/Sao_Paulo" required="true" />
-									<br />
-									<p:message for="birth" />
-	
-									<p:outputLabel for="cpf" value="CPF: " />
-									<p:inputMask id="cpf"
-										value="#{subscriptionDetailBean.client.cpf}"
-										mask="999.999.999-99" required="true"
-										validator="#{userBean.isCpfValid}" />
-									<br />
-									<p:message for="cpf" />
-								</h:panelGrid>
-							</p:panel>
-						</p:tab>
-						<p:tab id="address" title="Endereço">
-							<p:panel header="Endereço de Entrega">
-								<h:panelGrid columns="2" columnClasses="value">
-									<p:outputLabel for="street" value="Rua: " />
-									<p:inputText id="street"
-										value="#{subscriptionDetailBean.client.address.street}"
-										required="true" />
-									<br />
-									<p:message for="street" />
-	
-									<p:outputLabel for="number" value="Número: " />
-									<p:inputNumber id="number"
-										value="#{subscriptionDetailBean.client.address.number}"
-										required="true" />
-									<br />
-									<p:message for="number" />
-	
-									<p:outputLabel for="neighborhood" value="Bairro: " />
-									<p:inputText id="neighborhood" required="true"
-										value="#{subscriptionDetailBean.client.address.neighborhood}"/>
-									<br />
-									<p:message for="neighborhood" />
-	
-									<p:outputLabel for="cep" value="CEP: " />
-									<p:inputMask id="cep" required="true" mask="99.999-999"
-										value="#{subscriptionDetailBean.client.address.cep}"/>
-									<br />
-									<p:message for="cep" />
-									
-									<p:outputLabel for="state" value="Estado: " />
-									<p:inputText id="state" required="true"
-										value="#{subscriptionDetailBean.client.address.state}"/>
-									<br />
-									<p:message for="state" />
-									
-								</h:panelGrid>
-							</p:panel>
-						</p:tab>
-					</p:wizard>
-					<p:commandButton value="Assinar" styleClass="center-block"/>
-				</h:form>
-			</div>
+			<h:form>
+				<p:wizard flowListener="#{subscriptionDetailBean.onFlowProcess}"
+						backLabel="Voltar" nextLabel="Próximo">
+					<p:tab id="personal" title="Dados Pessoais">
+						<p:panel header="Dados Pessoais">
+							<h:panelGrid columns="2" columnClasses="value">
+								<p:outputLabel for="name" value="Nome: " />
+								<p:inputText id="name" required="true"
+									value="#{subscriptionDetailBean.client.name}"/>
+								<br />
+								<p:message for="name" />
+
+								<p:outputLabel for="surname" value="Sobrenome: " />
+								<p:inputText id="surname"
+									value="#{subscriptionDetailBean.client.lastName}"
+									required="true" label="Lastname" />
+								<br />
+								<p:message for="surname" />
+
+								<p:outputLabel for="birth" value="Data de Nascimento: " />
+								<p:calendar id="birth"
+									value="#{subscriptionDetailBean.client.dateBirth}"
+									effect="fold" pattern="dd/MM/yyyy" mask="true"
+									timeZone="America/Sao_Paulo" required="true" />
+								<br />
+								<p:message for="birth" />
+
+								<p:outputLabel for="cpf" value="CPF: " />
+								<p:inputMask id="cpf"
+									value="#{subscriptionDetailBean.client.cpf}"
+									mask="999.999.999-99" required="true"
+									validator="#{userBean.isCpfValid}" />
+								<br />
+								<p:message for="cpf" />
+							</h:panelGrid>
+						</p:panel>
+					</p:tab>
+					<p:tab id="address" title="Endereço">
+						<p:panel header="Endereço de Entrega">
+							<h:panelGrid columns="2" columnClasses="value">
+								<p:outputLabel for="street" value="Rua: " />
+								<p:inputText id="street"
+									value="#{subscriptionDetailBean.client.address.street}"
+									required="true" />
+								<br />
+								<p:message for="street" />
+
+								<p:outputLabel for="number" value="Número: " />
+								<p:inputNumber id="number"
+									value="#{subscriptionDetailBean.client.address.number}"
+									required="true" />
+								<br />
+								<p:message for="number" />
+
+								<p:outputLabel for="neighborhood" value="Bairro: " />
+								<p:inputText id="neighborhood" required="true"
+									value="#{subscriptionDetailBean.client.address.neighborhood}"/>
+								<br />
+								<p:message for="neighborhood" />
+
+								<p:outputLabel for="cep" value="CEP: " />
+								<p:inputMask id="cep" required="true" mask="99.999-999"
+									value="#{subscriptionDetailBean.client.address.cep}"/>
+								<br />
+								<p:message for="cep" />
+								
+								<p:outputLabel for="state" value="Estado: " />
+								<p:inputText id="state" required="true"
+									value="#{subscriptionDetailBean.client.address.state}"/>
+								<br />
+								<p:message for="state" />
+								
+							</h:panelGrid>
+						</p:panel>
+					</p:tab>
+				</p:wizard>
+				<p:commandButton value="Assinar" styleClass="center-block"/>
+			</h:form>
 		</div>
 	</ui:define>
 </ui:composition>
