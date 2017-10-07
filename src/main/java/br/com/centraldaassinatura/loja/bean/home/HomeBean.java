@@ -3,6 +3,7 @@ package br.com.centraldaassinatura.loja.bean.home;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -44,7 +45,7 @@ public class HomeBean implements Serializable {
 	}
 
 	public List<Announcement> getAnnouncements() {
-		if(announcements == null){
+		if (announcements == null) {
 			announcements = announcementService.lastAnnouncements();
 		}
 		return announcements;
@@ -61,14 +62,21 @@ public class HomeBean implements Serializable {
 	public void setCategoriesSelected(List<Category> categoriesSelected) {
 		this.categoriesSelected = categoriesSelected;
 	}
-	
-	public RedirectView redirectAnnouncement(){
-		Client userLogged = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userLogged");
+
+	public RedirectView redirectAnnouncement() {
+		Client userLogged = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+				.get("userLogged");
 		userLogged = clientService.findById(userLogged.getId());
 		if (userLogged != null && userLogged.getCompany() != null && userLogged.getCompany().getValid() == true) {
 			return new RedirectView("/restrict/announcement");
 		} else {
 			return new RedirectView("/restrict/registerCompany");
 		}
+	}
+
+	public String details() {
+		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		String id = params.get("announcementId");
+		return "/assinatura-detalhe.xhtml?faces-redirect=true&id=" + id;
 	}
 }

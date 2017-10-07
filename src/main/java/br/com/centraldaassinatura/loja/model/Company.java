@@ -22,6 +22,7 @@ public class Company {
 	private String nameFantasy;
 	private String reasonSocial;
 	private String cnpj;
+	private String site;
 	@Enumerated(EnumType.STRING)
 	private NaturesLegals legalNature;
 	private Boolean valid;
@@ -58,6 +59,14 @@ public class Company {
 
 	public void setCnpj(String cnpj) {
 		this.cnpj = cnpj;
+	}
+
+	public String getSite() {
+		return site;
+	}
+
+	public void setSite(String site) {
+		this.site = site;
 	}
 
 	public Address getAddress() {

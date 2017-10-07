@@ -39,6 +39,12 @@
 							<p:tab id="personal" title="Pessoal">
 								<p:panel header="Dados Pessoais">
 									<h:panelGrid columns="2">
+										<p:outputLabel for="site" value="Site: " title="Opcional"/>
+										<p:inputText id="site" styleClass="inputFields"
+											value="#{companyBean.company.site}" type="text"/>
+										<br />
+										<p:message for="site" />
+										
 										<p:outputLabel for="name" value="Nome Fantasia: " />
 										<p:inputText id="name" styleClass="inputFields"
 											value="#{companyBean.company.nameFantasy}" type="text"
@@ -106,6 +112,9 @@
 									<div class="ui-g-12">
 										<div class="ui-g-12 ui-md-12">
 											<h:panelGrid columns="2">
+												<p:outputLabel value="Site: " />
+												<p:outputLabel value="#{companyBean.company.site}" />
+												
 												<p:outputLabel value="Nome Fantasia: " />
 												<p:outputLabel value="#{companyBean.company.nameFantasy}" />
 

@@ -9,6 +9,18 @@
 <ui:composition template="_template.xhtml">
 
 	<ui:define name="content">
+		
+		<h:head>
+			<style>
+				.divContainerGrid .divBtns {
+				    display: none;
+				}
+				.divContainerGrid:hover .divBtns {
+					display: flex;
+				}
+			</style>
+		</h:head>
+		
 		<div class="ui-g-12">
 			<h:form id="formMain">
 				<div class="ui-g-12 ui-md-4 ui-lg-3">
@@ -28,14 +40,20 @@
 				        <f:facet name="header">
 				            Últimos Anúncios
 				        </f:facet>
-				        <a href="#{request.contextPath}/assinatura-detalhe.xhtml?id=#{a.id}">
+				        <div id="teste" class="divContainerGrid">
 					        <p:panel header="#{a.title}" style="text-align:center">
 					            <h:panelGrid columns="1" style="width:100%">
 					                <img style="width: 250px;" src="#{request.contextPath}/file/#{a.path}" alt="#{a.title}"/>
 					                <h:outputText value="#{a.description}" />
 					            </h:panelGrid>
 					        </p:panel>
-						</a>
+					        <div class="divBtns">
+					        	<p:commandButton value="Detalhes da Assinatura" action="#{homeBean.details}">
+					        		<f:param name="announcementId" value="#{a.id}" />
+					        	</p:commandButton>
+								<p:commandButton value="Adicionar ao Carrinho" actionListener="#{cartBean.add(a.id)}"/>
+					      	</div>
+						</div>
 				    </p:dataGrid>
 				</div>
 				
