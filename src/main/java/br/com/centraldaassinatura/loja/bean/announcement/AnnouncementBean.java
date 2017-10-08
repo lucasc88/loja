@@ -1,18 +1,23 @@
 package br.com.centraldaassinatura.loja.bean.announcement;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.Part;
 
+import org.primefaces.event.FileUploadEvent;
+
 import br.com.centraldaassinatura.loja.dao.announcement.AnnouncementService;
 import br.com.centraldaassinatura.loja.dao.category.CategoryService;
+import br.com.centraldaassinatura.loja.infra.FileSaver;
 import br.com.centraldaassinatura.loja.model.Announcement;
 import br.com.centraldaassinatura.loja.model.Category;
 import br.com.centraldaassinatura.loja.model.Client;
@@ -27,8 +32,8 @@ public class AnnouncementBean implements Serializable {
 	private List<Category> categories;
 	private Category categorySelected;
 	private Announcement announcement = new Announcement();
-//	private UploadedFile file;
-	private Part images;
+	// private UploadedFile file;
+	private Part mainImage;
 	private Company company;
 	@Inject
 	private CategoryService categoryService;
@@ -71,45 +76,50 @@ public class AnnouncementBean implements Serializable {
 		this.announcement = announcement;
 	}
 
-//	public UploadedFile getFile() {
-//		return file;
-//	}
-//
-//	public void setFile(UploadedFile file) {
-//		this.file = file;
-//	}
-
 	public Company getCompany() {
 		return company;
 	}
 
-	public Part getImages() {
-		return images;
+	public Part getMainImage() {
+		return mainImage;
 	}
 
-	public void setImages(Part images) {
-		this.images = images;
+	public void setMainImage(Part mainImage) {
+		this.mainImage = mainImage;
 	}
 
 	public void setCompany(Company company) {
 		this.company = company;
 	}
 
-//	public void upload(FileUploadEvent event) {
-//		UploadedFile uploadedFile = event.getFile();
+	public void validator(FacesContext context, UIComponent component, Object value) {
+		Part arquivo = (Part) value;
+		System.out.println("Size: " + arquivo.getSize());
+		if (arquivo.getSize() > 100000) {// 1MB
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Imagem muito grande",
+					"A imagem deve ter tamanho máximo de 1MB.");
+			throw new ValidatorException(msg);
+		}
+		System.out.println("ContentType: " + arquivo.getContentType());
+		if (!(arquivo.getContentType().equals("image/jpeg") || arquivo.getContentType().equals("image/png"))) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Tipo inválido",
+					"A imagem deve ser .jpg ou .png");
+			throw new ValidatorException(msg);
+		}
+	}
+
+//	public void handleFileUpload(FileUploadEvent event) {
+//		System.out.println("imagem: " + ++count);
+//		FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
+//		FacesContext.getCurrentInstance().addMessage(null, message);
 //	}
 
 	public RedirectView save() {
-		try {
-			String path = "/imagens/" + images.getSubmittedFileName();
-			//save in the disk
-			images.write(path);
-			announcement.setPath(path);
-			announcement.setCompany(company);
-			announcementService.save(announcement);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		FileSaver fs = new FileSaver();
+		String relativePath = fs.write(mainImage, "imagesUploaded");
+		announcement.setPath(relativePath);
+		announcement.setCompany(company);
+		announcementService.save(announcement);
 		return new RedirectView("/index");
 	}
 }

@@ -42,9 +42,12 @@
 						<br/>
 						<p:message for="category"/>
 						
-						<p:outputLabel value="Imagens: " />
-						<h:inputFile id="img" value="#{announcementBean.images}"/>
+						<p:outputLabel value="Imagem Principal: " title="Será a imagem exibida na página inicial"/>
+						<h:inputFile id="img" value="#{announcementBean.mainImage}" required="true"
+							validator="#{announcementBean.validator}"/>
 						<br/>
+						<p:message for="img"/>
+						
 					</h:panelGrid>
 				</p:panel>
 			</p:tab>

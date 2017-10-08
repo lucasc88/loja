@@ -2,25 +2,29 @@
 <persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.1"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-	
-<!-- 	<persistence-unit name="default"> -->
-<!-- 		<class>br.com.centraldaassinatura.loja.models.Category</class> -->
-<!-- 		<class>br.com.centraldaassinatura.loja.models.Product</class> -->
-<!-- 		<properties> -->
-<!-- 			<property name="javax.persistence.jdbc.user" value="your username here" /> -->
-<!-- 			<property name="javax.persistence.jdbc.password" value="your password here" /> -->
-<!-- 			<property name="hibernate.show_sql" value="true" /> -->
-<!-- 			<property name="hibernate.format_sql" value="true" /> -->
-<!-- 			<property name="hibernate.hbm2ddl.auto" value="update" /> -->
-<!-- 			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost/DB_NAME" /> -->
-<!-- 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" /> -->
-<!-- 		</properties> -->
-<!-- 	</persistence-unit> -->
+
+	<!-- <persistence-unit name="default"> -->
+	<!-- <class>br.com.centraldaassinatura.loja.models.Category</class> -->
+	<!-- <class>br.com.centraldaassinatura.loja.models.Product</class> -->
+	<!-- <properties> -->
+	<!-- <property name="javax.persistence.jdbc.user" value="your username here" 
+		/> -->
+	<!-- <property name="javax.persistence.jdbc.password" value="your password 
+		here" /> -->
+	<!-- <property name="hibernate.show_sql" value="true" /> -->
+	<!-- <property name="hibernate.format_sql" value="true" /> -->
+	<!-- <property name="hibernate.hbm2ddl.auto" value="update" /> -->
+	<!-- <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost/DB_NAME" 
+		/> -->
+	<!-- <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" 
+		/> -->
+	<!-- </properties> -->
+	<!-- </persistence-unit> -->
 
 	<persistence-unit name="loja" transaction-type="JTA">
-	
-		<!-- através da JNDI é feita a ligação desse recurso JTA  -->
-		<jta-data-source>java:/centraldaassinatura-ds</jta-data-source>
+
+		<!-- através da JNDI é feita a ligação desse recurso JTA -->
+		<jta-data-source>java:/PostgresDS</jta-data-source>
 
 		<class>br.com.centraldaassinatura.loja.model.Category</class>
 		<class>br.com.centraldaassinatura.loja.model.Announcement</class>
@@ -31,5 +35,5 @@
 			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
 		</properties>
 	</persistence-unit>
-	
+
 </persistence>
