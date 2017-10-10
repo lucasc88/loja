@@ -29,6 +29,7 @@ import br.com.centraldaassinatura.loja.util.RedirectView;
 public class AnnouncementBean implements Serializable {
 
 	private static final long serialVersionUID = 7209807319329147237L;
+	private static final FileSaver FS = new FileSaver();
 	private List<Category> categories;
 	private Category categorySelected;
 	private Announcement announcement = new Announcement();
@@ -108,17 +109,14 @@ public class AnnouncementBean implements Serializable {
 		}
 	}
 
-//	public void handleFileUpload(FileUploadEvent event) {
-//		System.out.println("imagem: " + ++count);
-//		FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
-//		FacesContext.getCurrentInstance().addMessage(null, message);
-//	}
+	public void handleFileUpload(FileUploadEvent event) {
+		FS.fileUploadEvent(event, company);
+	}
 
 	public RedirectView save() {
-		FileSaver fs = new FileSaver();
-		String relativePath = fs.write(mainImage, "imagesUploaded");
-		announcement.setPath(relativePath);
 		announcement.setCompany(company);
+		String relativePath = FS.write(mainImage, "imagesUploaded/companyId" + announcement.getCompany().getId());
+		announcement.setPath(relativePath);
 		announcementService.save(announcement);
 		return new RedirectView("/index");
 	}

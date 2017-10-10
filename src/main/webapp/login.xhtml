@@ -22,7 +22,7 @@
 						</p:inputText>
 						<p:message id="messageEmail" for="email" />
 					</div>
-						<p:commandButton value="Verificar Email" process="@this email"
+					<p:commandButton value="Verificar Email" process="@this email"
 							actionListener="#{loginBean.checkUser}" update="@form"
 							rendered="#{!loginBean.showPasswordField and !loginBean.newUser}" />
 					<div class="ui-g-12 ui-md-12 ui-lg-12">
@@ -92,7 +92,7 @@
 										<p:message for="street" />
 										
 										<p:outputLabel for="number" value="Número: "/>
-										<p:inputNumber id="number" required="true"
+										<p:inputNumber id="number" required="true" decimalPlaces="0"
 											value="#{loginBean.address.number}"/>
 										<br/>
 										<p:message for="number" />

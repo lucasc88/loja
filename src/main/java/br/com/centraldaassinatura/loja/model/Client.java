@@ -59,7 +59,7 @@ public class Client {
 	}
 
 	public void setEmail(String email) {
-		this.email = email;
+		this.email = email.toLowerCase();
 	}
 
 	public Date getDateBirth() {
