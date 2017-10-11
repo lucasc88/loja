@@ -96,9 +96,9 @@ public class AnnouncementBean implements Serializable {
 	public void validator(FacesContext context, UIComponent component, Object value) {
 		Part arquivo = (Part) value;
 		System.out.println("Size: " + arquivo.getSize());
-		if (arquivo.getSize() > 100000) {// 1MB
+		if (arquivo.getSize() > 500000) {// 5MB
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Imagem muito grande",
-					"A imagem deve ter tamanho máximo de 1MB.");
+					"A imagem deve ter tamanho máximo de 5MB.");
 			throw new ValidatorException(msg);
 		}
 		System.out.println("ContentType: " + arquivo.getContentType());

@@ -20,6 +20,7 @@ public class Announcement {
 	private String description;
 	private BigDecimal price;
 	private String path;
+//	private String mainImage
 	@ManyToOne
 	private Company company;
 	@ManyToOne
