@@ -49,7 +49,7 @@
 						<p:message for="img"/>
 						
 						<p:outputLabel value="Imagens Secundárias: " title="Serão as imagens exibidas no detalhamento da assinatura"/>
-						<p:fileUpload fileUploadListener="#{announcementBean.handleFileUpload}" mode="advanced"
+						<p:fileUpload fileUploadListener="#{announcementBean.handleFileUpload}" mode="advanced" required="true"
 							dragDropSupport="false" multiple="true" sizeLimit="500000" sequential="true" auto="true"
 							fileLimit="3" allowTypes="/(\.|\/)(jpe?g|png)$/" />
 						<br/>

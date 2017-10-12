@@ -48,4 +48,9 @@ public class AnnouncementDao {
 	public Announcement findById(Integer id) {
 		return dao.findById(id);
 	}
+
+	public Announcement findByIdWithSecundaryImages(Integer id) {
+		TypedQuery<Announcement> query = em.createQuery("SELECT a FROM Announcement a JOIN FETCH a.secundaryImage ", Announcement.class);
+		return query.getSingleResult();
+	}
 }

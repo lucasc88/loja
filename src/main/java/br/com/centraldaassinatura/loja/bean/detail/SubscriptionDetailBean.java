@@ -29,7 +29,7 @@ public class SubscriptionDetailBean implements Serializable{
 	private Integer id;
 
 	public void findById() {
-		ann = announcementService.findById(id);
+		ann = announcementService.findByIdWithSecundaryImages(id);
 		Client userLogged = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.get("userLogged");
 		if (userLogged == null) {

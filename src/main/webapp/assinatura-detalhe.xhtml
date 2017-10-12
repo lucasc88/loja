@@ -14,14 +14,19 @@
 	</f:metadata>
 
 	<ui:define name="content">
+		
 		<div class="jumbotron">
 			<h1>#{subscriptionDetailBean.ann.title}</h1>
 			<p>#{subscriptionDetailBean.ann.description}</p>
-		</div>
-		<div class="col-sm-7">
 			<img class="img-thumbnail img-responsive" style="margin: 0 auto;"
 				src="#{request.contextPath}/file/#{subscriptionDetailBean.ann.path}"
 				alt="#{subscriptionDetailBean.ann.title}" />
+		</div>
+		<div class="col-sm-7">
+			<p:carousel value="#{subscriptionDetailBean.ann.secundaryImage}" headerText="Mais Fotos"
+				var="image" itemStyle="height:200px;text-align:center" numVisible="1" easing="easeOutBounce" cricular="true">
+	        	<img src="#{request.contextPath}/file/#{image.path}" class="img-thumbnail img-responsive"/>
+		    </p:carousel>
 		</div>
 		<div class="col-sm-5" style="background-color: #a2a2a2;">
 			<div class="jumbotron">

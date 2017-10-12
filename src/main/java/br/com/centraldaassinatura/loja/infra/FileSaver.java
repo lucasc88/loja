@@ -66,26 +66,34 @@ public class FileSaver {
 		}
 	}
 
-	public void fileUploadEvent(FileUploadEvent event, Company company) {
+	public String fileUploadEvent(FileUploadEvent event, Company company) {
+		String finalRelativePath = null;
 		try {
 			String fullPath = this.getClass().getClassLoader().getResource("").getPath();
 			UploadedFile arq = event.getFile();
 			InputStream in = new BufferedInputStream(arq.getInputstream());
-			System.out.println(
-					"Salvou: " + FileSaver.getServerPath(fullPath) + "imagesUploaded/companyId" + company.getId());
-			File file = new File(FileSaver.getServerPath(fullPath) + "imagesUploaded/companyId" + company.getId());
+			String relativePathFromCompany = "imagesUploaded/companyId" + company.getId();
+			System.out.println("Criará: " + FileSaver.getServerPath(fullPath) + relativePathFromCompany);
+			File file = new File(FileSaver.getServerPath(fullPath) + relativePathFromCompany);
 			if (!file.exists()) {
 				file.mkdir();
 			}
-			FileOutputStream fout = new FileOutputStream(file + "/" + arq.getFileName());
+			String completePath = FileSaver.getServerPath(fullPath) + relativePathFromCompany + "/secundaryImages";
+			File secundaryImagesFile = new File(completePath);
+			if (!secundaryImagesFile.exists()) {
+				secundaryImagesFile.mkdir();
+			}
+			FileOutputStream fout = new FileOutputStream(secundaryImagesFile + "/" + arq.getFileName());
 			while (in.available() != 0) {
 				fout.write(in.read());
 				fout.flush();
 			}
 			fout.close();
 			in.close();
+			finalRelativePath = relativePathFromCompany + "/secundaryImages" + "/" + arq.getFileName();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return finalRelativePath;
 	}
 }

@@ -1,6 +1,7 @@
 package br.com.centraldaassinatura.loja.bean.announcement;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -22,6 +23,7 @@ import br.com.centraldaassinatura.loja.model.Announcement;
 import br.com.centraldaassinatura.loja.model.Category;
 import br.com.centraldaassinatura.loja.model.Client;
 import br.com.centraldaassinatura.loja.model.Company;
+import br.com.centraldaassinatura.loja.model.SecundaryImage;
 import br.com.centraldaassinatura.loja.util.RedirectView;
 
 @Named
@@ -31,6 +33,7 @@ public class AnnouncementBean implements Serializable {
 	private static final long serialVersionUID = 7209807319329147237L;
 	private static final FileSaver FS = new FileSaver();
 	private List<Category> categories;
+	private List<SecundaryImage> secundaryImages = new ArrayList<>();
 	private Category categorySelected;
 	private Announcement announcement = new Announcement();
 	// private UploadedFile file;
@@ -110,13 +113,18 @@ public class AnnouncementBean implements Serializable {
 	}
 
 	public void handleFileUpload(FileUploadEvent event) {
-		FS.fileUploadEvent(event, company);
+		SecundaryImage si = new SecundaryImage();
+		si.setPath(FS.fileUploadEvent(event, company));
+		secundaryImages.add(si);
 	}
 
 	public RedirectView save() {
 		announcement.setCompany(company);
 		String relativePath = FS.write(mainImage, "imagesUploaded/companyId" + announcement.getCompany().getId());
 		announcement.setPath(relativePath);
+		if(!secundaryImages.isEmpty()){
+			announcement.setSecundaryImage(secundaryImages);
+		}
 		announcementService.save(announcement);
 		return new RedirectView("/index");
 	}

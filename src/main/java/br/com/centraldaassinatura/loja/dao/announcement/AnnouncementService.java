@@ -35,4 +35,9 @@ public class AnnouncementService {
 	public List<Announcement> lastAnnouncements(){
 		return announcementDao.lastAnnouncements();
 	}
+
+	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+	public Announcement findByIdWithSecundaryImages(Integer id) {
+		return announcementDao.findByIdWithSecundaryImages(id);
+	}
 }

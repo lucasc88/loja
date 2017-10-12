@@ -1,14 +1,18 @@
 package br.com.centraldaassinatura.loja.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import br.com.centraldaassinatura.loja.model.Category;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 public class Announcement {
@@ -20,7 +24,9 @@ public class Announcement {
 	private String description;
 	private BigDecimal price;
 	private String path;
-//	private String mainImage
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "announcement_id")
+	private List<SecundaryImage> secundaryImage;
 	@ManyToOne
 	private Company company;
 	@ManyToOne
@@ -76,6 +82,14 @@ public class Announcement {
 
 	public void setCategory(Category category) {
 		this.category = category;
+	}
+
+	public List<SecundaryImage> getSecundaryImage() {
+		return secundaryImage;
+	}
+
+	public void setSecundaryImage(List<SecundaryImage> secundaryImage) {
+		this.secundaryImage = secundaryImage;
 	}
 
 	@Override
