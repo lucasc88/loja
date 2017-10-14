@@ -69,8 +69,8 @@ public class FileSaver {
 	public String fileUploadEvent(FileUploadEvent event, Company company) {
 		String finalRelativePath = null;
 		try {
-			String fullPath = this.getClass().getClassLoader().getResource("").getPath();
 			UploadedFile arq = event.getFile();
+			String fullPath = this.getClass().getClassLoader().getResource("").getPath();
 			InputStream in = new BufferedInputStream(arq.getInputstream());
 			String relativePathFromCompany = "imagesUploaded/companyId" + company.getId();
 			System.out.println("Criará: " + FileSaver.getServerPath(fullPath) + relativePathFromCompany);

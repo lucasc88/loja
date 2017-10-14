@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -24,8 +23,7 @@ public class Announcement {
 	private String description;
 	private BigDecimal price;
 	private String path;
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "announcement_id")
+	@OneToMany(mappedBy = "ann", cascade = CascadeType.ALL)
 	private List<SecundaryImage> secundaryImage;
 	@ManyToOne
 	private Company company;
@@ -131,8 +129,8 @@ public class Announcement {
 
 	@Override
 	public String toString() {
-		return "Announcement: title: " + title + ", description: " + description + ", price: " + price + ", category: "
+		return "Announcement: id: " + id + ", title: " + title + ", description: " + description + ", price: " + price
+				+ ", path: " + path + ", company: " + company + ", category: "
 				+ category;
 	}
-
 }

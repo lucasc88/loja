@@ -36,7 +36,6 @@ public class AnnouncementBean implements Serializable {
 	private List<SecundaryImage> secundaryImages = new ArrayList<>();
 	private Category categorySelected;
 	private Announcement announcement = new Announcement();
-	// private UploadedFile file;
 	private Part mainImage;
 	private Company company;
 	@Inject
@@ -98,13 +97,11 @@ public class AnnouncementBean implements Serializable {
 
 	public void validator(FacesContext context, UIComponent component, Object value) {
 		Part arquivo = (Part) value;
-		System.out.println("Size: " + arquivo.getSize());
 		if (arquivo.getSize() > 500000) {// 5MB
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Imagem muito grande",
 					"A imagem deve ter tamanho máximo de 5MB.");
 			throw new ValidatorException(msg);
 		}
-		System.out.println("ContentType: " + arquivo.getContentType());
 		if (!(arquivo.getContentType().equals("image/jpeg") || arquivo.getContentType().equals("image/png"))) {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Tipo inválido",
 					"A imagem deve ser .jpg ou .png");
@@ -115,6 +112,7 @@ public class AnnouncementBean implements Serializable {
 	public void handleFileUpload(FileUploadEvent event) {
 		SecundaryImage si = new SecundaryImage();
 		si.setPath(FS.fileUploadEvent(event, company));
+		si.setAnn(announcement);
 		secundaryImages.add(si);
 	}
 

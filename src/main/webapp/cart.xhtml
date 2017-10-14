@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="_template.xhtml">
+
+	<ui:define name="content">
+		<h:form>
+<!-- 			<p:dataGrid id="itensit" value="#{shoppingCart.itens}" var="item" columns="1" layout="grid"> -->
+<!-- 				<p:panelGrid columns="4"> -->
+<!-- 					<p:panelGrid columns="1"> -->
+<!-- 						<h5>#{item.announcement.title}</h5> -->
+<!-- 					</p:panelGrid> -->
+<!-- 					<p:panelGrid columns="1"> -->
+<!-- 						<a href="#{request.contextPath}/assinatura-detalhe.xhtml?id=#{item.announcement.id}"> -->
+<!-- 							<img src="#{request.contextPath}/file/#{item.announcement.path}" style="width: 300px;" class="img-thumbnail img-responsive"/> -->
+<!-- 						</a> -->
+<!-- 					</p:panelGrid> -->
+<!-- 					<p:panelGrid columns="1"> -->
+<!-- 						<h5>R$ #{item.announcement.price}</h5> -->
+<!-- 					</p:panelGrid> -->
+<!-- 					<p:panelGrid columns="1"> -->
+<!-- 						<h5>Quantidade #{item.quantity}</h5> -->
+<!-- 					</p:panelGrid> -->
+<!-- 				</p:panelGrid> -->
+<!-- 			</p:dataGrid> -->
+			
+			<p:dataTable var="i" value="#{shoppingCart.itens}" reflow="true" >
+			    <p:column headerText="Título">
+			        <h:outputText value="#{i.announcement.title}"/>
+			    </p:column>
+			    <p:column headerText="Foto">
+			    	<img src="#{request.contextPath}/file/#{i.announcement.path}"
+			    		style="width: 300px;" class="img-thumbnail img-responsive"/>
+			    </p:column>
+			    <p:column headerText="Quantidade">
+			        <h:outputText value="#{i.quantity}" />
+			    </p:column>
+			    <p:column headerText="Preço">
+			        <h:outputText value="#{shoppingCart.getTotal(i)}" />
+			    </p:column>
+			</p:dataTable>
+			<p:outputLabel value=" Total: R$ #{shoppingCart.getTotal()}"/>
+			<p:commandButton value="Assinar" styleClass="center-block"/>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

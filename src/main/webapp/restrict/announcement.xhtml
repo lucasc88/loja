@@ -49,9 +49,9 @@
 						<p:message for="img"/>
 						
 						<p:outputLabel value="Imagens Secundárias: " title="Serão as imagens exibidas no detalhamento da assinatura"/>
-						<p:fileUpload fileUploadListener="#{announcementBean.handleFileUpload}" mode="advanced" required="true"
+						<p:fileUpload id="upload" fileUploadListener="#{announcementBean.handleFileUpload}" mode="advanced"
 							dragDropSupport="false" multiple="true" sizeLimit="500000" sequential="true" auto="true"
-							fileLimit="3" allowTypes="/(\.|\/)(jpe?g|png)$/" />
+							fileLimit="3" allowTypes="/(\.|\/)(jpe?g|png)$/"/>
 						<br/>
 					</h:panelGrid>
 				</p:panel>

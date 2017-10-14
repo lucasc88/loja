@@ -1,6 +1,8 @@
 package br.com.centraldaassinatura.loja.bean.detail;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -11,9 +13,11 @@ import org.primefaces.event.FlowEvent;
 
 import br.com.centraldaassinatura.loja.dao.announcement.AnnouncementService;
 import br.com.centraldaassinatura.loja.dao.client.ClientService;
+import br.com.centraldaassinatura.loja.dao.secundaryImages.SecundaryImagesService;
 import br.com.centraldaassinatura.loja.model.Address;
 import br.com.centraldaassinatura.loja.model.Announcement;
 import br.com.centraldaassinatura.loja.model.Client;
+import br.com.centraldaassinatura.loja.model.SecundaryImage;
 
 @Named
 @ViewScoped
@@ -23,13 +27,26 @@ public class SubscriptionDetailBean implements Serializable{
 	@Inject
 	private AnnouncementService announcementService;
 	@Inject
+	private SecundaryImagesService secundaryImagesService;
+	@Inject
 	private ClientService clientService;
 	private Client client = new Client();
 	private Announcement ann;
 	private Integer id;
 
 	public void findById() {
-		ann = announcementService.findByIdWithSecundaryImages(id);
+		boolean c = secundaryImagesService.containsSecundaryImagesByAnnouncementId(id);
+		System.out.println("Contem Imagem Secundaria????????????????????????????????? " + c);
+		if(c){
+			ann = announcementService.findByIdWithSecundaryImages(id);
+		} else {
+			ann = announcementService.findById(id);
+			List<SecundaryImage> imgs = new ArrayList<>();
+			SecundaryImage s = new SecundaryImage();
+			s.setPath(ann.getPath());
+			imgs.add(s);
+			ann.setSecundaryImage(imgs);
+		}
 		Client userLogged = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.get("userLogged");
 		if (userLogged == null) {

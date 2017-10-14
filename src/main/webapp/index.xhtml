@@ -51,7 +51,7 @@
 					        	<p:commandButton value="Detalhes da Assinatura" action="#{homeBean.details}">
 					        		<f:param name="announcementId" value="#{a.id}" />
 					        	</p:commandButton>
-								<p:commandButton value="Adicionar ao Carrinho" actionListener="#{cartBean.add(a.id)}"/>
+								<p:commandButton value="Adicionar ao Carrinho" immediate="true" actionListener="#{shoppingCartBean.add(a.id)}"/>
 					      	</div>
 						</div>
 				    </p:dataGrid>

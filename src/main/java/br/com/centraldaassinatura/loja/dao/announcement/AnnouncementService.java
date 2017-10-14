@@ -17,7 +17,7 @@ public class AnnouncementService {
 
 	@Inject
 	private AnnouncementDao announcementDao;
-	
+
 	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public List<Announcement> allAnnouncement() {
 		return announcementDao.allAnnouncement();
@@ -26,13 +26,13 @@ public class AnnouncementService {
 	public Announcement findById(Integer id) {
 		return announcementDao.findById(id);
 	}
-	
+
 	public void save(Announcement announcement) {
 		announcementDao.persist(announcement);
 	}
-	
+
 	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	public List<Announcement> lastAnnouncements(){
+	public List<Announcement> lastAnnouncements() {
 		return announcementDao.lastAnnouncements();
 	}
 

@@ -77,6 +77,7 @@ public class HomeBean implements Serializable {
 	public String details() {
 		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		String id = params.get("announcementId");
+		System.out.println("Passou o Id: " + id);
 		return "/assinatura-detalhe.xhtml?faces-redirect=true&id=" + id;
 	}
 }

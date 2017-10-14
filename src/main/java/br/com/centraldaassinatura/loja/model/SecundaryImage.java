@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class SecundaryImage {
@@ -12,6 +13,8 @@ public class SecundaryImage {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String path;
+	@ManyToOne
+	private Announcement ann;
 
 	public Integer getId() {
 		return id;
@@ -27,6 +30,14 @@ public class SecundaryImage {
 
 	public void setPath(String path) {
 		this.path = path;
+	}
+
+	public Announcement getAnn() {
+		return ann;
+	}
+
+	public void setAnn(Announcement ann) {
+		this.ann = ann;
 	}
 
 	@Override
