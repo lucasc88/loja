@@ -16,48 +16,67 @@
 						<p:outputLabel for="titulo" value="Título:" />
 						<p:inputText id="titulo" required="true"
 							value="#{announcementBean.announcement.title}" />
-						<br/>
-						<p:message for="titulo"/>
+						<br />
+						<p:message for="titulo" />
 
 						<p:outputLabel for="desc" value="Descrição:" />
 						<p:inputTextarea id="desc" required="true" maxlength="255"
 							value="#{announcementBean.announcement.description}" />
-						<br/>
-						<p:message for="desc"/>
-						
+						<br />
+						<p:message for="desc" />
+
 						<p:outputLabel for="price" value="Preço:" />
 						<p:inputNumber id="price" required="true"
 							value="#{announcementBean.announcement.price}" />
-						<br/>
-						<p:message for="price"/>
-						
+						<br />
+						<p:message for="price" />
+
 						<p:outputLabel for="category" value="Categoria:" />
-						<p:selectOneMenu id="category" required="true" converter="categoryConverter"
+						<p:selectOneMenu id="category" required="true"
+							converter="categoryConverter"
 							value="#{announcementBean.announcement.category}"
 							style="width:125px">
 							<f:selectItem itemLabel="Selecione uma" itemValue="#{null}" />
 							<f:selectItems value="#{announcementBean.categories}" var="c"
-								itemLabel="#{c.name}" itemValue="#{c}"/>
+								itemLabel="#{c.name}" itemValue="#{c}" />
 						</p:selectOneMenu>
-						<br/>
-						<p:message for="category"/>
-						
-						<p:outputLabel value="Imagem Principal: " title="Será a imagem exibida na página inicial"/>
-						<h:inputFile id="img" value="#{announcementBean.mainImage}" required="true"
-							validator="#{announcementBean.validator}"/>
-						<br/>
-						<p:message for="img"/>
-						
-						<p:outputLabel value="Imagens Secundárias: " title="Serão as imagens exibidas no detalhamento da assinatura"/>
-						<p:fileUpload id="upload" fileUploadListener="#{announcementBean.handleFileUpload}" mode="advanced"
-							dragDropSupport="false" multiple="true" sizeLimit="500000" sequential="true" auto="true"
-							fileLimit="3" allowTypes="/(\.|\/)(jpe?g|png)$/"/>
-						<br/>
+						<br />
+						<p:message for="category" />
+
+						<p:outputLabel value="Imagem Principal: "
+							title="Será a imagem exibida na página inicial" />
+						<h:inputFile id="img" value="#{announcementBean.mainImage}"
+							required="true" validator="#{announcementBean.validator}" />
+						<br />
+						<p:message for="img" />
+
+						<p:outputLabel value="Imagens Secundárias: "
+							title="Serão as imagens exibidas no detalhamento da assinatura" />
+						<p:fileUpload id="upload" fileLimit="3"
+							fileUploadListener="#{announcementBean.handleFileUpload}"
+							mode="advanced" dragDropSupport="false" multiple="true"
+							sizeLimit="5000000" sequential="true" auto="true"
+							allowTypes="/(\.|\/)(jpe?g|png)$/"
+							onstart="PF('statusDialog').show()"
+							oncomplete="PF('statusDialog').hide()"
+							onerror="PF('statusDialog').hide()" />
+						<br />
 					</h:panelGrid>
 				</p:panel>
 			</p:tab>
-			<p:commandButton value="Salvar" action="#{announcementBean.save}" ajax="false"/>
+			<p:commandButton value="Salvar" action="#{announcementBean.save}"
+				ajax="false" />
 		</h:form>
+		<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+			closable="false" resizable="false" showHeader="false">
+			<div class="row">
+				<div>
+				<center>
+					<p:graphicImage library="img" name="ajax-loader.gif"/></center>
+				</div>
+				<p:outputLabel value="Aguarde o upload das imagens" style="margin: 0 10px 0 10px;"/>
+			</div>
+		</p:dialog>
 	</ui:define>
 </ui:composition>
 </html>

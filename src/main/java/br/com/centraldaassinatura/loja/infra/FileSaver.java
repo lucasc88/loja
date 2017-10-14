@@ -1,6 +1,7 @@
 package br.com.centraldaassinatura.loja.infra;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -16,7 +17,8 @@ import java.nio.file.Path;
 import javax.servlet.http.Part;
 
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.UploadedFile;
+
+import com.tinify.Tinify;
 
 import br.com.centraldaassinatura.loja.model.Company;
 
@@ -69,9 +71,9 @@ public class FileSaver {
 	public String fileUploadEvent(FileUploadEvent event, Company company) {
 		String finalRelativePath = null;
 		try {
-			UploadedFile arq = event.getFile();
+			String fileName = event.getFile().getFileName();
 			String fullPath = this.getClass().getClassLoader().getResource("").getPath();
-			InputStream in = new BufferedInputStream(arq.getInputstream());
+			InputStream in = new BufferedInputStream(compressWithTinify(event));
 			String relativePathFromCompany = "imagesUploaded/companyId" + company.getId();
 			System.out.println("Criará: " + FileSaver.getServerPath(fullPath) + relativePathFromCompany);
 			File file = new File(FileSaver.getServerPath(fullPath) + relativePathFromCompany);
@@ -83,17 +85,35 @@ public class FileSaver {
 			if (!secundaryImagesFile.exists()) {
 				secundaryImagesFile.mkdir();
 			}
-			FileOutputStream fout = new FileOutputStream(secundaryImagesFile + "/" + arq.getFileName());
+			FileOutputStream fout = new FileOutputStream(secundaryImagesFile + "/" + fileName);
 			while (in.available() != 0) {
 				fout.write(in.read());
 				fout.flush();
 			}
 			fout.close();
 			in.close();
-			finalRelativePath = relativePathFromCompany + "/secundaryImages" + "/" + arq.getFileName();
+			finalRelativePath = relativePathFromCompany + "/secundaryImages" + "/" + fileName;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return finalRelativePath;
+	}
+
+	private InputStream compressWithTinify(FileUploadEvent event) {
+		try {
+			Tinify.setKey("l18nHEH85YmZFfJJRWjCJLxyOS79EIk3");
+			byte[] sourceData = event.getFile().getContents();
+			byte[] resultData = Tinify.fromBuffer(sourceData).toBuffer();
+			InputStream myInputStream = new ByteArrayInputStream(resultData);
+			
+			System.out.println("******************");
+			System.out.println("Tamanho original: " + sourceData.length + ", tamanho final: " + resultData.length + ", InputStream: " + myInputStream);
+			System.out.println("******************");
+			
+			return myInputStream;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

@@ -97,7 +97,7 @@ public class AnnouncementBean implements Serializable {
 
 	public void validator(FacesContext context, UIComponent component, Object value) {
 		Part arquivo = (Part) value;
-		if (arquivo.getSize() > 500000) {// 5MB
+		if (arquivo.getSize() > 5000000) {// 5MB
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Imagem muito grande",
 					"A imagem deve ter tamanho máximo de 5MB.");
 			throw new ValidatorException(msg);
@@ -120,7 +120,7 @@ public class AnnouncementBean implements Serializable {
 		announcement.setCompany(company);
 		String relativePath = FS.write(mainImage, "imagesUploaded/companyId" + announcement.getCompany().getId());
 		announcement.setPath(relativePath);
-		if(!secundaryImages.isEmpty()){
+		if (!secundaryImages.isEmpty()) {
 			announcement.setSecundaryImage(secundaryImages);
 		}
 		announcementService.save(announcement);
