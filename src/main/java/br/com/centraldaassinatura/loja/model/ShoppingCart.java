@@ -44,4 +44,13 @@ public class ShoppingCart implements Serializable {
 		}
 		return total;
 	}
+	
+	public void remove(CartItem item){
+		this.itens.remove(item);
+	}
+	
+	public Integer getTotalAmount(){
+		//sum total amount from itens
+		return itens.stream().mapToInt(item -> item.getQuantity()).sum();
+	}
 }

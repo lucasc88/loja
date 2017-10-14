@@ -24,6 +24,10 @@
 			    <p:column headerText="Preço">
 			        <h:outputText value="R$ #{shoppingCart.getTotal(i)}" />
 			    </p:column>
+			    <p:column headerText="Excluir">
+			        <p:commandButton actionListener="#{shoppingCartBean.remove(i)}"
+		          		icon="fa fa-fw fa-times" update="@form :formCart:totalAmount"/>
+			    </p:column>
 			</p:dataTable>
 			<p:outputLabel value=" Total: R$ #{shoppingCart.getTotal()}"/>
 			<p:commandButton value="Assinar" styleClass="center-block"/>

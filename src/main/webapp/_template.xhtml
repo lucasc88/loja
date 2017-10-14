@@ -69,8 +69,11 @@
 						<b:navLink value="    " href="#"></b:navLink>
 					</b:navbarLinks>
 					<b:navbarLinks pull="right">
-						<b:navLink href="#{requestContext}/cart.xhtml" >
-							<p:graphicImage library="img" name="carrinho.png" style="width: 40px;"/>
+						<b:navLink href="#{requestContext}/cart.xhtml">
+							<h:form id="formCart">
+								<p:graphicImage library="img" name="carrinho.png" style="width: 40px;" title="Meu Carrinho"/>
+								<p:outputLabel id="totalAmount" value="#{shoppingCart.getTotalAmount()}" style="margin-left: 6px;" title="Meu Carrinho"/>
+							</h:form>
 						</b:navLink>
 						<b:navLink >
 							<h:form>

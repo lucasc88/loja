@@ -29,4 +29,8 @@ public class ShoppingCartBean {
 	public List<CartItem> getItens() {
 		return shoppingCart.getItens();
 	}
+	
+	public void remove(CartItem i){
+		shoppingCart.remove(i);
+	}
 }
