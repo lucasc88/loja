@@ -23,6 +23,9 @@ public class ShoppingCart implements Serializable {
 		if (!itens.add(c)) {
 			FacesMessage msg = new FacesMessage("Já Adicionado", "Este item já está no carrinho");
 			FacesContext.getCurrentInstance().addMessage(null, msg);
+		} else {
+			FacesMessage msg = new FacesMessage("Adicionado!", "Item adicionado ao carrinho");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 	}
 
