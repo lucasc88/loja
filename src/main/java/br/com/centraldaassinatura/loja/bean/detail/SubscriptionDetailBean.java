@@ -21,7 +21,7 @@ import br.com.centraldaassinatura.loja.model.SecundaryImage;
 
 @Named
 @ViewScoped
-public class SubscriptionDetailBean implements Serializable{
+public class SubscriptionDetailBean implements Serializable {
 
 	private static final long serialVersionUID = -955631322311075280L;
 	@Inject
@@ -36,8 +36,7 @@ public class SubscriptionDetailBean implements Serializable{
 
 	public void findById() {
 		boolean c = secundaryImagesService.containsSecundaryImagesByAnnouncementId(id);
-		System.out.println("Contem Imagem Secundaria????????????????????????????????? " + c);
-		if(c){
+		if (c) {
 			ann = announcementService.findByIdWithSecundaryImages(id);
 		} else {
 			ann = announcementService.findById(id);

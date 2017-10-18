@@ -47,4 +47,8 @@ public class CartItem {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "CartItem: announcement: " + announcement + ", quantity: " + quantity;
+	}
 }

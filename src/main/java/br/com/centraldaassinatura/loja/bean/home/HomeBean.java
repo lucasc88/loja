@@ -12,7 +12,6 @@ import javax.inject.Named;
 
 import br.com.centraldaassinatura.loja.dao.announcement.AnnouncementService;
 import br.com.centraldaassinatura.loja.dao.category.CategoryService;
-import br.com.centraldaassinatura.loja.dao.client.ClientService;
 import br.com.centraldaassinatura.loja.model.Announcement;
 import br.com.centraldaassinatura.loja.model.Category;
 import br.com.centraldaassinatura.loja.model.Client;
@@ -25,8 +24,6 @@ public class HomeBean implements Serializable {
 	private static final long serialVersionUID = 4548068412310165579L;
 	@Inject
 	private CategoryService categoryService;
-	@Inject
-	private ClientService clientService;
 	@Inject
 	private AnnouncementService announcementService;
 	private List<Announcement> announcements;
@@ -66,7 +63,6 @@ public class HomeBean implements Serializable {
 	public RedirectView redirectAnnouncement() {
 		Client userLogged = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.get("userLogged");
-		userLogged = clientService.findById(userLogged.getId());
 		if (userLogged != null && userLogged.getCompany() != null && userLogged.getCompany().getValid() == true) {
 			return new RedirectView("/restrict/announcement");
 		} else {
@@ -77,7 +73,6 @@ public class HomeBean implements Serializable {
 	public String details() {
 		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		String id = params.get("announcementId");
-		System.out.println("Passou o Id: " + id);
 		return "/assinatura-detalhe.xhtml?faces-redirect=true&id=" + id;
 	}
 }

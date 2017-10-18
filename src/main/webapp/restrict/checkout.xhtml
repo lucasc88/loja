@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<ui:composition template="../_template.xhtml">
+
+	<ui:define name="content">
+
+		<h:form>
+			<p:wizard flowListener="#{checkoutBean.onFlowProcess}"
+				backLabel="Voltar" nextLabel="Próximo">
+				<p:tab title="Entrega">
+					<p:panel header="Endereço de Entrega">
+						<h:panelGrid columns="2" columnClasses="value">
+							<h:outputText value="Rua: " />
+							<p:outputLabel
+								value="#{checkoutBean.user.address.street}, #{checkoutBean.user.address.number}" />
+							<h:outputText value="Bairro: " />
+							<p:outputLabel value="#{checkoutBean.user.address.neighborhood}" />
+							<h:outputText value="CEP: " />
+							<p:outputLabel value="#{checkoutBean.user.address.cep}" />
+							<h:outputText value="Cidade: " />
+							<p:outputLabel value="#{checkoutBean.user.address.city}" />
+							<h:outputText value="Estado: " />
+							<p:outputLabel value="#{checkoutBean.user.address.state}" />
+						</h:panelGrid>
+					</p:panel>
+				</p:tab>
+
+				<p:tab title="Confirme">
+					<p:panel header="Confirmação">
+						<h:panelGrid columns="2" columnClasses="value">
+
+							<p:dataTable var="i" value="#{checkoutBean.itens}" reflow="true">
+								<p:column headerText="Título">
+									<h:outputText value="#{i.announcement.title}" />
+								</p:column>
+								<p:column headerText="Foto">
+									<img src="#{request.contextPath}/file/#{i.announcement.path}"
+										style="width: 100px;" class="img-thumbnail img-responsive" />
+								</p:column>
+								<p:column headerText="Quantidade">
+									<h:outputText value="#{i.quantity}" />
+								</p:column>
+								<p:column headerText="Preço">
+									<h:outputText value="R$ #{checkoutBean.getTotal(i)}" />
+								</p:column>
+							</p:dataTable>
+							<br />
+
+							<h:panelGrid columns="2" columnClasses="value">
+								<h:outputText value="Add PayPal ExpressCheckout here: " />
+								<p:commandButton value="Pay with PayPal ExpressCheckout" process="@this"
+									actionListener="#{checkoutBean.getPayPal()}" />
+							</h:panelGrid>
+						</h:panelGrid>
+					</p:panel>
+				</p:tab>
+			</p:wizard>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

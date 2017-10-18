@@ -30,7 +30,10 @@
 			    </p:column>
 			</p:dataTable>
 			<p:outputLabel value=" Total: R$ #{shoppingCart.getTotal()}"/>
-			<p:commandButton value="Assinar" styleClass="center-block"/>
+			<p:commandButton value="Finalizar Carrinho" styleClass="center-block"
+				action="#{shoppingCart.redirectCheckout()}" rendered="#{userLogged != null}"/>
+			<p:commandButton value="Login" styleClass="center-block" title="Login necessário"
+				action="#{shoppingCart.redirectLogin()}" rendered="#{userLogged == null}"/>
 		</h:form>
 	</ui:define>
 </ui:composition>

@@ -12,5 +12,4 @@ public class RedirectView {
 	public String toString() {
 		return viewName + "?faces-redirect=true";
 	}
-	
 }

@@ -12,6 +12,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
+import br.com.centraldaassinatura.loja.util.RedirectView;
+
 @Named
 @SessionScoped
 public class ShoppingCart implements Serializable {
@@ -44,13 +46,21 @@ public class ShoppingCart implements Serializable {
 		}
 		return total;
 	}
-	
-	public void remove(CartItem item){
+
+	public void remove(CartItem item) {
 		this.itens.remove(item);
 	}
-	
-	public Integer getTotalAmount(){
-		//sum total amount from itens
+
+	public Integer getTotalAmount() {
+		// sum total amount from each itens
 		return itens.stream().mapToInt(item -> item.getQuantity()).sum();
+	}
+
+	public RedirectView redirectCheckout() {
+		return new RedirectView("/restrict/checkout");
+	}
+	
+	public RedirectView redirectLogin() {
+		return new RedirectView("login");
 	}
 }
