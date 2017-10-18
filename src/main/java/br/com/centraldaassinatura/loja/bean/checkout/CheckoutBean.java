@@ -60,6 +60,7 @@ public class CheckoutBean implements Serializable {
 
 	public void getPayPal() {
 		//here you have Client, Anouncements and yours Companies, Itens from cart
+		//You will probably have to create a new entity called Subscription with these datas
 		for (CartItem cartItem : itens) {
 			System.out.println(cartItem.getAnnouncement().getTitle() + ", " + cartItem.getQuantity() + " from Company: "
 					+ cartItem.getAnnouncement().getCompany().getNameFantasy());
