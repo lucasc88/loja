@@ -18,12 +18,14 @@ import org.primefaces.event.FileUploadEvent;
 
 import br.com.centraldaassinatura.loja.dao.announcement.AnnouncementService;
 import br.com.centraldaassinatura.loja.dao.category.CategoryService;
+import br.com.centraldaassinatura.loja.dao.client.ClientService;
 import br.com.centraldaassinatura.loja.infra.FileSaver;
 import br.com.centraldaassinatura.loja.model.Announcement;
 import br.com.centraldaassinatura.loja.model.Category;
 import br.com.centraldaassinatura.loja.model.Client;
 import br.com.centraldaassinatura.loja.model.Company;
 import br.com.centraldaassinatura.loja.model.SecundaryImage;
+import br.com.centraldaassinatura.loja.service.GatewayPayPal;
 import br.com.centraldaassinatura.loja.util.RedirectView;
 
 @Named
@@ -42,13 +44,25 @@ public class AnnouncementBean implements Serializable {
 	private CategoryService categoryService;
 	@Inject
 	private AnnouncementService announcementService;
+	@Inject
+	private ClientService clientService;
+	@Inject
+	private GatewayPayPal gateway;
 
 	@PostConstruct
 	public void init() {
+		company = findCompanyByUserLogged();
+		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!" + company);
+	}
+
+	private Company findCompanyByUserLogged() {
 		Client userLogged = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.get("userLogged");
+		userLogged = clientService.findById(userLogged.getId());
 		if (userLogged != null && userLogged.getCompany() != null) {
-			company = userLogged.getCompany();
+			return userLogged.getCompany();
+		} else {
+			return null;
 		}
 	}
 
@@ -83,6 +97,10 @@ public class AnnouncementBean implements Serializable {
 		return company;
 	}
 
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+
 	public Part getMainImage() {
 		return mainImage;
 	}
@@ -91,8 +109,65 @@ public class AnnouncementBean implements Serializable {
 		this.mainImage = mainImage;
 	}
 
-	public void setCompany(Company company) {
-		this.company = company;
+	public void validatorGraterThan0(FacesContext context, UIComponent component, Object value) {
+		Double cycleD = null;
+		Integer cycleInt = null;
+		if (value instanceof Double) {
+			cycleD = (Double) value;
+		} else if (value instanceof Integer) {
+			cycleInt = (Integer) value;
+		}
+		if (cycleD != null && cycleD <= 0) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Valor Inválido",
+					"Valor deve ser maior que 0");
+			throw new ValidatorException(msg);
+		} else if (cycleInt != null && cycleInt <= 0) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Valor Inválido",
+					"Valor deve ser maior que 0");
+			throw new ValidatorException(msg);
+		}
+	}
+
+	public void validatorWidth(FacesContext context, UIComponent component, Object value) {
+		Integer width = (Integer) value;
+		if (width != null && width > 105) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Largura Inválida",
+					"Largura deve ser menor que 106");
+			throw new ValidatorException(msg);
+		} 
+		if(width != null && width < 11){
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Largura Inválida",
+					"Largura deve ser maior que 10");
+			throw new ValidatorException(msg);
+		}
+	}
+	
+	public void validatorHeight(FacesContext context, UIComponent component, Object value) {
+		Integer height = (Integer) value;
+		if (height != null && height > 105) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Altura Inválida",
+					"Altura deve ser menor que 106");
+			throw new ValidatorException(msg);
+		} 
+		if(height != null && height < 2){
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Altura Inválida",
+					"Altura deve ser maior que 1");
+			throw new ValidatorException(msg);
+		}
+	}
+	
+	public void validatorLength(FacesContext context, UIComponent component, Object value) {
+		Integer length = (Integer) value;
+		if (length != null && length > 105) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Comprimento Inválido",
+					"Comprimento deve ser menor que 106");
+			throw new ValidatorException(msg);
+		} 
+		if(length != null && length < 16){
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Comprimento Inválido",
+					"Comprimento deve ser maior que 15");
+			throw new ValidatorException(msg);
+		}
 	}
 
 	public void validator(FacesContext context, UIComponent component, Object value) {
@@ -110,8 +185,13 @@ public class AnnouncementBean implements Serializable {
 	}
 
 	public void handleFileUpload(FileUploadEvent event) {
+		if (company == null) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Empresa NULL", "Empresa NULL");
+			throw new ValidatorException(msg);
+		}
 		SecundaryImage si = new SecundaryImage();
-		si.setPath(FS.fileUploadEvent(event, company));
+		System.out.println("!!!!!!!!!!!!!!!!!! " + company);
+		si.setPath(FS.fileUploadEvent(event, company.getId()));
 		si.setAnn(announcement);
 		secundaryImages.add(si);
 	}
@@ -123,6 +203,12 @@ public class AnnouncementBean implements Serializable {
 		if (!secundaryImages.isEmpty()) {
 			announcement.setSecundaryImage(secundaryImages);
 		}
+		System.out.println("Chamou gateWay pra Criar Plano !!!!!!!!!!!!!!!!!!!!!!!!!");
+		String planIdAndChargeId = gateway.createPlan(announcement);
+		System.out.println("Id do Plano e Id do frete: " + planIdAndChargeId);
+		announcement.setPlanId(planIdAndChargeId.substring(0, planIdAndChargeId.indexOf(" ")));
+		announcement.setChargeModelIdShipping(
+				planIdAndChargeId.substring(planIdAndChargeId.indexOf(" ") + 1, planIdAndChargeId.length()));
 		announcementService.save(announcement);
 		return new RedirectView("/index");
 	}

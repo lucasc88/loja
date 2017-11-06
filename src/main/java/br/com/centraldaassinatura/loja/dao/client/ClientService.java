@@ -19,8 +19,8 @@ public class ClientService {
 	private ClientDao clientDao;
 	
 	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	public List<Client> allCategories() {
-		return clientDao.allCategories();
+	public List<Client> allClients() {
+		return clientDao.allClients();
 	}
 	
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)

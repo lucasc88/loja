@@ -23,6 +23,15 @@ public class Announcement {
 	private String description;
 	private BigDecimal price;
 	private String path;
+	private String type;
+	private String frequency;
+	private String planId;
+	private String chargeModelIdShipping;
+	private int widthBox;
+	private int heightBox;
+	private int lengthBox;
+	private double weightBox;
+	private int cycles;
 	@OneToMany(mappedBy = "ann", cascade = CascadeType.ALL)
 	private List<SecundaryImage> secundaryImage;
 	@ManyToOne
@@ -90,6 +99,78 @@ public class Announcement {
 		this.secundaryImage = secundaryImage;
 	}
 
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getFrequency() {
+		return frequency;
+	}
+
+	public void setFrequency(String frequency) {
+		this.frequency = frequency;
+	}
+
+	public int getCycles() {
+		return cycles;
+	}
+
+	public void setCycles(int cycles) {
+		this.cycles = cycles;
+	}
+	
+	public String getPlanId() {
+		return planId;
+	}
+
+	public void setPlanId(String planId) {
+		this.planId = planId;
+	}
+
+	public String getChargeModelIdShipping() {
+		return chargeModelIdShipping;
+	}
+
+	public void setChargeModelIdShipping(String chargeModelIdShipping) {
+		this.chargeModelIdShipping = chargeModelIdShipping;
+	}
+
+	public int getWidthBox() {
+		return widthBox;
+	}
+
+	public void setWidthBox(int widthBox) {
+		this.widthBox = widthBox;
+	}
+
+	public int getHeightBox() {
+		return heightBox;
+	}
+
+	public void setHeightBox(int heightBox) {
+		this.heightBox = heightBox;
+	}
+
+	public int getLengthBox() {
+		return lengthBox;
+	}
+
+	public void setLengthBox(int lengthBox) {
+		this.lengthBox = lengthBox;
+	}
+
+	public double getWeightBox() {
+		return weightBox;
+	}
+
+	public void setWeightBox(double weightBox) {
+		this.weightBox = weightBox;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -130,7 +211,6 @@ public class Announcement {
 	@Override
 	public String toString() {
 		return "Announcement: id: " + id + ", title: " + title + ", description: " + description + ", price: " + price
-				+ ", path: " + path + ", company: " + company + ", category: "
-				+ category;
+				+ ", path: " + path + ", company: " + company + ", category: " + category;
 	}
 }

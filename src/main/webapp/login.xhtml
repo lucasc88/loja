@@ -85,6 +85,15 @@
 							<p:tab id="address" title="Endereço">
 								<p:panel header="Endereço p/ Entrega">
 									<h:panelGrid columns="2" columnClasses="value">
+										<p:outputLabel for="cep" value="CEP: " />
+										<p:inputMask id="cep" value="#{loginBean.address.cep}"
+											mask="99.999-999" required="true">
+											<p:ajax event="blur" update="@form"
+												listener="#{loginBean.findCEP()}"/>
+										</p:inputMask>
+										<br/>
+										<p:message for="cep" />
+										
 										<p:outputLabel for="street" value="Rua: " />
 										<p:inputText id="street" value="#{loginBean.address.street}"
 											type="text" required="true"/>
@@ -102,12 +111,6 @@
 											value="#{loginBean.address.neighborhood}"/>
 										<br/>
 										<p:message for="neighborhood" />
-										
-										<p:outputLabel for="cep" value="CEP: " />
-										<p:inputMask id="cep" value="#{loginBean.address.cep}"
-											mask="99.999-999" required="true"/>
-										<br/>
-										<p:message for="cep" />
 										
 										<p:outputLabel for="city" value="Cidade: " />
 										<p:inputText id="city" required="true"
@@ -131,41 +134,41 @@
 											<h3 style="font-weight: 900;">Dados Pessoais</h3>
 											<h:panelGrid columns="2" columnClasses="value">
 												<p:outputLabel value="Nome: " />
-												<h:outputText value="#{loginBean.user.name}"
+												<p:outputLabel value="#{loginBean.user.name}"
 													styleClass="outputLabel" />
 
 												<p:outputLabel value="Sobrenome: " />
-												<h:outputText value="#{loginBean.user.lastName}"
+												<p:outputLabel value="#{loginBean.user.lastName}"
 													styleClass="outputLabel" />
 
 												<p:outputLabel value="Email: " />
-												<h:outputText value="#{loginBean.user.email}"
+												<p:outputLabel value="#{loginBean.user.email}"
 													styleClass="outputLabel" />
 
 												<p:outputLabel value="Nascimento: " />
-												<h:outputText value="#{loginBean.user.dateBirth}"
+												<p:outputLabel value="#{loginBean.user.dateBirth}"
 													styleClass="outputLabel">
 													<f:convertDateTime pattern="dd/MM/yyyy"/>	
-												</h:outputText>
+												</p:outputLabel>
 
 												<p:outputLabel value="CPF: " />
-												<h:outputText value="#{loginBean.user.cpf}"
+												<p:outputLabel value="#{loginBean.user.cpf}"
 													styleClass="outputLabel" />
 													
 												<p:outputLabel value="Endereço: " />
-												<h:outputText value="#{loginBean.address.street}, #{loginBean.address.number}"
+												<p:outputLabel value="#{loginBean.address.street}, #{loginBean.address.number}"
 													styleClass="outputLabel" />
 													
 												<p:outputLabel value="Bairro: " />
-												<h:outputText value="#{loginBean.address.neighborhood}"
+												<p:outputLabel value="#{loginBean.address.neighborhood}"
 													styleClass="outputLabel" />
 													
 												<p:outputLabel value="Cidade: " />
-												<h:outputText value="#{loginBean.address.city}"
+												<p:outputLabel value="#{loginBean.address.city}"
 													styleClass="outputLabel" />
 												
 												<p:outputLabel value="Estado: " />
-												<h:outputText value="#{loginBean.address.state}"
+												<p:outputLabel value="#{loginBean.address.state}"
 													styleClass="outputLabel" />
 												
 											</h:panelGrid>

@@ -20,8 +20,6 @@ import org.primefaces.event.FileUploadEvent;
 
 import com.tinify.Tinify;
 
-import br.com.centraldaassinatura.loja.model.Company;
-
 public class FileSaver {
 
 	public String write(Part mainImage, String imagesUploadedPathWithId) {
@@ -68,13 +66,13 @@ public class FileSaver {
 		}
 	}
 
-	public String fileUploadEvent(FileUploadEvent event, Company company) {
+	public String fileUploadEvent(FileUploadEvent event, int id) {
 		String finalRelativePath = null;
 		try {
 			String fileName = event.getFile().getFileName();
 			String fullPath = this.getClass().getClassLoader().getResource("").getPath();
 			InputStream in = new BufferedInputStream(compressWithTinify(event));
-			String relativePathFromCompany = "imagesUploaded/companyId" + company.getId();
+			String relativePathFromCompany = "imagesUploaded/companyId" + id;
 			System.out.println("Criará: " + FileSaver.getServerPath(fullPath) + relativePathFromCompany);
 			File file = new File(FileSaver.getServerPath(fullPath) + relativePathFromCompany);
 			if (!file.exists()) {

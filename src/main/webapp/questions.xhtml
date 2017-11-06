@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="_template.xhtml">
+
+	<ui:define name="content">
+		<h:form id="formTips">
+			<p:accordionPanel activeIndex="null">
+				<p:tab title="Como funciona uma assinatura na Central da Assinatura?">
+					<h:panelGrid cellpadding="10">
+						<ul class="list-group">
+							<li class="list-group-item">Funciona de modo recorrente e contínuo. Você paga um valor mensal por cartão de crédito via PayPal e recebe o seu produto.</li>
+						</ul>
+					</h:panelGrid>
+				</p:tab>
+				<p:tab title="Quais são as formas de pagamento?">
+					<h:panelGrid cellpadding="10">
+						<ul class="list-group">
+							<li class="list-group-item">Somente via PayPal.</li>
+						</ul>
+					</h:panelGrid>
+				</p:tab>
+				<p:tab title="Fiz minha assinatura. Quando recebo?">
+					<h:panelGrid cellpadding="10">
+						<ul class="list-group">
+							<li class="list-group-item">Mediante confirmação do respectivo pagamento, sua caixa começará a ser produzida. Cada uma delas possui uma condição de entrega que pode variar, dependendo da localidade, de uma semana a um mês.</li>
+						</ul>
+					</h:panelGrid>
+				</p:tab>
+				<p:tab title="Quero cancelar a minha assinatura. O que faço?">
+					<h:panelGrid cellpadding="10">
+						<ul class="list-group">
+							<li class="list-group-item">Selecione "Minha Conta" e cancela a assinatura em questão.</li>
+						</ul>
+					</h:panelGrid>
+				</p:tab>
+			</p:accordionPanel>
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+
+</html>

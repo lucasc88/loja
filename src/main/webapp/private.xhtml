@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="_template.xhtml">
+
+	<ui:define name="content">
+		<h:form id="formTips">
+			<p:accordionPanel activeIndex="null">
+				<p:tab title="Segurança">
+					<h:panelGrid cellpadding="10">
+						<ul class="list-group">
+							<li class="list-group-item">Toda informação que nós coletamos é protegida por meios técnicos e procedimentos de segurança razoáveis no intuito de evitar acessos ou uso dos dados de forma não autorizada.</li>
+						</ul>
+					</h:panelGrid>
+				</p:tab>
+				<p:tab title="Acesso e correção">
+					<h:panelGrid cellpadding="10">
+						<ul class="list-group">
+							<li class="list-group-item">Você pode acessar e também corrigir seus dados.</li>
+						</ul>
+					</h:panelGrid>
+				</p:tab>
+				<p:tab title="Compartilhamento da Informação">
+					<h:panelGrid cellpadding="10">
+						<ul class="list-group">
+							<li class="list-group-item">Nós não compartilhamos seus dados.</li>
+						</ul>
+					</h:panelGrid>
+				</p:tab>
+			</p:accordionPanel>
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+
+</html>

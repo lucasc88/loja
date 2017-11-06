@@ -7,14 +7,14 @@
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
 <ui:composition template="../_template.xhtml">
-
+	
 	<ui:define name="content">
 		<h:form id="formAnnouncement" enctype="multipart/form-data">
 			<p:tab id="announcement1" title="Dados do Anúncio">
 				<p:panel header="O que você quer anunciar?">
 					<h:panelGrid columns="2" columnClasses="value">
 						<p:outputLabel for="titulo" value="Título:" />
-						<p:inputText id="titulo" required="true"
+						<p:inputText id="titulo" required="true" maxlength="255"
 							value="#{announcementBean.announcement.title}" />
 						<br />
 						<p:message for="titulo" />
@@ -42,7 +42,35 @@
 						</p:selectOneMenu>
 						<br />
 						<p:message for="category" />
-
+						
+						<p:outputLabel for="type" value="Tipo da Assinatura:" title="Define se têm um número fixo ou infinito de ciclos"/>
+				        <p:selectOneRadio id="type" value="#{announcementBean.announcement.type}"
+				        	style="width: 200px;" required="true">
+				            <f:selectItem itemLabel="Fixo" itemValue="fixed"/>
+				            <f:selectItem itemLabel="Infinito" itemValue="infinite"/>
+				            <p:ajax update="cycles" event="change"/>
+				        </p:selectOneRadio>
+				        <br />
+						<p:message for="type" />
+				        
+				        <p:outputLabel for="cycles" value="Total de Ciclos:" />
+				        <p:inputNumber id="cycles" value="#{announcementBean.announcement.cycles}" required="true"
+				        	disabled="#{announcementBean.announcement.type == 'infinite'}" decimalPlaces="0"
+				        	validator="#{announcementBean.validatorGraterThan0}" />
+				        <br />
+						<p:message for="cycles" />
+				        
+				        <p:outputLabel for="frequency" value="Frequência:"/>
+				        <p:selectOneRadio id="frequency" value="#{announcementBean.announcement.frequency}"
+				        	layout="responsive" columns="4" required="true" style="width: 463px;">
+				            <f:selectItem itemLabel="Diária" itemValue="DAY"/>
+				            <f:selectItem itemLabel="Semanal" itemValue="WEEK"/>
+				            <f:selectItem itemLabel="Mensal" itemValue="MONTH"/>
+				            <f:selectItem itemLabel="Anual" itemValue="YEAR"/>
+				        </p:selectOneRadio>
+				        <br />
+						<p:message for="frequency" />
+				        
 						<p:outputLabel value="Imagem Principal: "
 							title="Será a imagem exibida na página inicial" />
 						<h:inputFile id="img" value="#{announcementBean.mainImage}"
@@ -56,12 +84,44 @@
 							fileUploadListener="#{announcementBean.handleFileUpload}"
 							mode="advanced" dragDropSupport="false" multiple="true"
 							sizeLimit="5000000" sequential="true" auto="true"
-							allowTypes="/(\.|\/)(jpe?g|png)$/"
+							allowTypes="/(\.|\/)(jpe?g|png)$/" 
 							onstart="PF('statusDialog').show()"
 							oncomplete="PF('statusDialog').hide()"
 							onerror="PF('statusDialog').hide()" />
 						<br />
+						<p:message for="upload" />
 					</h:panelGrid>
+					<p:fieldset legend="Medidas da Embalagem" style="margin-bottom:20px">
+				        <h:panelGrid columns="2" cellpadding="5">
+				            <p:outputLabel for="width" value="Largura (cm): " />
+					        <p:inputNumber id="width" value="#{announcementBean.announcement.widthBox}"
+					        	decimalPlaces="0" required="true"
+					        	validator="#{announcementBean.validatorWidth}"/>
+					        <br />
+							<p:message for="width" />
+							
+							<p:outputLabel for="height" value="Altura (cm): " />
+					        <p:inputNumber id="height" value="#{announcementBean.announcement.heightBox}"
+					        	decimalPlaces="0" required="true"
+					        	validator="#{announcementBean.validatorHeight}"/>
+					        <br />
+							<p:message for="height" />
+							
+							<p:outputLabel for="length" value="Comprimento (cm): " />
+					        <p:inputNumber id="length" value="#{announcementBean.announcement.lengthBox}"
+					        	decimalPlaces="0" required="true" 
+					        	validator="#{announcementBean.validatorLength}"/>
+					        <br />
+							<p:message for="length" />
+							
+							<p:outputLabel for="weightBox" value="Peso (Kg): " />
+					        <p:inputNumber id="weightBox" value="#{announcementBean.announcement.weightBox}"
+					        	decimalPlaces="1" required="true"
+					        	validator="#{announcementBean.validatorGraterThan0}" />
+					        <br />
+							<p:message for="weightBox" />
+				        </h:panelGrid>
+				    </p:fieldset>
 				</p:panel>
 			</p:tab>
 			<p:commandButton value="Salvar" action="#{announcementBean.save}"

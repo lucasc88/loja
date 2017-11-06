@@ -32,5 +32,8 @@ public class CategoryDao {
 	public List<Category> allCategories() {
 		return dao.selectAll();
 	}
-
+	
+	public void save(Category c){
+		dao.persist(c);
+	}
 }

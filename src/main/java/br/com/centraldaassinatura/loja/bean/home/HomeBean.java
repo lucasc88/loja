@@ -12,6 +12,7 @@ import javax.inject.Named;
 
 import br.com.centraldaassinatura.loja.dao.announcement.AnnouncementService;
 import br.com.centraldaassinatura.loja.dao.category.CategoryService;
+import br.com.centraldaassinatura.loja.dao.client.ClientService;
 import br.com.centraldaassinatura.loja.model.Announcement;
 import br.com.centraldaassinatura.loja.model.Category;
 import br.com.centraldaassinatura.loja.model.Client;
@@ -26,6 +27,8 @@ public class HomeBean implements Serializable {
 	private CategoryService categoryService;
 	@Inject
 	private AnnouncementService announcementService;
+	@Inject
+	private ClientService clientService;
 	private List<Announcement> announcements;
 	private List<Category> categories;
 	private List<Category> categoriesSelected = new ArrayList<>();
@@ -63,6 +66,7 @@ public class HomeBean implements Serializable {
 	public RedirectView redirectAnnouncement() {
 		Client userLogged = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.get("userLogged");
+		userLogged = clientService.findById(userLogged.getId());
 		if (userLogged != null && userLogged.getCompany() != null && userLogged.getCompany().getValid() == true) {
 			return new RedirectView("/restrict/announcement");
 		} else {

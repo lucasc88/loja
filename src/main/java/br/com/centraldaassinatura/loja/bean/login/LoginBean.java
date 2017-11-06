@@ -1,6 +1,15 @@
 package br.com.centraldaassinatura.loja.bean.login;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -9,10 +18,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.primefaces.event.FlowEvent;
+import org.primefaces.json.JSONObject;
 
 import br.com.centraldaassinatura.loja.dao.client.ClientService;
 import br.com.centraldaassinatura.loja.model.Address;
 import br.com.centraldaassinatura.loja.model.Client;
+import br.com.centraldaassinatura.loja.service.CepWebService;
 import br.com.centraldaassinatura.loja.util.RedirectView;
 
 @Named
@@ -112,6 +123,12 @@ public class LoginBean implements Serializable {
 		Client c = usuerDao.findByEmail(user.getEmail());
 		if (c.getPassword() != null && c.getPassword().equals(user.getPassword())) {
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userLogged", c);
+			FacesContext fc = FacesContext.getCurrentInstance();
+			fc.getExternalContext().getFlash().setKeepMessages(true);
+			fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Logado com Sucesso!", "Bem vindo " + user.getEmail()));
+		} else {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Dados Incorretos", "Tente novamente"));
+			return new RedirectView("");
 		}
 		return new RedirectView("index");
 	}
@@ -123,5 +140,9 @@ public class LoginBean implements Serializable {
 
 	public RedirectView redirectTologin() {
 		return new RedirectView("login");
+	}
+	
+	public void findCEP(){
+		address = CepWebService.findAddress(address);
 	}
 }

@@ -1,5 +1,7 @@
 package br.com.centraldaassinatura.loja.model;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,11 +16,32 @@ public class Subscription {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	private String agreementId;
+	private String state;
+	private String token;
+	private BigDecimal shipping;
 	@ManyToOne
 	private Client client;
 	@OneToOne
 	@JoinColumn(name = "announcement", nullable = false)
 	private Announcement announcement;
+
+	public Subscription() {
+	}
+
+	public Subscription(String agreementId, String state, String token, Client client, Announcement announcement, BigDecimal shipping) {
+		this.agreementId = agreementId;
+		this.state = state;
+		this.token = token;
+		this.client = client;
+		this.announcement = announcement;
+		this.shipping = shipping;
+	}
+
+	// @PrePersist does persist UuId before save in the DB
+	// @PrePersist
+	// public void createUuId(){
+	// }
 
 	public Integer getId() {
 		return id;
@@ -26,6 +49,38 @@ public class Subscription {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getAgreementId() {
+		return agreementId;
+	}
+
+	public void setAgreementId(String agreementId) {
+		this.agreementId = agreementId;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public BigDecimal getShipping() {
+		return shipping;
+	}
+
+	public void setShipping(BigDecimal shipping) {
+		this.shipping = shipping;
 	}
 
 	public Client getClient() {
@@ -71,7 +126,8 @@ public class Subscription {
 
 	@Override
 	public String toString() {
-		return "Subscription: client: " + client + ", announcement: " + announcement;
+		return "Subscription: agreementId: " + agreementId + ", state: " + state + ", token: " + token + ", client: "
+				+ client + ", announcement: " + announcement;
 	}
-	
+
 }

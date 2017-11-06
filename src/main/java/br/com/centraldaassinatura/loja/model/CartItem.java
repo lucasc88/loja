@@ -1,7 +1,7 @@
 package br.com.centraldaassinatura.loja.model;
 
 public class CartItem {
-	
+
 	private Announcement announcement;
 	private Integer quantity;
 

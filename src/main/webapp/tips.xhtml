@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="_template.xhtml">
+
+	<ui:define name="content">
+		<h:form id="formTips">
+			<p:accordionPanel activeIndex="null">
+				<p:tab title="Dicas para Assinantes">
+					<h:panelGrid cellpadding="10">
+						<ul class="list-group">
+							<li class="list-group-item">Confira se o preço condiz com a assinatura. Desconfie de assinaturas muito baratas.</li>
+							<li class="list-group-item">Tenta conferir se a empresa é real. Veja se possui site, telefone, endereço, email com domínio próprio.</li>
+							<li class="list-group-item">Se não receber, você pode cancelar.</li>
+						</ul>
+					</h:panelGrid>
+				</p:tab>
+				<p:tab title="Dicas para Anunciantes">
+					<h:panelGrid cellpadding="10">
+						<ul class="list-group">
+							<li class="list-group-item">Coloque fotos que valorize o seu produto.</li>
+							<li class="list-group-item">Quanto mais informação melhor. Cliente irão quere conferir sua empresa.</li>
+							<li class="list-group-item">Cumpra as entregas dentro do prazo.</li>
+						</ul>
+					</h:panelGrid>
+				</p:tab>
+			</p:accordionPanel>
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+
+</html>

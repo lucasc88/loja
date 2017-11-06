@@ -9,18 +9,19 @@
 <ui:composition template="_template.xhtml">
 
 	<ui:define name="content">
-		
+
 		<h:head>
 			<style>
-				.divContainerGrid .divBtns {
-				    display: none;
-				}
-				.divContainerGrid:hover .divBtns {
-					display: flex;
-				}
-			</style>
+.divContainerGrid .divBtns {
+	display: none;
+}
+
+.divContainerGrid:hover .divBtns {
+	display: flex;
+}
+</style>
 		</h:head>
-		
+
 		<div class="ui-g-12">
 			<h:form id="formMain">
 				<div class="ui-g-12 ui-md-4 ui-lg-3">
@@ -36,41 +37,52 @@
 					</p:fieldset>
 				</div>
 				<div class="ui-g-12 ui-md-8 ui-lg-9">
-					<p:dataGrid id="announcements" value="#{homeBean.announcements}" var="a" columns="3" layout="grid">
-				        <f:facet name="header">
+					<p:dataGrid id="announcements" value="#{homeBean.announcements}"
+						var="a" columns="3" layout="grid">
+						<f:facet name="header">
 				            Últimos Anúncios
 				        </f:facet>
-				        <div id="teste" class="divContainerGrid">
-					        <p:panel header="#{a.title}" style="text-align:center">
-					            <h:panelGrid columns="1" style="width:100%">
-					                <img style="width: 250px;" src="#{request.contextPath}/file/#{a.path}" alt="#{a.title}"/>
-					                <h:outputText value="#{a.description}"/>
-					            </h:panelGrid>
-					        </p:panel>
-					        <div class="divBtns">
-					        	<p:commandButton value="Detalhes da Assinatura" action="#{homeBean.details}">
-					        		<f:param name="announcementId" value="#{a.id}" />
-					        	</p:commandButton>
-								<p:commandButton value="Adicionar ao Carrinho" actionListener="#{shoppingCartBean.add(a.id)}"
-									update=":formCart:totalAmount"/>
-					      	</div>
+						<div id="teste" class="divContainerGrid">
+							<p:panel header="#{a.title}" style="text-align:center">
+								<h:panelGrid columns="1" style="width:100%">
+									<img style="width: 250px;"
+										src="#{request.contextPath}/file/#{a.path}" alt="#{a.title}" />
+									<h:outputText
+										value="#{a.description.length() gt 100 ? a.description.substring(0,97).concat('...') : a.description}" />
+								</h:panelGrid>
+							</p:panel>
+							<div class="divBtns">
+								<p:commandButton value="Detalhes da Assinatura"
+									action="#{homeBean.details}">
+									<f:param name="announcementId" value="#{a.id}" />
+								</p:commandButton>
+								<p:commandButton value="Adicionar ao Carrinho"
+									actionListener="#{shoppingCartBean.add(a.id)}"
+									update=":formCart:totalAmount" />
+							</div>
 						</div>
-				    </p:dataGrid>
+					</p:dataGrid>
 				</div>
-				
+
 				<div class="ui-g-12">
 					<p:carousel value="#{homeBean.announcements}" circular="true"
 						headerText="Mais Vendidos" var="a" itemStyle="text-align:center"
 						responsive="true">
-						<p:panelGrid columns="2" style="width:100%;margin:10px 0px"
-							columnClasses="label,value" layout="grid"
-							styleClass="ui-panelgrid-blank">
+						<h:panelGrid columns="1" style="width:100%">
 							<f:facet name="header">
-								<img style="width: 250px;" src="#{request.contextPath}/file/#{a.path}" alt="#{a.title}"/>
+								<center>
+									<img style="width: 250px;" alt="#{a.title}" 
+										src="#{request.contextPath}/file/#{a.path}"/>
+								</center>
 							</f:facet>
-							<h:outputText value="#{a.title}" />
-							<h:outputText value="#{a.description}" />
-						</p:panelGrid>
+							<h:link outcome="/assinatura-detalhe.xhtml?id=#{a.id}" >
+								<h:panelGrid columns="1">
+									<p:outputLabel id="carouselTitle" value="#{a.title}" />
+									<h:outputText id="carouseldescription"
+										value="#{a.description.length() gt 100 ? a.description.substring(0,97).concat('...') : a.description}" />
+								</h:panelGrid>
+							</h:link>
+						</h:panelGrid>
 					</p:carousel>
 				</div>
 			</h:form>

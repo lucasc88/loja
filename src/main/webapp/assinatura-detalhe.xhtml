@@ -14,101 +14,84 @@
 	</f:metadata>
 
 	<ui:define name="content">
-		
+
 		<div class="jumbotron">
 			<h1>#{subscriptionDetailBean.ann.title}</h1>
-			<p>#{subscriptionDetailBean.ann.description}</p>
+			<p class="text-justify">#{subscriptionDetailBean.ann.description}</p>
+			<h:outputLink value="#{subscriptionDetailBean.ann.company.site}" target="_blank"
+			    styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+			    <span class="ui-button-text">Site da Empresa</span>
+			</h:outputLink>
 			<img class="img-thumbnail img-responsive" style="margin: 0 auto;"
 				src="#{request.contextPath}/file/#{subscriptionDetailBean.ann.path}"
 				alt="#{subscriptionDetailBean.ann.title}" />
 		</div>
 		<div class="col-sm-7">
-			<p:carousel value="#{subscriptionDetailBean.ann.secundaryImage}" headerText="Mais Fotos"
-				var="image" numVisible="1" easing="easeOutBounce" cricular="true">
-	        	<img src="#{request.contextPath}/file/#{image.path}" class="img-thumbnail img-responsive"/>
-		    </p:carousel>
+			<p:carousel value="#{subscriptionDetailBean.ann.secundaryImage}"
+				headerText="Mais Fotos" var="image" numVisible="1"
+				styleClass="img-responsive" easing="easeOutBounce" cricular="true">
+				<img src="#{request.contextPath}/file/#{image.path}"
+					class="img-thumbnail img-responsive" />
+			</p:carousel>
 		</div>
 		<div class="col-sm-5" style="background-color: #a2a2a2;">
 			<div class="jumbotron">
 				<h2>Valor Total: R$ #{subscriptionDetailBean.ann.price}</h2>
 			</div>
-			<h:form>
+
+			<h:form rendered="#{userLogged == null}">
+				<p:commandButton value="Login" styleClass="center-block"
+					action="#{subscriptionDetailBean.redirectTologin}" />
+			</h:form>
+			<h:form rendered="#{userLogged != null}">
 				<p:wizard flowListener="#{subscriptionDetailBean.onFlowProcess}"
-						backLabel="Voltar" nextLabel="Próximo">
+					backLabel="Voltar" nextLabel="Próximo">
 					<p:tab id="personal" title="Dados Pessoais">
 						<p:panel header="Dados Pessoais">
 							<h:panelGrid columns="2" columnClasses="value">
-								<p:outputLabel for="name" value="Nome: " />
-								<p:inputText id="name" required="true"
-									value="#{subscriptionDetailBean.client.name}"/>
-								<br />
-								<p:message for="name" />
+								<h:outputText value="Nome: " />
+								<p:outputLabel id="name"
+									value="#{subscriptionDetailBean.client.name}" />
 
-								<p:outputLabel for="surname" value="Sobrenome: " />
-								<p:inputText id="surname"
-									value="#{subscriptionDetailBean.client.lastName}"
-									required="true" label="Lastname" />
-								<br />
-								<p:message for="surname" />
+								<h:outputText value="Sobrenome: " />
+								<p:outputLabel id="surname"
+									value="#{subscriptionDetailBean.client.lastName}" />
 
-								<p:outputLabel for="birth" value="Data de Nascimento: " />
-								<p:calendar id="birth"
-									value="#{subscriptionDetailBean.client.dateBirth}"
-									effect="fold" pattern="dd/MM/yyyy" mask="true"
-									timeZone="America/Sao_Paulo" required="true" />
-								<br />
-								<p:message for="birth" />
+								<h:outputText value="Data de Nascimento: " />
+								<p:outputLabel id="birth"
+									value="#{subscriptionDetailBean.client.dateBirth}">
+									<f:convertDateTime pattern="dd-MM-yyyy" />
+								</p:outputLabel>
 
-								<p:outputLabel for="cpf" value="CPF: " />
-								<p:inputMask id="cpf"
-									value="#{subscriptionDetailBean.client.cpf}"
-									mask="999.999.999-99" required="true"
-									validator="#{userBean.isCpfValid}" />
-								<br />
-								<p:message for="cpf" />
+								<h:outputText value="CPF: " />
+								<p:outputLabel id="cpf"
+									value="#{subscriptionDetailBean.client.cpf}" />
 							</h:panelGrid>
 						</p:panel>
 					</p:tab>
 					<p:tab id="address" title="Endereço">
 						<p:panel header="Endereço de Entrega">
 							<h:panelGrid columns="2" columnClasses="value">
-								<p:outputLabel for="street" value="Rua: " />
-								<p:inputText id="street"
-									value="#{subscriptionDetailBean.client.address.street}"
-									required="true" />
-								<br />
-								<p:message for="street" />
+								<h:outputText value="Rua: " />
+								<p:outputLabel id="street"
+									value="#{subscriptionDetailBean.client.address.street}, #{subscriptionDetailBean.client.address.number}" />
 
-								<p:outputLabel for="number" value="Número: " />
-								<p:inputNumber id="number"
-									value="#{subscriptionDetailBean.client.address.number}"
-									required="true" />
-								<br />
-								<p:message for="number" />
+								<h:outputText value="Bairro: " />
+								<p:outputLabel id="neighborhood"
+									value="#{subscriptionDetailBean.client.address.neighborhood}" />
 
-								<p:outputLabel for="neighborhood" value="Bairro: " />
-								<p:inputText id="neighborhood" required="true"
-									value="#{subscriptionDetailBean.client.address.neighborhood}"/>
-								<br />
-								<p:message for="neighborhood" />
+								<h:outputText value="CEP: " />
+								<p:outputLabel id="cep"
+									value="#{subscriptionDetailBean.client.address.cep}" />
 
-								<p:outputLabel for="cep" value="CEP: " />
-								<p:inputMask id="cep" required="true" mask="99.999-999"
-									value="#{subscriptionDetailBean.client.address.cep}"/>
-								<br />
-								<p:message for="cep" />
-								
-								<p:outputLabel for="state" value="Estado: " />
-								<p:inputText id="state" required="true"
-									value="#{subscriptionDetailBean.client.address.state}"/>
-								<br />
-								<p:message for="state" />
-								
+								<h:outputText value="Estado: " />
+								<p:outputLabel id="state"
+									value="#{subscriptionDetailBean.client.address.state}" />
 							</h:panelGrid>
 						</p:panel>
+						<p:commandButton value="Assinar" styleClass="center-block" />
 					</p:tab>
 				</p:wizard>
-				<p:commandButton value="Assinar" styleClass="center-block"/>
 			</h:form>
 		</div>
 	</ui:define>

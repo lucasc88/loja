@@ -13,56 +13,67 @@
 		<h:form>
 			<p:wizard flowListener="#{checkoutBean.onFlowProcess}"
 				backLabel="Voltar" nextLabel="Próximo">
-				<p:tab title="Entrega">
+				<p:tab id="delivery" title="Entrega">
 					<p:panel header="Endereço de Entrega">
 						<h:panelGrid columns="2" columnClasses="value">
 							<h:outputText value="Rua: " />
-							<p:outputLabel
-								value="#{checkoutBean.user.address.street}, #{checkoutBean.user.address.number}" />
+							<p:inputText value="#{checkoutBean.user.address.street}" />
+							<h:outputText value="Número: " />
+							<p:inputNumber value="#{checkoutBean.user.address.number}" decimalPlaces="0" />
 							<h:outputText value="Bairro: " />
-							<p:outputLabel value="#{checkoutBean.user.address.neighborhood}" />
+							<p:inputText value="#{checkoutBean.user.address.neighborhood}" />
 							<h:outputText value="CEP: " />
-							<p:outputLabel value="#{checkoutBean.user.address.cep}" />
+							<p:inputMask mask="99.999-999" value="#{checkoutBean.user.address.cep}" />
 							<h:outputText value="Cidade: " />
-							<p:outputLabel value="#{checkoutBean.user.address.city}" />
+							<p:inputText value="#{checkoutBean.user.address.city}" />
 							<h:outputText value="Estado: " />
-							<p:outputLabel value="#{checkoutBean.user.address.state}" />
+							<p:inputText value="#{checkoutBean.user.address.state}" />
+							<p:tooltip id="toolTipFade" for="type" value="PAC é mais econômica, entrega de segunda a sexta. SEDEX é mais rápida, entrega de segunda a sábado" position="top"/>
+							<br/>
+							<h:outputText value="PAC ou SEDEX: "/>
+							<p:selectOneRadio id="type" value="#{checkoutBean.type}" required="true">
+					            <f:selectItem itemLabel="PAC" itemValue="04510" />
+					            <f:selectItem itemLabel="SEDEX" itemValue="04014" />
+					        </p:selectOneRadio>
 						</h:panelGrid>
 					</p:panel>
 				</p:tab>
 
-				<p:tab title="Confirme">
+				<p:tab id="confirm" title="Confirme">
 					<p:panel header="Confirmação">
-						<h:panelGrid columns="2" columnClasses="value">
-
-							<p:dataTable var="i" value="#{checkoutBean.itens}" reflow="true">
-								<p:column headerText="Título">
-									<h:outputText value="#{i.announcement.title}" />
-								</p:column>
-								<p:column headerText="Foto">
-									<img src="#{request.contextPath}/file/#{i.announcement.path}"
-										style="width: 100px;" class="img-thumbnail img-responsive" />
-								</p:column>
-								<p:column headerText="Quantidade">
-									<h:outputText value="#{i.quantity}" />
-								</p:column>
-								<p:column headerText="Preço">
-									<h:outputText value="R$ #{checkoutBean.getTotal(i)}" />
-								</p:column>
+						<h:panelGrid columns="1" columnClasses="value">
+							<p:dataTable var="i" value="#{checkoutBean.itens}" reflow="true" >
+								<p:column headerText="Empresa">
+							        <p:outputLabel value="#{i.announcement.company.nameFantasy}"/>
+							    </p:column>
+							    <p:column headerText="Título">
+							        <p:outputLabel value="#{i.announcement.title}"/>
+							    </p:column>
+							    <p:column headerText="Imagem">
+							        <img class="img-thumbnail img-responsive"
+										src="#{request.contextPath}/file/#{i.announcement.path}"/>
+							    </p:column>
+							    <p:column headerText="Preço Individual">
+							        <p:outputLabel value="R$ #{i.announcement.price}"/>
+							    </p:column>
+							    <p:column headerText="Frete">
+							        <p:outputLabel value="R$ #{checkoutBean.shipping}"/>
+							    </p:column>
+							    <p:column headerText="TOTAL">
+							        <p:outputLabel value="R$ #{checkoutBean.shipping + i.announcement.price}"/>
+							    </p:column>
 							</p:dataTable>
-							<br />
-
-							<h:panelGrid columns="2" columnClasses="value">
-								<h:outputText value="Add PayPal ExpressCheckout here: " />
-								<p:commandButton value="Pay with PayPal ExpressCheckout" process="@this"
-									actionListener="#{checkoutBean.getPayPal()}" />
-							</h:panelGrid>
+							
+							<p:commandButton value="Pagar com PayPal"
+								action="#{checkoutBean.sendPayment}"
+								update="@form :formCart:totalAmount" />
+							<p:commandButton value="Refresh Token"
+								actionListener="#{checkoutBean.geraToken}"/>
 						</h:panelGrid>
 					</p:panel>
 				</p:tab>
 			</p:wizard>
 		</h:form>
-
 	</ui:define>
 </ui:composition>
 </html>

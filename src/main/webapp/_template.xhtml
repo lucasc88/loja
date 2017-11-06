@@ -35,27 +35,7 @@
 			
 				<b:navBar brandImg="#{request.contextPath}/resources/img/logo.png" brandHref="#{request.contextPath}/" brandImgStyle="max-width: 76px;margin-top: -20px;">
 					<b:navbarLinks styleClass="marginTopMenu">
-						<b:navLink value="Sobre" href="#" iconAwesome="fa-building-o"></b:navLink>
-						<b:dropMenu value="Dropdown" iconAwesome="birthday-cake">
-							<b:navLink value="Action" href="#"></b:navLink>
-							<b:navLink value="Another action" href="#"></b:navLink>
-							<b:navLink value="Something else here" href="#"></b:navLink>
-							<b:navLink></b:navLink>
-							<b:navLink header="Nav header"></b:navLink>
-							<b:navLink value="Separated link" href="#"></b:navLink>
-							<b:dropMenu value="Nested submenu" iconAwesome="birthday-cake"
-								iconAlign="right">
-								<b:navLink value="You can nest menus" href="#"></b:navLink>
-								<b:dropMenu value="Nested sub-submenu">
-									<b:navLink value="... as deep as ..." href="#"></b:navLink>
-									<b:dropMenu value="Nested sub-sub-submenu">
-										<b:navLink value="... you want!" href="#"></b:navLink>
-									</b:dropMenu>
-								</b:dropMenu>
-	
-							</b:dropMenu>
-							<b:navLink value="One more separated link" href="#"></b:navLink>
-						</b:dropMenu>
+						<b:navLink value="Sobre" href="/about.xhtml" iconAwesome="fa-building-o"></b:navLink>
 					</b:navbarLinks>
 					<form class="navbar-form navbar-left hidden-md hidden-sm hidden-xs"
 						role="search">
@@ -81,12 +61,9 @@
 							</h:form>
 						</b:navLink>
 						<b:dropMenu value="Minha Conta" iconAwesome="fa-user-o">
-							<b:navLink value="Action" href="#"></b:navLink>
-							<b:navLink value="Another action" href="#"></b:navLink>
-							<b:navLink value="Something else here" href="#"></b:navLink>
+							<b:navLink value="Canelar Assinatura" href="#"></b:navLink>
+							<b:navLink value="Canelar Anúncio" href="#"></b:navLink>
 							<b:navLink></b:navLink>
-							<b:navLink header="Nav header"></b:navLink>
-							<b:navLink value="Separated link" href="#"></b:navLink>
 							<h:form>
 								<p:commandButton rendered="#{userLogged == null}" value="Login" action="#{loginBean.redirectTologin}"/>
 								<p:commandButton rendered="#{userLogged != null}" value="Logout" action="#{loginBean.logout}"/>
@@ -101,7 +78,7 @@
 
 	<div id="content" style="margin-top: 60px;">
 		<div class="container">
-			<p:messages globalOnly="true" />
+			<p:messages globalOnly="true" closable="true"/>
 			<ui:insert name="content">
 			</ui:insert>
 		</div>
@@ -109,14 +86,16 @@
 	
 	<div id="footer" class="container panel panel-default panel-body footer" style="margin-top: 3%;">
 		<ui:insert name="footer">
-			<p:panelGrid columns="4" layout="grid">
-				<p:commandLink value="Dicas para Anunciantes" />
-				<p:commandLink value="Perguntas Frequentes" />
-				<p:commandLink value="Política de Privacidade" />
-				<p:commandLink value="Termos de Uso" />
-			</p:panelGrid>
+			<center>
+				<h:form>
+					<p:panelGrid columns="3" layout="grid">
+						<p:commandLink value="Dicas" action="/tips.xhtml?faces-redirect=true"/>
+						<p:commandLink value="Perguntas Frequentes" action="/questions.xhtml?faces-redirect=true"/>
+						<p:commandLink value="Política de Privacidade" action="/private.xhtml?faces-redirect=true"/>
+					</p:panelGrid>
+				</h:form>
+			</center>
 		</ui:insert>
 	</div>
 </h:body>
-
 </html>

@@ -102,6 +102,20 @@
 											required="true" />
 										<br />
 										<p:message for="state" />
+										
+										<p:outputLabel for="clientId" value="Seu Client-Id do PayPal: " />
+										<p:inputText id="clientId" styleClass="inputFields"
+											value="#{companyBean.company.clientId}" type="text"
+											required="true" />
+										<br />
+										<p:message for="clientId" />
+										
+										<p:outputLabel for="clientSecret" value="Seu Secret do PayPal: " />
+										<p:inputText id="clientSecret" styleClass="inputFields"
+											value="#{companyBean.company.clientSecret}" type="text"
+											required="true" />
+										<br />
+										<p:message for="clientSecret" />
 
 									</h:panelGrid>
 								</p:panel>

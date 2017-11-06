@@ -19,6 +19,14 @@ public class Category {
 	@OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
 	private List<Announcement> announcements;
 
+	public Category() {
+	}
+
+	public Category(String name, List<Announcement> announcements) {
+		this.name = name;
+		this.announcements = announcements;
+	}
+
 	public Integer getId() {
 		return this.id;
 	}

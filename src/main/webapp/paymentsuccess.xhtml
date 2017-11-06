@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="_template.xhtml">
+
+	<f:metadata>
+		<f:viewParam value="#{paymentSuccessBean.token}" name="token" />
+		<f:viewAction action="#{paymentSuccessBean.executeAgreement()}" />
+	</f:metadata>
+	
+	<ui:define name="content">
+		<h:form>
+			<h2>Pagamento Realizado com Sucesso!</h2>
+			<p:panelGrid columns="4" layout="grid">
+    			<h:outputText value="Assinatura: #{paymentSuccessBean.subscription.announcement.title}" />
+    			<h:outputText value="Empresa: #{paymentSuccessBean.subscription.announcement.company.nameFantasy}" />
+    			<h:outputText value="Preço R$ #{paymentSuccessBean.subscription.announcement.price}" />
+    			<h:outputText value="Frete R$ #{paymentSuccessBean.subscription.shipping}" />
+    		</p:panelGrid>
+    		<br/>
+    		<p:panelGrid columns="1" layout="grid" rendered="#{not empty shoppingCart.itens}">
+    			<h2>Ainda há compras no seu carrinho</h2>
+    			<p:commandButton value="Finalizar Compras do Carrinho" action="/cart.xhtml?faces-redirect=true"/>
+    		</p:panelGrid>
+    		
+			<p:commandLink value="Página Inicial" action="/index.xhtml?faces-redirect=true"/>
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+
+</html>

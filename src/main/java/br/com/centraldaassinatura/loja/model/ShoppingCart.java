@@ -20,6 +20,23 @@ public class ShoppingCart implements Serializable {
 
 	private static final long serialVersionUID = -1379866240401823737L;
 	private Set<CartItem> itens = new HashSet<>();
+	private CartItem itemToBeFinalized;
+
+	public List<CartItem> getItens() {
+		return new ArrayList<CartItem>(itens);
+	}
+
+	public CartItem getItemToBeFinalized() {
+		return itemToBeFinalized;
+	}
+
+	public void setItemToBeFinalized(CartItem itemToBeFinalized) {
+		this.itemToBeFinalized = itemToBeFinalized;
+	}
+
+	public BigDecimal getTotal(CartItem item) {
+		return item.getAnnouncement().getPrice().multiply(new BigDecimal(item.getQuantity()));
+	}
 
 	public void add(CartItem c) {
 		if (!itens.add(c)) {
@@ -29,14 +46,6 @@ public class ShoppingCart implements Serializable {
 			FacesMessage msg = new FacesMessage("Adicionado!", "Item adicionado ao carrinho");
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
-	}
-
-	public List<CartItem> getItens() {
-		return new ArrayList<CartItem>(itens);
-	}
-
-	public BigDecimal getTotal(CartItem item) {
-		return item.getAnnouncement().getPrice().multiply(new BigDecimal(item.getQuantity()));
 	}
 
 	public BigDecimal getTotal() {
@@ -56,10 +65,11 @@ public class ShoppingCart implements Serializable {
 		return itens.stream().mapToInt(item -> item.getQuantity()).sum();
 	}
 
-	public RedirectView redirectCheckout() {
+	public RedirectView redirectCheckout(CartItem i) {
+		setItemToBeFinalized(i);
 		return new RedirectView("/restrict/checkout");
 	}
-	
+
 	public RedirectView redirectLogin() {
 		return new RedirectView("login");
 	}

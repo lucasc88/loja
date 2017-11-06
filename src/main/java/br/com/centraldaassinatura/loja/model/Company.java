@@ -23,6 +23,8 @@ public class Company {
 	private String reasonSocial;
 	private String cnpj;
 	private String site;
+	private String clientId;
+	private String clientSecret;
 	@Enumerated(EnumType.STRING)
 	private NaturesLegals legalNature;
 	private Boolean valid;
@@ -69,6 +71,22 @@ public class Company {
 		this.site = site;
 	}
 
+	public String getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(String clientId) {
+		this.clientId = clientId;
+	}
+
+	public String getClientSecret() {
+		return clientSecret;
+	}
+
+	public void setClientSecret(String clientSecret) {
+		this.clientSecret = clientSecret;
+	}
+
 	public Address getAddress() {
 		return address;
 	}
@@ -111,8 +129,9 @@ public class Company {
 
 	@Override
 	public String toString() {
-		return "Company: nameFantasy: " + nameFantasy + ", reasonSocial: " + reasonSocial + ", cnpj: " + cnpj
-				+ ", legalNature: " + legalNature + ", valid: " + valid + ", client: " + client;
+		return "Company: id: " + id + ", nameFantasy: " + nameFantasy + ", reasonSocial: " + reasonSocial + ", cnpj: "
+				+ cnpj + ", clientId: " + clientId + ", clientSecret: " + clientSecret + ", legalNature: " + legalNature
+				+ ", valid: " + valid + ", address: " + address;
 	}
 
 }

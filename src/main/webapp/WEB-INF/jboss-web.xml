@@ -2,5 +2,5 @@
 <jboss-web>
   <context-root>/</context-root>
 </jboss-web>
-<!-- Este arquivo faz a aplicacao executar na raiz do servidor,
-no caso, http://localhost:8080/ -->
+<!-- This file makes the application run in the root of the server,
+in this case, http://localhost:8080/ -->

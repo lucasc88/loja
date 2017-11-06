@@ -5,11 +5,15 @@ public class RedirectView {
 	private String viewName;
 
 	public RedirectView(String viewName) {
-		this.viewName = viewName;
+		if(viewName != null && !viewName.equals("")){
+			this.viewName = viewName + "?faces-redirect=true";
+		} else {
+			this.viewName = "";
+		}
 	}
 
 	@Override
 	public String toString() {
-		return viewName + "?faces-redirect=true";
+		return viewName;
 	}
 }

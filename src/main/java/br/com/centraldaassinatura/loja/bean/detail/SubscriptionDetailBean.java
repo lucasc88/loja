@@ -1,9 +1,11 @@
 package br.com.centraldaassinatura.loja.bean.detail;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -18,6 +20,7 @@ import br.com.centraldaassinatura.loja.model.Address;
 import br.com.centraldaassinatura.loja.model.Announcement;
 import br.com.centraldaassinatura.loja.model.Client;
 import br.com.centraldaassinatura.loja.model.SecundaryImage;
+import br.com.centraldaassinatura.loja.util.RedirectView;
 
 @Named
 @ViewScoped
@@ -81,5 +84,18 @@ public class SubscriptionDetailBean implements Serializable {
 
 	public String onFlowProcess(FlowEvent event) {
 		return event.getNewStep();
+	}
+
+	public RedirectView redirectTologin() {
+		return new RedirectView("login");
+	}
+
+	public void getExternalRedirect() {
+		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+		try {
+			externalContext.redirect(ann.getCompany().getSite());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
