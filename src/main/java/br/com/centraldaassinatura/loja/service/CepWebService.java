@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -29,9 +31,17 @@ public class CepWebService {
 		try {
 			URL url = new URL("https://viacep.com.br/ws/" + address.getCep().replaceAll("\\.|\\-", "") + "/json/");
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			InputStream content = connection.getInputStream();
+			InputStream content = null;
+			try {
+				content = connection.getInputStream();
+			} catch (ConnectException e) {
+				e.printStackTrace();
+				return null;
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+				return null;
+			}
 			BufferedReader br = new BufferedReader(new InputStreamReader(content, "UTF-8"));
-
 			StringBuilder sb = new StringBuilder();
 			String line = null;
 			while ((line = br.readLine()) != null) {
@@ -39,11 +49,16 @@ public class CepWebService {
 			}
 			JSONObject json = new JSONObject(sb.toString());
 
-			address.setState(json.getString("uf"));
-			address.setStreet(json.getString("logradouro"));
-			address.setNeighborhood(json.getString("bairro"));
-			address.setCity(json.getString("localidade"));
-
+			if (!json.toString().contains(":true}")) {
+				address.setState(json.getString("uf"));
+				address.setStreet(json.getString("logradouro"));
+				address.setNeighborhood(json.getString("bairro"));
+				address.setCity(json.getString("localidade"));
+			} else {
+				// CEP not found
+				address = new Address();
+				return address;
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -52,11 +67,12 @@ public class CepWebService {
 
 	/**
 	 * 
-	 * @param cepOrigem, cepDestino, tipoServico, altura, largura, comprimento, peso
+	 * @param cepOrigem,
+	 *            cepDestino, tipoServico, altura, largura, comprimento, peso
 	 * @return
 	 */
-	public static String findShippingValue(String cepOrigem, String cepDestino, 
-			String tipoServico, int altura, int largura, int comprimento, double peso) {
+	public static String findShippingValue(String cepOrigem, String cepDestino, String tipoServico, int altura,
+			int largura, int comprimento, double peso) {
 		String nCdEmpresa = "";
 		String sDsSenha = "";
 		// 04510 Pac , 04014 Sedex
@@ -68,7 +84,8 @@ public class CepWebService {
 		String nCdFormato = "1";// caixa
 		String nVlComprimento = String.valueOf(comprimento);
 		String nVlAltura = String.valueOf(altura);
-		String nVlLargura = String.valueOf(largura);// largura nao pode ser inferior a 11
+		String nVlLargura = String.valueOf(largura);// largura nao pode ser
+													// inferior a 11
 		String nVlDiametro = "0";
 		String sCdMaoPropria = "n";
 		String nVlValorDeclarado = "0";
@@ -95,7 +112,7 @@ public class CepWebService {
 		parameters.setProperty("sCdAvisoRecebimento", sCdAvisoRecebimento);
 		parameters.setProperty("StrRetorno", StrRetorno);
 		// o iterador, para criar a URL
-		
+
 		@SuppressWarnings("rawtypes")
 		Iterator i = parameters.keySet().iterator();
 		// o contador

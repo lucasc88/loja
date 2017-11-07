@@ -38,4 +38,8 @@ public class ClientService {
 		return clientDao.findById(id);
 	}
 	
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public void update(Client c) {
+		clientDao.update(c);
+	}
 }

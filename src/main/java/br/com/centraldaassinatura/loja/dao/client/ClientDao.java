@@ -55,4 +55,9 @@ public class ClientDao {
 			return null;
 		}
 	}
+
+	@TransactionAttribute(TransactionAttributeType.MANDATORY)
+	public void update(Client c) {
+		dao.update(c);;
+	}
 }

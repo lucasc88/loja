@@ -1,15 +1,6 @@
 package br.com.centraldaassinatura.loja.bean.login;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -17,8 +8,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.FlowEvent;
-import org.primefaces.json.JSONObject;
 
 import br.com.centraldaassinatura.loja.dao.client.ClientService;
 import br.com.centraldaassinatura.loja.model.Address;
@@ -32,7 +23,7 @@ public class LoginBean implements Serializable {
 
 	private static final long serialVersionUID = -5842651762845034157L;
 	@Inject
-	private ClientService usuerDao;
+	private ClientService usuerService;
 	private boolean newUser;
 	private boolean userAlreadyExists;
 	private boolean skip;
@@ -98,7 +89,7 @@ public class LoginBean implements Serializable {
 	}
 
 	public void checkUser() {
-		Client c = usuerDao.findByEmail(user.getEmail());
+		Client c = usuerService.findByEmail(user.getEmail());
 		if (c != null) {
 			setUserAlreadyExists(true);
 			setShowPasswordField(true);
@@ -109,7 +100,7 @@ public class LoginBean implements Serializable {
 
 	public void save() {
 		user.setAddress(address);
-		usuerDao.save(user);
+		usuerService.save(user);
 		setUserAlreadyExists(true);
 		FacesMessage msg = new FacesMessage("Salvo com Sucesso", "Já pode logar " + user.getEmail());
 		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -120,14 +111,16 @@ public class LoginBean implements Serializable {
 	}
 
 	public RedirectView login() {
-		Client c = usuerDao.findByEmail(user.getEmail());
+		Client c = usuerService.findByEmail(user.getEmail());
 		if (c.getPassword() != null && c.getPassword().equals(user.getPassword())) {
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userLogged", c);
 			FacesContext fc = FacesContext.getCurrentInstance();
 			fc.getExternalContext().getFlash().setKeepMessages(true);
-			fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Logado com Sucesso!", "Bem vindo " + user.getEmail()));
+			fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Logado com Sucesso!",
+					"Bem vindo " + user.getEmail()));
 		} else {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Dados Incorretos", "Tente novamente"));
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Dados Incorretos", "Tente novamente"));
 			return new RedirectView("");
 		}
 		return new RedirectView("index");
@@ -141,8 +134,18 @@ public class LoginBean implements Serializable {
 	public RedirectView redirectTologin() {
 		return new RedirectView("login");
 	}
-	
-	public void findCEP(){
-		address = CepWebService.findAddress(address);
+
+	public void findCEP() {
+		Address a = CepWebService.findAddress(address);
+		if (a == null) {//ConnectException
+			RequestContext req = RequestContext.getCurrentInstance();
+			req.execute("PF('connectionFailWid').show()");
+		} else {
+			address = a;
+			if (address.getCep() == null) {
+				RequestContext req = RequestContext.getCurrentInstance();
+				req.execute("PF('addressNotFoundWid').show()");
+			}
+		}
 	}
 }
