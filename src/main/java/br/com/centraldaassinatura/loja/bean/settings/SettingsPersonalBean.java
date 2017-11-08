@@ -1,6 +1,8 @@
 package br.com.centraldaassinatura.loja.bean.settings;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.faces.context.FacesContext;
@@ -13,6 +15,7 @@ import org.primefaces.context.RequestContext;
 import br.com.centraldaassinatura.loja.dao.client.ClientService;
 import br.com.centraldaassinatura.loja.model.Address;
 import br.com.centraldaassinatura.loja.model.Client;
+import br.com.centraldaassinatura.loja.model.Subscription;
 import br.com.centraldaassinatura.loja.service.CepWebService;
 
 @Named
@@ -24,10 +27,17 @@ public class SettingsPersonalBean implements Serializable {
 	private ClientService usuerService;
 	private Client user = new Client();
 	private Address address = new Address();
+	private List<Subscription> subscriptions = new ArrayList<>();
 
 	public void findUserById(Integer id) {
 		user = usuerService.findByIdWithSubscriptions(id);
-		address = user.getAddress();
+		if (user != null) {
+			address = user.getAddress();
+		} else {
+			user = usuerService.findById(id);
+			user.setSubscription(subscriptions);
+			address = user.getAddress();
+		}
 	}
 
 	public Client getUser() {
@@ -36,6 +46,14 @@ public class SettingsPersonalBean implements Serializable {
 
 	public void setUser(Client user) {
 		this.user = user;
+	}
+
+	public List<Subscription> getSubscriptions() {
+		return subscriptions;
+	}
+
+	public void setSubscriptions(List<Subscription> subscriptions) {
+		this.subscriptions = subscriptions;
 	}
 
 	public Address getAddress() {
