@@ -29,6 +29,10 @@ public class CepWebService {
 
 	public static Address findAddress(Address address) {
 		try {
+			if(address.getCep() == null || address.getCep().isEmpty()){
+				address.setCep(null);
+				return address;
+			}
 			URL url = new URL("https://viacep.com.br/ws/" + address.getCep().replaceAll("\\.|\\-", "") + "/json/");
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			InputStream content = null;

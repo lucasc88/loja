@@ -19,8 +19,13 @@
 		<h:form id="formAnnouncement">
 			<p:tab title="Dados da Empresa">
 				<p:panel header="Preencha os dados da sua empresa">
-					<p:outputLabel
-						value="Antes precisamos validar a sua empresa. É rápido!" />
+					<div style="margin: 15px 0 20px 0;">
+						<p:outputLabel style="color:red"
+							value="Você ainda não cadastrou sua Empresa."/>
+						<br/>
+						<p:outputLabel style="margin-bot:10px"
+							value="Vamos cadastrá-la? É simples e rápido!" />
+					</div>
 					<h:panelGrid columns="3" columnClasses="value">
 						<p:outputLabel for="cnpj" value="CNPJ: " />
 						<p:inputMask id="cnpj" value="#{companyBean.company.cnpj}"

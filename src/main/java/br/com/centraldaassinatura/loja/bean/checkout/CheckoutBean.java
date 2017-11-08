@@ -3,7 +3,12 @@ package br.com.centraldaassinatura.loja.bean.checkout;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -16,6 +21,7 @@ import javax.inject.Named;
 import org.primefaces.event.FlowEvent;
 
 import br.com.centraldaassinatura.loja.dao.subscription.SubscriptionService;
+import br.com.centraldaassinatura.loja.model.Announcement;
 import br.com.centraldaassinatura.loja.model.CartItem;
 import br.com.centraldaassinatura.loja.model.Client;
 import br.com.centraldaassinatura.loja.model.ShoppingCart;
@@ -98,6 +104,7 @@ public class CheckoutBean implements Serializable {
 					itemToBeFinalized.getAnnouncement().getWidthBox(),
 					itemToBeFinalized.getAnnouncement().getLengthBox(),
 					itemToBeFinalized.getAnnouncement().getWeightBox());
+			System.out.println("Valor do Frete: R$ " + value);
 			setShipping(new BigDecimal(value.replace(',', '.')));
 		}
 		return event.getNewStep();
@@ -132,12 +139,16 @@ public class CheckoutBean implements Serializable {
 		// // it makes payment using asynchronous way
 
 		// remove from cart
-		String[] urlAndPaymentId = gateway.newAgreement(user, itemToBeFinalized.getAnnouncement(), getShipping());
-		String url = urlAndPaymentId[0];
-		String agreementId = urlAndPaymentId[1];
+		String[] datas = gateway.newAgreement(user, itemToBeFinalized.getAnnouncement(), getShipping());
+		String url = datas[0];
+		String agreementId = datas[1];
+		String paymentStartDate = datas[2];
+		Date payStartDate = convertStringToDate(paymentStartDate);
+		Date payLastDate = lastDateByAnnouncement(paymentStartDate, itemToBeFinalized.getAnnouncement());
+
 		// ao chegar em paymentsuccess.xhtml ativar a assinatura e atualiza-la
 		Subscription s = new Subscription(agreementId, "PENDING", gateway.extractedTokenFromURL(url), user,
-				itemToBeFinalized.getAnnouncement(), getShipping());
+				itemToBeFinalized.getAnnouncement(), payStartDate, payLastDate, getShipping());
 		subscriptionService.save(s);
 		shoppingCart.remove(itemToBeFinalized);
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
@@ -149,9 +160,47 @@ public class CheckoutBean implements Serializable {
 		return url;
 	}
 
-	public void geraToken() {
-		System.out.println(
-				"@@@@@@@@@@ " + gateway.refreshToken(itemToBeFinalized.getAnnouncement().getCompany().getClientId(),
-						itemToBeFinalized.getAnnouncement().getCompany().getClientSecret()));
+	private Date lastDateByAnnouncement(String paymentStartDate, Announcement announcement) {
+		Date date = null;
+		int qtd = announcement.getCycles();
+		if(qtd == 0){//infinite cycle
+			return date;
+		}
+		// DAY, WEEK, MONTH, YEAR
+		String frequency = announcement.getFrequency();
+		System.out.println("Cálculo último dia: frequenci: " + frequency);
+		Instant instant = null;
+		switch (frequency) {
+		case "DAY":
+			instant = Instant.now().plus(qtd, ChronoUnit.DAYS);
+			break;
+		case "WEEK":
+			instant = Instant.now().plus(qtd, ChronoUnit.WEEKS);
+			break;
+		case "MONTH":
+			instant = Instant.now().plus(qtd, ChronoUnit.MONTHS);
+			break;
+		case "YEAR":
+			instant = Instant.now().plus(qtd, ChronoUnit.YEARS);
+			break;
+		default:
+			instant = Instant.now();
+			break;
+		}
+		date = Date.from(instant);
+		return date;
 	}
+
+	private Date convertStringToDate(String paymentStartDate) {
+		Date date = null;
+		try {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			String dateInString = paymentStartDate.substring(0, 10);
+			date = formatter.parse(dateInString);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return date;
+	}
+
 }

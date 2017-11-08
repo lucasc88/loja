@@ -60,6 +60,38 @@
 			        <p:confirm header="Confirmação" message="Novas assinaturas serão entregues no endereço atualizado. Confirmar a atualização?" icon="ui-icon-alert" />
 			    </p:commandButton>
 			</p:fieldset>
+			<h2 style="text-align: center;">Assinaturas</h2>
+			<p:dataTable var="s" value="#{settingsPersonalBean.user.subscription}" reflow="true" >
+			    <p:column headerText="Título">
+			        <p:outputLabel value="#{s.announcement.title}"/>
+			    </p:column>
+			    <p:column headerText="Total">
+			    	<p:outputLabel value="R$ #{s.shipping + s.announcement.price}"/>
+			    </p:column>
+			    <p:column headerText="Status">
+			        <p:outputLabel value="#{s.state}" />
+			    </p:column>
+			    <p:column headerText="1º Pagamento">
+			        <h:outputText style="font-weight: bolder;" value="#{s.paymentStartDate}">
+			        	<f:convertDateTime pattern="dd/MM/yyyy" />
+			        </h:outputText >
+			    </p:column>
+			    <p:column headerText="Último Pagamento">
+			        <h:outputText style="font-weight: bolder;" value="#{s.paymentLastDate == null ? 'Indeterminado' : s.paymentLastDate}">
+			        	<f:convertDateTime pattern="dd/MM/yyyy" />
+			        </h:outputText >
+			    </p:column>
+			    <p:column headerText="Frequencia">
+			        <p:outputLabel  value="#{s.announcement.frequency}"/>
+			    </p:column>
+			    <p:column headerText="Editar">
+			        <p:commandButton action="#{settingsPersonalBean.edit}" title="Editar"
+		          		icon="fa fa-fw fa-cog">
+		          		<f:param name="agreementId" value="#{s.agreementId}" />
+		          	</p:commandButton>
+			    </p:column>
+			</p:dataTable>
+			
 		</h:form>
 		<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
 			closable="false" resizable="false" showHeader="false">
@@ -88,7 +120,9 @@
 		<p:dialog header="Aviso" widgetVar="connectionFailWid" modal="true" draggable="false" resizable="false" closable="false" height="100">
 			<p:panelGrid columns="1" layout="grid">
 			    <h:outputText value="Falha de conexão. Verifique sua rede." />
-				<p:commandButton value="Fechar" onclick="PF('connectionFailWid').hide()" />
+			    <h:form>
+			    	<p:commandButton value="Fechar" onclick="PF('connectionFailWid').hide()" update=":formSettings"/>
+			    </h:form>
 			</p:panelGrid>
 		</p:dialog>
 	</ui:define>

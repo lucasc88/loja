@@ -1,7 +1,9 @@
 package br.com.centraldaassinatura.loja.bean.settings;
 
 import java.io.Serializable;
+import java.util.Map;
 
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -24,7 +26,7 @@ public class SettingsPersonalBean implements Serializable {
 	private Address address = new Address();
 
 	public void findUserById(Integer id) {
-		user = usuerService.findById(id);
+		user = usuerService.findByIdWithSubscriptions(id);
 		address = user.getAddress();
 	}
 
@@ -46,7 +48,7 @@ public class SettingsPersonalBean implements Serializable {
 
 	public void findCEP() {
 		Address a = CepWebService.findAddress(address);
-		if (a == null) {//ConnectException
+		if (a == null) {// ConnectException
 			RequestContext req = RequestContext.getCurrentInstance();
 			req.execute("PF('connectionFailWid').show(); PF('statusDialog').hide();");
 		} else {
@@ -60,6 +62,14 @@ public class SettingsPersonalBean implements Serializable {
 
 	public void saveAddress() {
 		user.setAddress(address);
-		usuerService.update(user);;
+		usuerService.update(user);
+		;
+	}
+
+	public String edit() {
+		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		String id = params.get("agreementId");
+		System.out.println("AgreementId: " + id);
+		return "/restrict/settingsSubscription.xhtml?faces-redirect=true&id=" + id;
 	}
 }

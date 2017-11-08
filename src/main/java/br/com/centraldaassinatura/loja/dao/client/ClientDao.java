@@ -60,4 +60,15 @@ public class ClientDao {
 	public void update(Client c) {
 		dao.update(c);;
 	}
+
+	public Client findByIdWithSubscriptions(Integer id) {
+		TypedQuery<Client> query = em.createQuery(
+				"SELECT c FROM Client c JOIN FETCH c.subscription s WHERE c.id = :id", Client.class);
+		query.setParameter("id", id);
+		try {
+			return query.getSingleResult();
+		} catch (NoResultException nre) {
+			return null;
+		}
+	}
 }

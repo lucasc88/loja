@@ -33,10 +33,6 @@ public class HomeBean implements Serializable {
 	private List<Category> categories;
 	private List<Category> categoriesSelected = new ArrayList<>();
 
-	public void action() {
-		System.out.println("button clicked!");
-	}
-
 	public List<Category> getCategories() {
 		if (categories == null) {
 			categories = categoryService.allCategories();

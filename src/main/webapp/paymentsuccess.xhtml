@@ -17,10 +17,10 @@
 		<h:form>
 			<h2>Pagamento Realizado com Sucesso!</h2>
 			<p:panelGrid columns="4" layout="grid">
-    			<h:outputText value="Assinatura: #{paymentSuccessBean.subscription.announcement.title}" />
-    			<h:outputText value="Empresa: #{paymentSuccessBean.subscription.announcement.company.nameFantasy}" />
-    			<h:outputText value="Preço R$ #{paymentSuccessBean.subscription.announcement.price}" />
-    			<h:outputText value="Frete R$ #{paymentSuccessBean.subscription.shipping}" />
+    			<p:outputLabel value="Assinatura: #{paymentSuccessBean.subscription.announcement.title}" />
+    			<p:outputLabel value="Empresa: #{paymentSuccessBean.subscription.announcement.company.nameFantasy}" />
+    			<p:outputLabel value="Preço R$ #{paymentSuccessBean.subscription.announcement.price}" />
+    			<p:outputLabel value="Frete R$ #{paymentSuccessBean.subscription.shipping}" />
     		</p:panelGrid>
     		<br/>
     		<p:panelGrid columns="1" layout="grid" rendered="#{not empty shoppingCart.itens}">

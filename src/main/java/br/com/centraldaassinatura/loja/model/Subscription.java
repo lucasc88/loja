@@ -1,6 +1,7 @@
 package br.com.centraldaassinatura.loja.model;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class Subscription {
@@ -19,6 +22,10 @@ public class Subscription {
 	private String agreementId;
 	private String state;
 	private String token;
+	@Temporal(TemporalType.DATE)
+	private Date paymentStartDate;
+	@Temporal(TemporalType.DATE)
+	private Date paymentLastDate;
 	private BigDecimal shipping;
 	@ManyToOne
 	private Client client;
@@ -29,13 +36,16 @@ public class Subscription {
 	public Subscription() {
 	}
 
-	public Subscription(String agreementId, String state, String token, Client client, Announcement announcement, BigDecimal shipping) {
+	public Subscription(String agreementId, String state, String token, Client client, Announcement announcement,
+			Date paymentStartDate, Date paymentLastDate, BigDecimal shipping) {
 		this.agreementId = agreementId;
 		this.state = state;
 		this.token = token;
+		this.paymentStartDate = paymentStartDate;
+		this.paymentLastDate = paymentLastDate;
+		this.shipping = shipping;
 		this.client = client;
 		this.announcement = announcement;
-		this.shipping = shipping;
 	}
 
 	// @PrePersist does persist UuId before save in the DB
@@ -73,6 +83,22 @@ public class Subscription {
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public Date getPaymentStartDate() {
+		return paymentStartDate;
+	}
+
+	public void setPaymentStartDate(Date paymentStartDate) {
+		this.paymentStartDate = paymentStartDate;
+	}
+
+	public Date getPaymentLastDate() {
+		return paymentLastDate;
+	}
+
+	public void setPaymentLastDate(Date paymentLastDate) {
+		this.paymentLastDate = paymentLastDate;
 	}
 
 	public BigDecimal getShipping() {

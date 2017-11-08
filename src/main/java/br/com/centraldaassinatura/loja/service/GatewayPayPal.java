@@ -236,9 +236,10 @@ public class GatewayPayPal {
 					System.out.println("URL do PayPal: " + links.getHref());
 					String urlWithToken = links.getHref();
 					System.out.println("link do PayPal p/ pagar: " + urlWithToken);
-					String[] urlAndAgreementId = new String[2];
+					String[] urlAndAgreementId = new String[3];
 					urlAndAgreementId[0] = urlWithToken;
 					urlAndAgreementId[1] = agreement.getId();
+					urlAndAgreementId[2] = agreement.getStartDate();
 					return urlAndAgreementId;
 					// PRIMEIRO redirecionar p/ pagar no PayPal, depois do
 					// pagamento daí ativa

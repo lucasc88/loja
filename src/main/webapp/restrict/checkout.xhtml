@@ -67,8 +67,6 @@
 							<p:commandButton value="Pagar com PayPal"
 								action="#{checkoutBean.sendPayment}"
 								update="@form :formCart:totalAmount" />
-							<p:commandButton value="Refresh Token"
-								actionListener="#{checkoutBean.geraToken}"/>
 						</h:panelGrid>
 					</p:panel>
 				</p:tab>

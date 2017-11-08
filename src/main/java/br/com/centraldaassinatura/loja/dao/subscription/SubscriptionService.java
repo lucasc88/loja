@@ -31,4 +31,7 @@ public class SubscriptionService {
 		subscriptionDao.update(s);
 	}
 
+	public Subscription findByAgreementId(String id) {
+		return subscriptionDao.findByAgreementId(id);
+	}
 }
