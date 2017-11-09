@@ -133,8 +133,8 @@ public class GatewayPayPal {
 	}
 
 	private String compressTexts(String text) {
-		if (text.length() > 124) {
-			return text.substring(0, 124) + "...";
+		if (text.length() > 123) {
+			return text.substring(0, 123) + "...";
 		}
 		return text;
 	}
