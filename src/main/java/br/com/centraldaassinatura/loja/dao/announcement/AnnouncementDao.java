@@ -37,7 +37,7 @@ public class AnnouncementDao {
 
 	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public List<Announcement> lastAnnouncements() {
-		TypedQuery<Announcement> query = em.createQuery("SELECT a FROM Announcement a ORDER BY a.id DESC",
+		TypedQuery<Announcement> query = em.createQuery("SELECT a FROM Announcement a WHERE a.state LIKE 'ACTIVE' ORDER BY a.id DESC",
 				Announcement.class);
 		return query.setMaxResults(9).getResultList();
 	}
@@ -59,5 +59,29 @@ public class AnnouncementDao {
 		} catch (NoResultException nre) {
 			return null;
 		}
+	}
+
+	public List<Announcement> allAnnouncementByCompanyId(Integer id) {
+		TypedQuery<Announcement> query = em.createQuery("SELECT a FROM Announcement a WHERE a.company.id = :id", Announcement.class);
+		query.setParameter("id", id);
+		try {
+			return query.getResultList();
+		} catch (NoResultException nre) {//in case it does not find
+			return null;
+		}
+	}
+
+	public Announcement findByUuId(String uuId) {
+		TypedQuery<Announcement> query = em.createQuery("SELECT a FROM Announcement a WHERE a.uuId = :uuId", Announcement.class);
+		query.setParameter("uuId", uuId);
+		try {
+			return query.getSingleResult();
+		} catch (NoResultException nre) {
+			return null;
+		}
+	}
+
+	public void update(Announcement ann) {
+		dao.update(ann);
 	}
 }

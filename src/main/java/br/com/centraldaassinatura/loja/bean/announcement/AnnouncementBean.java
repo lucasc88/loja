@@ -209,6 +209,7 @@ public class AnnouncementBean implements Serializable {
 		announcement.setPlanId(planIdAndChargeId.substring(0, planIdAndChargeId.indexOf(" ")));
 		announcement.setChargeModelIdShipping(
 				planIdAndChargeId.substring(planIdAndChargeId.indexOf(" ") + 1, planIdAndChargeId.length()));
+		announcement.setState("ACTIVE");
 		announcementService.save(announcement);
 		return new RedirectView("/index");
 	}

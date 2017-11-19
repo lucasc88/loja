@@ -27,4 +27,9 @@ public class CompanyService {
 	public void save(Company c) {
 		companyDao.persist(c);
 	}
+
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public void update(Company company) {
+		companyDao.update(company);
+	}
 }

@@ -40,4 +40,16 @@ public class AnnouncementService {
 	public Announcement findByIdWithSecundaryImages(Integer id) {
 		return announcementDao.findByIdWithSecundaryImages(id);
 	}
+
+	public List<Announcement> allAnnouncementByCompanyId(Integer id) {
+		return announcementDao.allAnnouncementByCompanyId(id);
+	}
+
+	public Announcement findByUuId(String uuId) {
+		return announcementDao.findByUuId(uuId);
+	}
+
+	public void update(Announcement ann) {
+		announcementDao.update(ann);
+	}
 }

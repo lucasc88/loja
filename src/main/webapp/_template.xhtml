@@ -64,6 +64,10 @@
 							<h:form>
 								<p:commandLink value="Minha Conta" action="#{homeBean.redirectSettings}"
 									rendered="#{userLogged != null}" style="margin-left: 6px;"/>
+								<br/>
+								<p:commandLink value="Conta Empresa" action="#{homeBean.redirectSettingsCompany}"
+									rendered="#{userLogged != null}" style="margin-left: 6px;"
+									disabled="#{homeBean.userHasCompany(sessionScope['userLogged'].id) != true}"/>
 							</h:form>
 							<b:navLink></b:navLink>
 							<h:form>

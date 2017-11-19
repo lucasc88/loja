@@ -2,6 +2,7 @@ package br.com.centraldaassinatura.loja.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -22,6 +24,7 @@ public class Subscription {
 	private String agreementId;
 	private String state;
 	private String token;
+	private String uuId;
 	@Temporal(TemporalType.DATE)
 	private Date paymentStartDate;
 	@Temporal(TemporalType.DATE)
@@ -48,10 +51,11 @@ public class Subscription {
 		this.announcement = announcement;
 	}
 
-	// @PrePersist does persist UuId before save in the DB
-	// @PrePersist
-	// public void createUuId(){
-	// }
+//	 @PrePersist does persist UuId before save in the DB
+	 @PrePersist
+	 public void createUuId(){
+		 uuId = UUID.randomUUID().toString();
+	 }
 
 	public Integer getId() {
 		return id;
@@ -107,6 +111,14 @@ public class Subscription {
 
 	public void setShipping(BigDecimal shipping) {
 		this.shipping = shipping;
+	}
+
+	public String getUuId() {
+		return uuId;
+	}
+
+	public void setUuId(String uuid) {
+		this.uuId = uuid;
 	}
 
 	public Client getClient() {

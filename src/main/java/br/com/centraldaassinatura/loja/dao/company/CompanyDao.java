@@ -38,6 +38,10 @@ public class CompanyDao {
 		dao.persist(c);
 	}
 
+	public void update(Company company) {
+		dao.update(company);
+	}
+
 //	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 //	public Company findByEmail(String email) {
 //		TypedQuery<Company> query = em.createQuery("SELECT c FROM Client c WHERE c.email LIKE :email", Company.class);

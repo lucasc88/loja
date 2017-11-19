@@ -69,14 +69,23 @@ public class HomeBean implements Serializable {
 	}
 
 	public RedirectView redirectSettings() {
+		return new RedirectView("/restrict/settingsPersonal");
+	}
+	
+	public RedirectView redirectSettingsCompany(){
 		Client userLogged = findUserLogged();
 		if (userLogged != null && userLogged.getCompany() != null && userLogged.getCompany().getValid() == true) {
 			return new RedirectView("/restrict/settingsCompany");
 		} else {
-			return new RedirectView("/restrict/settingsPersonal");
+			return new RedirectView("");
 		}
 	}
 
+	public boolean userHasCompany(Integer id){
+		Client c = clientService.findById(id);
+		return c.getCompany() != null;
+	}
+	
 	private Client findUserLogged() {
 		Client userLogged = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.get("userLogged");

@@ -7,11 +7,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 
 import br.com.centraldaassinatura.loja.model.Category;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 public class Announcement {
@@ -24,6 +26,7 @@ public class Announcement {
 	private BigDecimal price;
 	private String path;
 	private String type;
+	private String state;
 	private String frequency;
 	private String planId;
 	private String chargeModelIdShipping;
@@ -32,15 +35,30 @@ public class Announcement {
 	private int lengthBox;
 	private double weightBox;
 	private int cycles;
+	private String uuId;
 	@OneToMany(mappedBy = "ann", cascade = CascadeType.ALL)
 	private List<SecundaryImage> secundaryImage;
 	@ManyToOne
 	private Company company;
 	@ManyToOne
 	private Category category;
+	
+//	 @PrePersist does persist UuId before save in the DB
+	 @PrePersist
+	 public void createUuId(){
+		 uuId = UUID.randomUUID().toString();
+	 }
 
 	public Integer getId() {
 		return this.id;
+	}
+
+	public String getUuId() {
+		return uuId;
+	}
+
+	public void setUuId(String uuId) {
+		this.uuId = uuId;
 	}
 
 	public String getTitle() {
@@ -65,6 +83,14 @@ public class Announcement {
 
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 
 	public String getPath() {

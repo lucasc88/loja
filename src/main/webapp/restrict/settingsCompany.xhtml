@@ -9,84 +9,86 @@
 <ui:composition template="../_template.xhtml">
 	
 	<f:metadata>
-		<f:viewAction action="#{settingsPersonalBean.findUserById(sessionScope['userLogged'].id)}" />
+		<f:viewAction action="#{settingsCompanyBean.findUserById(sessionScope['userLogged'].id)}" />
 	</f:metadata>
 	
 	<ui:define name="content">
 		<h:form id="formSettings">
-			<p:fieldset legend="Endereço de Entrega" toggleable="true" toggleSpeed="500" collapsed="true">
+			<p:fieldset legend="Endereço da Empresa" toggleable="true" toggleSpeed="500" collapsed="true">
 				<h:panelGrid columns="2" cellpadding="5">
 		            <p:outputLabel for="cep" value="CEP: " />
-					<p:inputMask id="cep" value="#{settingsPersonalBean.address.cep}"
+					<p:inputMask id="cep" value="#{settingsCompanyBean.address.cep}"
 						mask="99.999-999" required="true">
 						<p:ajax event="blur" update="@this street number neighborhood city state"
 							onstart="PF('statusDialog').show()" oncomplete="PF('statusDialog').hide()"
-							listener="#{settingsPersonalBean.findCEP()}"/>
+							listener="#{settingsCompanyBean.findCEP()}"/>
 					</p:inputMask>
 					<br/>
 					<p:message for="cep" />
 					
 					<p:outputLabel for="street" value="Rua: " />
-					<p:inputText id="street" value="#{settingsPersonalBean.address.street}"
+					<p:inputText id="street" value="#{settingsCompanyBean.address.street}"
 						type="text" required="true"/>
 					<br/>
 					<p:message for="street" />
 					
 					<p:outputLabel for="number" value="Número: "/>
 					<p:inputNumber id="number" required="true" decimalPlaces="0"
-						value="#{settingsPersonalBean.address.number}"/>
+						value="#{settingsCompanyBean.address.number}"/>
 					<br/>
 					<p:message for="number" />
 					
 					<p:outputLabel for="neighborhood" value="Bairro: " />
 					<p:inputText id="neighborhood" required="true"
-						value="#{settingsPersonalBean.address.neighborhood}"/>
+						value="#{settingsCompanyBean.address.neighborhood}"/>
 					<br/>
 					<p:message for="neighborhood" />
 					
 					<p:outputLabel for="city" value="Cidade: " />
 					<p:inputText id="city" required="true"
-						value="#{settingsPersonalBean.address.city}"/>
+						value="#{settingsCompanyBean.address.city}"/>
 					<br/>
 					<p:message for="city" />
 					
 					<p:outputLabel for="state" value="Estado: " />
 					<p:inputText id="state" required="true"
-						value="#{settingsPersonalBean.address.state}"/>
+						value="#{settingsCompanyBean.address.state}"/>
 					<br/>
 					<p:message for="state" />
 		        </h:panelGrid>
-		        <p:commandButton value="Atualizar" actionListener="#{settingsPersonalBean.saveAddress}" update="@form">
-			        <p:confirm header="Confirmação" message="Novas assinaturas serão entregues no endereço atualizado. Confirmar a atualização?" icon="ui-icon-alert" />
+		        <p:commandButton value="Atualizar" actionListener="#{settingsCompanyBean.saveAddress}" update="@form">
+			        <p:confirm header="Confirmação" message="Novos Assinantes terão seus fretes calculados com base no endereço atualizado. Confirmar a atualização?" icon="ui-icon-alert" />
 			    </p:commandButton>
 			</p:fieldset>
 			
-			<h2 style="text-align: center;">Assinaturas</h2>
+			<h2 style="text-align: center;">Seus Planos</h2>
 			
-			<p:dataTable var="s" value="#{settingsPersonalBean.user.subscription}" reflow="true" >
+			<p:dataTable var="a" value="#{settingsCompanyBean.announcement}" reflow="true" >
 			    <p:column headerText="Título">
-			        <p:outputLabel value="#{s.announcement.title}"/>
+			        <p:outputLabel value="#{a.title}"/>
 			    </p:column>
-			    <p:column headerText="Total">
-			    	<p:outputLabel value="R$ #{s.shipping + s.announcement.price}"/>
-			    </p:column>
-			    <p:column headerText="1º Pagamento">
-			        <h:outputText style="font-weight: bolder;" value="#{s.paymentStartDate}">
-			        	<f:convertDateTime pattern="dd/MM/yyyy" />
-			        </h:outputText >
-			    </p:column>
-			    <p:column headerText="Encerramento">
-			        <h:outputText style="font-weight: bolder;" value="#{s.paymentLastDate == null ? 'Indeterminado' : s.paymentLastDate}">
-			        	<f:convertDateTime pattern="dd/MM/yyyy" />
-			        </h:outputText >
+			    <p:column headerText="Preço">
+			    	<p:outputLabel value="R$ #{a.price}"/>
 			    </p:column>
 			    <p:column headerText="Frequencia">
-			        <p:outputLabel  value="#{s.announcement.frequency}"/>
+			    	<p:outputLabel value="#{a.frequency}"/>
 			    </p:column>
-			    <p:column headerText="Cancelar">
-			        <p:commandButton action="#{settingsPersonalBean.edit}" title="Cancelar"
-		          		icon="fa fa-fw fa-times">
-		          		<f:param name="agreementUuId" value="#{s.uuid}" />
+			    <p:column headerText="Ciclos">
+			    	<p:outputLabel value="#{a.cycles == 0 ? 'Indeterminado' : a.cycles}"/>
+			    </p:column>
+			    <p:column headerText="Estado">
+			    	<p:outputLabel value="#{a.state}"/>
+			    </p:column>
+			    <p:column headerText="Editar">
+			        <p:commandButton action="#{settingsCompanyBean.editAnnouncement}" title="Editar"
+		          		icon="fa fa-fw fa-edit">
+		          		<f:param name="announcementUuId" value="#{a.uuId}" />
+		          	</p:commandButton>
+			    </p:column>
+   			    <p:column headerText="Assinantes">
+			        <p:commandButton action="#{settingsCompanyBean.announcementSubscriptions}" title="Assinantes"
+		          		icon="fa fa-fw fa-group">
+		          		<f:param name="announcementUuId" value="#{a.uuId}" />
 		          	</p:commandButton>
 			    </p:column>
 			</p:dataTable>

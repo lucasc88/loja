@@ -174,6 +174,25 @@ public class GatewayPayPal {
 			e.printStackTrace();
 		}
 	}
+	
+	public Plan inactivePlan(APIContext apiContext, Plan plan){
+		List<Patch> patchRequestList = new ArrayList<>();
+		Map<String, String> value = new HashMap<String, String>();
+		value.put("state", "INACTIVE");
+
+		Patch patch = new Patch();
+		patch.setPath("/");
+		patch.setValue(value);
+		patch.setOp("replace");
+		patchRequestList.add(patch);
+
+		try {
+			plan.update(apiContext, patchRequestList);
+		} catch (PayPalRESTException e) {
+			e.printStackTrace();
+		}
+		return plan;
+	}
 
 	@SuppressWarnings("deprecation")
 	public String[] newAgreement(Client c, Announcement announcement, BigDecimal valueShipping) {
@@ -392,12 +411,39 @@ public class GatewayPayPal {
 	}
 
 	public String showAgreementDetails(String clientId, String clientSecret, String agreementId) {
-		System.out.println("Chamou AgreementDetail");
 		APIContext apiContext = createAPIContext(clientId, clientSecret, "sandbox");
 		refreshToken(clientId, clientSecret);
 		Agreement newAgreement = getAgreement(agreementId, apiContext);
 		System.out.println(newAgreement.toString());
 		return newAgreement.getState();
+	}
+	
+	private Plan getPlan(String planId, APIContext apiContext) {
+		Plan newPlan = null;
+		try {
+			newPlan = Plan.get(apiContext, planId);
+		} catch (PayPalRESTException e) {
+			e.printStackTrace();
+		}
+		return newPlan;
+	}
+	
+	public String showAnnouncementDetails(String clientId, String clientSecret, String planId) {
+		System.out.println("Chamou showAnnouncementDetails");
+		APIContext apiContext = createAPIContext(clientId, clientSecret, "sandbox");
+		refreshToken(clientId, clientSecret);
+		Plan newPlan = getPlan(planId, apiContext);
+		System.out.println(newPlan.toString());
+		return newPlan.getState();
+	}
+
+	public String cancelPlan(String clientId, String clientSecret, String planId) {
+		APIContext apiContext = createAPIContext(clientId, clientSecret, "sandbox");
+		refreshToken(clientId, clientSecret);
+		Plan newPlan = getPlan(planId, apiContext);
+		newPlan = inactivePlan(apiContext, newPlan);
+		System.out.println(newPlan.toString());
+		return newPlan.getState();
 	}
 
 }

@@ -59,4 +59,15 @@ public class SubscriptionDao {
 			return null;
 		}
 	}
+
+	public Subscription findByUuId(String id) {
+		TypedQuery<Subscription> query = em.createQuery("SELECT s FROM Subscription s WHERE s.uuId LIKE :uuId",
+				Subscription.class);
+		query.setParameter("uuId", id);
+		try {
+			return query.getSingleResult();
+		} catch (NoResultException nre) {// in case it does not find
+			return null;
+		}
+	}
 }

@@ -12,32 +12,33 @@ import javax.inject.Named;
 
 import org.primefaces.context.RequestContext;
 
+import br.com.centraldaassinatura.loja.dao.announcement.AnnouncementService;
 import br.com.centraldaassinatura.loja.dao.client.ClientService;
+import br.com.centraldaassinatura.loja.dao.company.CompanyService;
 import br.com.centraldaassinatura.loja.model.Address;
+import br.com.centraldaassinatura.loja.model.Announcement;
 import br.com.centraldaassinatura.loja.model.Client;
-import br.com.centraldaassinatura.loja.model.Subscription;
 import br.com.centraldaassinatura.loja.service.CepWebService;
 
 @Named
 @ViewScoped
-public class SettingsPersonalBean implements Serializable {
+public class SettingsCompanyBean implements Serializable {
 
-	private static final long serialVersionUID = -4007792113947668901L;
+	private static final long serialVersionUID = 3851757163663738636L;
 	@Inject
 	private ClientService usuerService;
+	@Inject
+	private CompanyService companyService;
+	@Inject
+	private AnnouncementService announcementService;
 	private Client user = new Client();
 	private Address address = new Address();
-	private List<Subscription> subscriptions = new ArrayList<>();
+	private List<Announcement> announcement = new ArrayList<>();
 
 	public void findUserById(Integer id) {
-		user = usuerService.findByIdWithSubscriptions(id);
-		if (user != null) {
-			address = user.getAddress();
-		} else {
-			user = usuerService.findById(id);
-			user.setSubscription(subscriptions);
-			address = user.getAddress();
-		}
+		user = usuerService.findById(id);
+		address = user.getCompany().getAddress();
+		announcement = announcementService.allAnnouncementByCompanyId(user.getCompany().getId());
 	}
 
 	public Client getUser() {
@@ -48,20 +49,20 @@ public class SettingsPersonalBean implements Serializable {
 		this.user = user;
 	}
 
-	public List<Subscription> getSubscriptions() {
-		return subscriptions;
-	}
-
-	public void setSubscriptions(List<Subscription> subscriptions) {
-		this.subscriptions = subscriptions;
-	}
-
 	public Address getAddress() {
 		return address;
 	}
 
 	public void setAddress(Address address) {
 		this.address = address;
+	}
+
+	public List<Announcement> getAnnouncement() {
+		return announcement;
+	}
+
+	public void setAnnouncement(List<Announcement> announcement) {
+		this.announcement = announcement;
 	}
 
 	public void findCEP() {
@@ -79,14 +80,21 @@ public class SettingsPersonalBean implements Serializable {
 	}
 
 	public void saveAddress() {
-		user.setAddress(address);
-		usuerService.update(user);
+		user.getCompany().setAddress(address);
+		companyService.update(user.getCompany());
 	}
-
-	public String edit() {
+	
+	public String editAnnouncement(){
 		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-		String id = params.get("agreementUuId");
-		System.out.println("############### agreementUuId: " + id);
-		return "/restrict/settingsSubscription.xhtml?faces-redirect=true&id=" + id;
+		String id = params.get("announcementUuId");
+		System.out.println("AnnouncementUuId: " + id);
+		return "/restrict/settingsAnnouncement.xhtml?faces-redirect=true&id=" + id;
+	}
+	
+	public String announcementSubscriptions(){
+		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		String id = params.get("announcementUuId");
+		System.out.println("AnnouncementUuId: " + id);
+		return "";
 	}
 }

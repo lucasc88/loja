@@ -6,12 +6,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.primefaces.context.RequestContext;
-
 import br.com.centraldaassinatura.loja.dao.subscription.SubscriptionService;
-import br.com.centraldaassinatura.loja.model.Address;
 import br.com.centraldaassinatura.loja.model.Subscription;
-import br.com.centraldaassinatura.loja.service.CepWebService;
 import br.com.centraldaassinatura.loja.service.GatewayPayPal;
 
 @Named
@@ -28,7 +24,7 @@ public class SettingsSubscriptionBean implements Serializable{
 	private String id;
 	
 	public void findSubscriptionByAgreementId(){
-		subscription = subscriptionService.findByAgreementId(id);
+		subscription = subscriptionService.findByUuId(id);
 		String status = gateway.showAgreementDetails(subscription.getAnnouncement().getCompany().getClientId(),
 				subscription.getAnnouncement().getCompany().getClientSecret(),
 				subscription.getAgreementId());

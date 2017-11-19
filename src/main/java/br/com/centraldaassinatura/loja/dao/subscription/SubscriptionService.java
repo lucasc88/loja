@@ -34,4 +34,8 @@ public class SubscriptionService {
 	public Subscription findByAgreementId(String id) {
 		return subscriptionDao.findByAgreementId(id);
 	}
+
+	public Subscription findByUuId(String id) {
+		return subscriptionDao.findByUuId(id);
+	}
 }
