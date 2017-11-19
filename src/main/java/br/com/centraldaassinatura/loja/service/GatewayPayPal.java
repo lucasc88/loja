@@ -23,6 +23,7 @@ import javax.ws.rs.core.Response;
 import org.primefaces.json.JSONObject;
 
 import com.paypal.api.payments.Agreement;
+import com.paypal.api.payments.AgreementStateDescriptor;
 import com.paypal.api.payments.ChargeModels;
 import com.paypal.api.payments.Currency;
 import com.paypal.api.payments.Links;
@@ -37,6 +38,7 @@ import com.paypal.api.payments.ShippingAddress;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
 
+import br.com.centraldaassinatura.loja.model.Address;
 import br.com.centraldaassinatura.loja.model.Announcement;
 import br.com.centraldaassinatura.loja.model.Client;
 
@@ -64,7 +66,10 @@ public class GatewayPayPal {
 		PaymentDefinition paymentDefinition = new PaymentDefinition();
 		paymentDefinition.setName("Pagamento Regular");
 		paymentDefinition.setType("REGULAR");
-		paymentDefinition.setFrequency(announcement.getFrequency());// DAY, WEEK, MONTH, YEAR
+		paymentDefinition.setFrequency(announcement.getFrequency());// DAY,
+																	// WEEK,
+																	// MONTH,
+																	// YEAR
 		// se configuramos a frequencia para "SEMANA" e o intervalo de
 		// freqüência para "1", estamos definindo um pagamento semanal
 		paymentDefinition.setFrequencyInterval("1");// SEMPRE SERÁ UM PAGAMENTO
@@ -153,7 +158,7 @@ public class GatewayPayPal {
 	 * @throws IOException
 	 */
 	public void activePlan(APIContext apiContext, Plan plan) {
-		List<Patch> patchRequestList = new ArrayList<Patch>();
+		List<Patch> patchRequestList = new ArrayList<>();
 		Map<String, String> value = new HashMap<String, String>();
 		value.put("state", "ACTIVE");
 
@@ -268,10 +273,10 @@ public class GatewayPayPal {
 
 	public String[] activeAgreement(String clientId, String clientSecret, String token) {
 		String agreementIdAndState[] = new String[2];
-		
+
 		APIContext apiContext = createAPIContext(clientId, clientSecret, "sandbox");
 		refreshToken(clientId, clientSecret);
-		
+
 		// Ativa Assinatura depois do pagamento de cliente;
 		// token obtained when creating the agreement (following redirect)
 		System.out.println("TOKEN da Assinatura: " + token);
@@ -280,10 +285,9 @@ public class GatewayPayPal {
 		try {
 			@SuppressWarnings("static-access")
 			Agreement activeAgreement = a.execute(apiContext, a.getToken());
-			System.out.println("Agreement created with ID " + activeAgreement.getId()
-				+ ", " + activeAgreement.getState()
-				+ ", startDate: " + activeAgreement.getStartDate()
-				+ ", Token: " + activeAgreement.getToken());
+			System.out.println("Agreement created with ID " + activeAgreement.getId() + ", "
+					+ activeAgreement.getState() + ", startDate: " + activeAgreement.getStartDate() + ", Token: "
+					+ activeAgreement.getToken());
 			agreementIdAndState[0] = activeAgreement.getId();
 			agreementIdAndState[1] = activeAgreement.getState();
 		} catch (PayPalRESTException e) {
@@ -311,16 +315,89 @@ public class GatewayPayPal {
 		// Perform a post request
 		String restResource = "https://api.sandbox.paypal.com/v1/oauth2/token";
 		javax.ws.rs.client.Client client = ClientBuilder.newClient();
-		Response res = client.target(restResource)
-				.request(MediaType.APPLICATION_FORM_URLENCODED)
-				.header("Accept", "application/json")
-				.header("Accept-Language", "en_US")
-				.header(authorizationHeaderName, authorizationHeaderValue)
-				.post(Entity.form(formParameters));
+		Response res = client.target(restResource).request(MediaType.APPLICATION_FORM_URLENCODED)
+				.header("Accept", "application/json").header("Accept-Language", "en_US")
+				.header(authorizationHeaderName, authorizationHeaderValue).post(Entity.form(formParameters));
 		String result = res.readEntity(String.class);
 		System.out.println(result);
 		JSONObject obj = new JSONObject(result);
 		return obj.get("access_token").toString();
+	}
+
+	public void updateShipping(String agreementId, String value, Address address, String clientId, String clientSecret) {
+		APIContext apiContext = createAPIContext(clientId, clientSecret, "sandbox");
+		refreshToken(clientId, clientSecret);
+		Agreement newAgreement = getAgreement(agreementId, apiContext);
+		
+//		Currency shippingValue = new Currency();
+//		shippingValue.setCurrency("BRL");
+//		shippingValue.setValue(value);
+//		OverrideChargeModel frete = new OverrideChargeModel();
+//		frete.setChargeId(chargeModelId);
+//		frete.setAmount(shippingValue);// frete novo
+//		List<OverrideChargeModel> overrideChargeModel = new ArrayList<>();
+//		overrideChargeModel.add(frete);
+//		newAgreement.setOverrideChargeModels(overrideChargeModel);
+
+//		System.out.println("Antigo valor do Frete: " + newAgreement.getPlan().getPaymentDefinitions().get(0)
+//				.getChargeModels().get(1).getAmount().getValue());
+//		newAgreement.getPlan().getPaymentDefinitions().get(0).getChargeModels().get(1).getAmount().setValue(value);
+
+		ShippingAddress shipping = new ShippingAddress();
+		shipping.setLine1(address.getStreet() + ", " + address.getNumber());
+		shipping.setCity(address.getCity());
+		shipping.setState(address.getState());
+		shipping.setPostalCode(address.getCep().replaceAll("\\.|\\-", ""));
+		shipping.setCountryCode("BR");
+		newAgreement.setShippingAddress(shipping);
+
+		// build PatchRequest which is an array of Patch
+		List<Patch> patchRequestList = new ArrayList<>();
+		Map<String, ShippingAddress> map = new HashMap<>();
+		map.put("shipping_address", shipping);
+		Patch patch = new Patch();
+		patch.setPath("/");
+		patch.setValue(map);
+		patch.setOp("replace");
+		patchRequestList.add(patch);
+		try {
+			newAgreement.update(apiContext, patchRequestList);
+		} catch (PayPalRESTException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void cancelSubscription(String clientId, String clientSecret, String agreementId){
+		APIContext apiContext = createAPIContext(clientId, clientSecret, "sandbox");
+		refreshToken(clientId, clientSecret);
+		Agreement newAgreement = getAgreement(agreementId, apiContext);
+		AgreementStateDescriptor agreementStateDescriptor = new AgreementStateDescriptor();
+		agreementStateDescriptor.setNote("Cancelando Assinatura " + agreementId);
+		try {
+			newAgreement.cancel(apiContext, agreementStateDescriptor);
+		} catch (PayPalRESTException e) {
+			e.printStackTrace();
+		}
+		System.out.println(newAgreement.toString());
+	}
+
+	private Agreement getAgreement(String agreementId, APIContext apiContext) {
+		Agreement newAgreement = null;
+		try {
+			newAgreement = Agreement.get(apiContext, agreementId);
+		} catch (PayPalRESTException e) {
+			e.printStackTrace();
+		}
+		return newAgreement;
+	}
+
+	public String showAgreementDetails(String clientId, String clientSecret, String agreementId) {
+		System.out.println("Chamou AgreementDetail");
+		APIContext apiContext = createAPIContext(clientId, clientSecret, "sandbox");
+		refreshToken(clientId, clientSecret);
+		Agreement newAgreement = getAgreement(agreementId, apiContext);
+		System.out.println(newAgreement.toString());
+		return newAgreement.getState();
 	}
 
 }

@@ -70,15 +70,12 @@
 			    <p:column headerText="Total">
 			    	<p:outputLabel value="R$ #{s.shipping + s.announcement.price}"/>
 			    </p:column>
-			    <p:column headerText="Status">
-			        <p:outputLabel value="#{s.state}" />
-			    </p:column>
 			    <p:column headerText="1º Pagamento">
 			        <h:outputText style="font-weight: bolder;" value="#{s.paymentStartDate}">
 			        	<f:convertDateTime pattern="dd/MM/yyyy" />
 			        </h:outputText >
 			    </p:column>
-			    <p:column headerText="Último Pagamento">
+			    <p:column headerText="Encerramento">
 			        <h:outputText style="font-weight: bolder;" value="#{s.paymentLastDate == null ? 'Indeterminado' : s.paymentLastDate}">
 			        	<f:convertDateTime pattern="dd/MM/yyyy" />
 			        </h:outputText >
@@ -86,9 +83,9 @@
 			    <p:column headerText="Frequencia">
 			        <p:outputLabel  value="#{s.announcement.frequency}"/>
 			    </p:column>
-			    <p:column headerText="Editar">
-			        <p:commandButton action="#{settingsPersonalBean.edit}" title="Editar"
-		          		icon="fa fa-fw fa-cog">
+			    <p:column headerText="Cancelar">
+			        <p:commandButton action="#{settingsPersonalBean.edit}" title="Cancelar"
+		          		icon="fa fa-fw fa-times">
 		          		<f:param name="agreementId" value="#{s.agreementId}" />
 		          	</p:commandButton>
 			    </p:column>

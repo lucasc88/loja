@@ -15,9 +15,43 @@
 	
 	<ui:define name="content">
 		<h:form id="formSettings">
-			<h3>id: #{settingsSubscriptionBean.subscription.agreementId}</h3>
-			<h3>titulo: #{settingsSubscriptionBean.subscription.announcement.title}</h3>
+			<h:panelGrid columns="1">
+				<h2>Assinatura: #{settingsSubscriptionBean.subscription.announcement.title}</h2>
+				<h3>Estado: #{settingsSubscriptionBean.subscription.state}</h3>
+				<p:outputLabel style="font-size: 24px;margin-bottom: 32px;" title="Preço R$ #{settingsSubscriptionBean.subscription.announcement.price} / Frete R$ #{settingsSubscriptionBean.subscription.shipping}"
+					value="Total: #{settingsSubscriptionBean.subscription.announcement.price + settingsSubscriptionBean.subscription.shipping}"/>
+		       	<p:commandButton value="Cancelar" actionListener="#{settingsSubscriptionBean.cancelSubscription}"
+		       		update="@form" disabled="#{settingsSubscriptionBean.subscription.state == 'Cancelled'}">
+			        <p:confirm header="Confirmação" message="Será cancelada a assinatura. Confirma o cancelamento?" icon="ui-icon-alert" />
+			    </p:commandButton>
+			</h:panelGrid>
 		</h:form>
+		<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+			closable="false" resizable="false" showHeader="false">
+			<div class="row">
+				<div>
+				<center>
+					<p:graphicImage library="img" name="ajax-loader.gif"/></center>
+				</div>
+				<p:outputLabel value="Localizando endereço..." style="margin: 0 10px 0 10px;"/>
+			</div>
+		</p:dialog>
+		<p:dialog header="Aviso" widgetVar="connectionFailWid" modal="true" draggable="false" resizable="false" closable="false" height="100">
+			<p:panelGrid columns="1" layout="grid">
+			    <h:outputText value="Falha de conexão. Verifique sua rede." />
+			    <h:form>
+			    	<p:commandButton value="Fechar" onclick="PF('connectionFailWid').hide()" update=":formSettings"/>
+			    </h:form>				
+			</p:panelGrid>
+		</p:dialog>
+		
+	    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" closable="false" responsive="true">
+	    	<center>
+		        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+		        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		    </center>
+	    </p:confirmDialog>
+	    
 	</ui:define>
 </ui:composition>
 </html>

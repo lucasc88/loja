@@ -6,8 +6,13 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.context.RequestContext;
+
 import br.com.centraldaassinatura.loja.dao.subscription.SubscriptionService;
+import br.com.centraldaassinatura.loja.model.Address;
 import br.com.centraldaassinatura.loja.model.Subscription;
+import br.com.centraldaassinatura.loja.service.CepWebService;
+import br.com.centraldaassinatura.loja.service.GatewayPayPal;
 
 @Named
 @ViewScoped
@@ -16,13 +21,18 @@ public class SettingsSubscriptionBean implements Serializable{
 	private static final long serialVersionUID = -1777879655266447098L;
 	@Inject
 	private SubscriptionService subscriptionService;
+	@Inject
+	private GatewayPayPal gateway;
+	private String type;
 	private Subscription subscription = new Subscription();
 	private String id;
 	
 	public void findSubscriptionByAgreementId(){
-		System.out.println("@@@@@@@@@@ findSubscriptionByAgreementId(): " + id);
 		subscription = subscriptionService.findByAgreementId(id);
-		System.out.println(subscription);
+		String status = gateway.showAgreementDetails(subscription.getAnnouncement().getCompany().getClientId(),
+				subscription.getAnnouncement().getCompany().getClientSecret(),
+				subscription.getAgreementId());
+		subscription.setState(status);
 	}
 
 	public String getId() {
@@ -39,5 +49,21 @@ public class SettingsSubscriptionBean implements Serializable{
 
 	public void setSubscription(Subscription subscription) {
 		this.subscription = subscription;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public void cancelSubscription(){
+		gateway.cancelSubscription(subscription.getAnnouncement().getCompany().getClientId(),
+				subscription.getAnnouncement().getCompany().getClientSecret(),
+				subscription.getAgreementId());
+		subscription.setState("Cancelled");
+		subscriptionService.update(subscription);
 	}
 }
