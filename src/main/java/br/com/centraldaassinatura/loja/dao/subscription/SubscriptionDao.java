@@ -97,4 +97,15 @@ public class SubscriptionDao {
 	public EntityManager getEntityManager() {
 		return em;
 	}
+
+	public List<Subscription> findSubscriptionsByAgreementIdActiveOrderDate(Integer id) {
+		TypedQuery<Subscription> query = em.createQuery("SELECT s FROM Subscription s WHERE s.announcement.id = :id ORDER BY s.paymentStartDate",
+				Subscription.class);
+		query.setParameter("id", id);
+		try {
+			return query.getResultList();
+		} catch (NoResultException nre) {// in case it does not find
+			return null;
+		}
+	}
 }

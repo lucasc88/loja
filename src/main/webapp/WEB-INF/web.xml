@@ -46,8 +46,8 @@
 		<param-value>true</param-value>
 	</context-param>
 <!-- 	depois setar o tema desejado. Classe TemaBean é q será usada-->
-<!-- 	<context-param> -->
-<!-- 		<param-name>primefaces.THEME</param-name> -->
-<!-- 		<param-value>#{temaBean.tema}</param-value> -->
-<!-- 	</context-param> -->
+	<context-param>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>bootstrap</param-value>
+	</context-param>
 </web-app>

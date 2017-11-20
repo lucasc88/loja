@@ -126,8 +126,8 @@ public class Subscription {
 		return uuId;
 	}
 
-	public void setUuId(String uuid) {
-		this.uuId = uuid;
+	public void setUuId(String uuId) {
+		this.uuId = uuId;
 	}
 
 	public Client getClient() {

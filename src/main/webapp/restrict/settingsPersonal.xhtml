@@ -63,7 +63,8 @@
 			
 			<h2 style="text-align: center;">Assinaturas</h2>
 			
-			<p:dataTable var="s" value="#{settingsPersonalBean.user.subscription}" reflow="true" >
+			<p:dataTable var="s" value="#{settingsPersonalBean.user.subscription}" reflow="true"
+				emptyMessage="Não há Assinaturas">
 			    <p:column headerText="Título">
 			        <p:outputLabel value="#{s.announcement.title}"/>
 			    </p:column>
@@ -83,11 +84,15 @@
 			    <p:column headerText="Frequencia">
 			        <p:outputLabel  value="#{s.announcement.frequency}"/>
 			    </p:column>
+			    <p:column headerText="Cod. Rastreio">
+			        <p:outputLabel  value="#{s.trackingCode}"/>
+			    </p:column>
 			    <p:column headerText="Cancelar">
 			        <p:commandButton action="#{settingsPersonalBean.edit}" title="Cancelar"
-		          		icon="fa fa-fw fa-times">
-		          		<f:param name="agreementUuId" value="#{s.uuid}" />
+		          		icon="fa fa-fw fa-times" rendered="#{s.state != 'Cancelled'}">
+		          		<f:param name="agreementUuId" value="#{s.uuId}" />
 		          	</p:commandButton>
+		          	<p:outputLabel  value="Cancelado" rendered="#{s.state == 'Cancelled'}"/>
 			    </p:column>
 			</p:dataTable>
 			

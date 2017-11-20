@@ -57,4 +57,8 @@ public class SubscriptionService {
 	public EntityManager getEntityManager() {
 		return subscriptionDao.getEntityManager();
 	}
+
+	public List<Subscription> findSubscriptionsByAgreementIdActiveOrderDate(Integer id) {
+		return subscriptionDao.findSubscriptionsByAgreementIdActiveOrderDate(id);
+	}
 }

@@ -63,7 +63,7 @@
 			
 			<h2 style="text-align: center;">Seus Planos</h2>
 			
-			<p:dataTable var="a" value="#{settingsCompanyBean.announcement}" reflow="true" >
+			<p:dataTable var="a" value="#{settingsCompanyBean.announcement}" reflow="true">
 			    <p:column headerText="Título">
 			        <p:outputLabel value="#{a.title}"/>
 			    </p:column>
@@ -92,6 +92,14 @@
 		          	</p:commandButton>
 			    </p:column>
 			</p:dataTable>
+			
+			<br/>
+			<br/>
+			<br/>
+			
+			<p:commandButton type="button" value="Reset no Gráfico" icon="ui-icon-cancel" onclick="PF('chart').resetZoom()"/>
+			<p:chart id="chartSub" type="line" model="#{settingsCompanyBean.zoomModel}" style="height:400px;"
+				widgetVar="chart" responsive="true"/>
 			
 		</h:form>
 		<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
