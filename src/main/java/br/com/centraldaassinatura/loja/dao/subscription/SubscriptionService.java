@@ -1,11 +1,14 @@
 package br.com.centraldaassinatura.loja.dao.subscription;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
 import br.com.centraldaassinatura.loja.model.Subscription;
 
@@ -31,11 +34,27 @@ public class SubscriptionService {
 		subscriptionDao.update(s);
 	}
 
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public Subscription findByAgreementId(String id) {
 		return subscriptionDao.findByAgreementId(id);
 	}
 
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public Subscription findByUuId(String id) {
 		return subscriptionDao.findByUuId(id);
+	}
+
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public List<Subscription> findSubscriptionsByAgreementId(Integer id) {
+		return subscriptionDao.findSubscriptionsByAgreementId(id);
+	}
+
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public int totalSubscriptions() {
+		return subscriptionDao.totalSubscriptions();
+	}
+
+	public EntityManager getEntityManager() {
+		return subscriptionDao.getEntityManager();
 	}
 }

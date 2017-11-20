@@ -1,5 +1,7 @@
 package br.com.centraldaassinatura.loja.dao.subscription;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -69,5 +71,30 @@ public class SubscriptionDao {
 		} catch (NoResultException nre) {// in case it does not find
 			return null;
 		}
+	}
+
+	public List<Subscription> findSubscriptionsByAgreementId(Integer id) {
+		TypedQuery<Subscription> query = em.createQuery("SELECT s FROM Subscription s WHERE s.announcement.id = :id",
+				Subscription.class);
+		query.setParameter("id", id);
+		try {
+			return query.getResultList();
+		} catch (NoResultException nre) {// in case it does not find
+			return null;
+		}
+	}
+
+	@TransactionAttribute(TransactionAttributeType.MANDATORY)
+	public int totalSubscriptions() {
+		TypedQuery<Long> query = em.createQuery("select count(n) from Subscription n", Long.class);
+		long l = query.getSingleResult();
+		return (int) l;
+//		int x = (Integer) em.createQuery("select count(n) from Subscription n").getSingleResult();
+//		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!! " + x);
+//		return x;
+	}
+
+	public EntityManager getEntityManager() {
+		return em;
 	}
 }

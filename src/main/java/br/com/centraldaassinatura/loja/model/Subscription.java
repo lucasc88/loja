@@ -25,6 +25,7 @@ public class Subscription {
 	private String state;
 	private String token;
 	private String uuId;
+	private String trackingCode;
 	@Temporal(TemporalType.DATE)
 	private Date paymentStartDate;
 	@Temporal(TemporalType.DATE)
@@ -111,6 +112,14 @@ public class Subscription {
 
 	public void setShipping(BigDecimal shipping) {
 		this.shipping = shipping;
+	}
+
+	public String getTrackingCode() {
+		return trackingCode;
+	}
+
+	public void setTrackingCode(String trackingCode) {
+		this.trackingCode = trackingCode;
 	}
 
 	public String getUuId() {

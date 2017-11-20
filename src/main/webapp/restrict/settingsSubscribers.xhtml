@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<ui:composition template="../_template.xhtml">
+	
+	<f:metadata>
+		<f:viewParam value="#{settingsSubscribersBean.uuId}" name="id"/>
+		<f:viewAction action="#{settingsSubscribersBean.findSubscribersByAnnouncementUuId()}"/>
+	</f:metadata>
+	
+	<ui:define name="content">
+		<h:form id="formSettings">
+			<h2 style="text-align: center;">Seus Assinantes</h2>
+			
+			<p:dataTable var="a" value="#{settingsSubscribersBean.subscriptions}" reflow="true" editable="true" editMode="cell"
+				emptyMessage="Não há Assinantes">
+			
+				<p:ajax event="cellEdit" listener="#{settingsSubscribersBean.onCellEdit}" update="messages" />
+				
+			    <p:column headerText="Nome" sortBy="#{a.client.name}">
+			        <p:outputLabel value="#{a.client.name}"/>
+			    </p:column>
+			    <p:column headerText="Email" sortBy="#{a.client.email}">
+			    	<p:outputLabel value="#{a.client.email}"/>
+			    </p:column>
+			    <p:column headerText="Endereço" sortBy="#{a.client.address.street}">
+			    	<p:outputLabel value="#{a.client.address.street}, #{a.client.address.number}"/>
+			    </p:column>
+			    <p:column headerText="Cidade" sortBy="#{a.client.address.city}">
+			    	<p:outputLabel value="#{a.client.address.city}"/>
+			    </p:column>
+			    <p:column headerText="Estado" sortBy="#{a.client.address.state}">
+			    	<p:outputLabel value="#{a.client.address.state}"/>
+			    </p:column>
+			    <p:column headerText="Cod. Rastreio">
+			    	<p:cellEditor>
+			    		<f:facet name="output">
+			    			<h:outputText value="#{a.trackingCode == null ? 'Insira aqui' : a.trackingCode == '' ? 'Insira aqui' : a.trackingCode}" />
+			    		</f:facet>
+               			<f:facet name="input">
+               				<p:inputText id="modelInput" value="#{a.trackingCode}"
+              					style="width:100%"/>
+              			</f:facet>
+			    	</p:cellEditor>
+			    </p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

@@ -87,14 +87,12 @@ public class SettingsCompanyBean implements Serializable {
 	public String editAnnouncement(){
 		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		String id = params.get("announcementUuId");
-		System.out.println("AnnouncementUuId: " + id);
 		return "/restrict/settingsAnnouncement.xhtml?faces-redirect=true&id=" + id;
 	}
 	
 	public String announcementSubscriptions(){
 		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		String id = params.get("announcementUuId");
-		System.out.println("AnnouncementUuId: " + id);
-		return "";
+		return "/restrict/settingsSubscribers.xhtml?faces-redirect=true&id=" + id;
 	}
 }
