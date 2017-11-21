@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
@@ -115,30 +116,6 @@ public class CheckoutBean implements Serializable {
 	}
 
 	public String sendPayment() {
-		// for (CartItem cartItem : itens) {
-		// persist Subscription
-		// }
-		// String contextName =
-		// FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-		// HttpServletResponse response = (HttpServletResponse)
-		// FacesContext.getCurrentInstance().getExternalContext()
-		// .getResponse();
-		// // it allows a temporary redirect, it does not change the URL in the
-		// browser
-		// response.setStatus(HttpServletResponse.SC_TEMPORARY_REDIRECT);
-		// // when the browser receives the redirect for that URL
-		// (/service/payment)
-		// // it will do the redirection maintaining the method that was
-		// invoked,
-		// // that is, it does the redirection while maintaining the current
-		// call request
-		// // it makes redicrect by Header Location
-		// response.setHeader("Location", contextName +
-		// "/services/payment?uuid="
-		// + s.getUuId());
-		// // it makes payment using asynchronous way
-
-		// remove from cart
 		String[] datas = gateway.newAgreement(user, itemToBeFinalized.getAnnouncement(), getShipping());
 		String url = datas[0];
 		String agreementId = datas[1];
@@ -172,19 +149,20 @@ public class CheckoutBean implements Serializable {
 		Instant instant = null;
 		switch (frequency) {
 		case "DAY":
-			instant = Instant.now().plus(qtd, ChronoUnit.DAYS);
+			instant = ZonedDateTime.now().plus(qtd, ChronoUnit.DAYS).toInstant();
 			break;
 		case "WEEK":
-			instant = Instant.now().plus(qtd, ChronoUnit.WEEKS);
+			instant = ZonedDateTime.now().plus(qtd, ChronoUnit.WEEKS).toInstant();
 			break;
 		case "MONTH":
-			instant = Instant.now().plus(qtd, ChronoUnit.MONTHS);
+			instant = ZonedDateTime.now().plus(qtd, ChronoUnit.MONTHS).toInstant();
+//			ZonedDateTime.now().plus(qtd, ChronoUnit.MONTHS);
 			break;
 		case "YEAR":
-			instant = Instant.now().plus(qtd, ChronoUnit.YEARS);
+			instant = ZonedDateTime.now().plus(qtd, ChronoUnit.YEARS).toInstant();
 			break;
 		default:
-			instant = Instant.now();
+			instant = ZonedDateTime.now().toInstant();
 			break;
 		}
 		date = Date.from(instant);
@@ -202,5 +180,4 @@ public class CheckoutBean implements Serializable {
 		}
 		return date;
 	}
-
 }

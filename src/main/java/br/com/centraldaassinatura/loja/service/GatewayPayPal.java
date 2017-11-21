@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -205,7 +206,7 @@ public class GatewayPayPal {
 		Agreement agreement = new Agreement();
 		agreement.setName(compressTexts(announcement.getTitle()));
 		agreement.setDescription(compressTexts(announcement.getDescription()));
-		agreement.setStartDate(convertDate());// date that start payments
+		agreement.setStartDate(startPaymentDate());// date that start payments
 
 		// Set plan ID
 		Plan plan = new Plan();
@@ -285,9 +286,9 @@ public class GatewayPayPal {
 		return new String[0];
 	}
 
-	private String convertDate() {
-		String d = Instant.now().plus(1, ChronoUnit.DAYS).toString();
-		return d.substring(0, d.lastIndexOf(".")) + "Z";
+	private String startPaymentDate() {
+		String d = ZonedDateTime.now().plus(2, ChronoUnit.MINUTES).toString();
+		return d.substring(0, d.lastIndexOf(".")) + "-0300";//Brazil
 	}
 
 	public String[] activeAgreement(String clientId, String clientSecret, String token) {
