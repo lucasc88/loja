@@ -108,4 +108,8 @@ public class SubscriptionDao {
 			return null;
 		}
 	}
+
+	public void remove(Subscription subscription) {
+		dao.remove(subscription);
+	}
 }

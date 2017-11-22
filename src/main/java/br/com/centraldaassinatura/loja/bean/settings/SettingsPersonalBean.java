@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -13,6 +14,7 @@ import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 
 import br.com.centraldaassinatura.loja.dao.client.ClientService;
+import br.com.centraldaassinatura.loja.dao.subscription.SubscriptionService;
 import br.com.centraldaassinatura.loja.model.Address;
 import br.com.centraldaassinatura.loja.model.Client;
 import br.com.centraldaassinatura.loja.model.Subscription;
@@ -23,6 +25,8 @@ import br.com.centraldaassinatura.loja.service.CepWebService;
 public class SettingsPersonalBean implements Serializable {
 
 	private static final long serialVersionUID = -4007792113947668901L;
+	@Inject
+	private SubscriptionService subscriptionService;
 	@Inject
 	private ClientService usuerService;
 	private Client user = new Client();
@@ -37,6 +41,17 @@ public class SettingsPersonalBean implements Serializable {
 			user = usuerService.findById(id);
 			user.setSubscription(subscriptions);
 			address = user.getAddress();
+		}
+	}
+	
+	@PostConstruct
+	public void init(){
+		Client c = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userLogged");
+		user = usuerService.findByIdWithSubscriptions(c.getId());
+		for (Subscription subscription : user.getSubscription()) {
+			if(subscription.getAgreementId() == null){
+				subscriptionService.remove(subscription);
+			}
 		}
 	}
 

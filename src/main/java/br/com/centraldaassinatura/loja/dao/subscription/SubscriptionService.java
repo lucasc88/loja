@@ -61,4 +61,9 @@ public class SubscriptionService {
 	public List<Subscription> findSubscriptionsByAgreementIdActiveOrderDate(Integer id) {
 		return subscriptionDao.findSubscriptionsByAgreementIdActiveOrderDate(id);
 	}
+
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public void remove(Subscription subscription) {
+		subscriptionDao.remove(subscription);
+	}
 }
