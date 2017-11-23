@@ -99,7 +99,7 @@ public class SubscriptionDao {
 	}
 
 	public List<Subscription> findSubscriptionsByAgreementIdActiveOrderDate(Integer id) {
-		TypedQuery<Subscription> query = em.createQuery("SELECT s FROM Subscription s WHERE s.announcement.id = :id ORDER BY s.paymentStartDate",
+		TypedQuery<Subscription> query = em.createQuery("SELECT s FROM Subscription s WHERE s.announcement.id = :id AND s.state != 'PENDING' ORDER BY s.paymentStartDate",
 				Subscription.class);
 		query.setParameter("id", id);
 		try {

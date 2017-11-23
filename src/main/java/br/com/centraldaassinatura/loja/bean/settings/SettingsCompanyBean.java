@@ -1,7 +1,11 @@
 package br.com.centraldaassinatura.loja.bean.settings;
 
 import java.io.Serializable;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +16,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.primefaces.context.RequestContext;
-import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.DateAxis;
 import org.primefaces.model.chart.LineChartModel;
@@ -53,20 +56,20 @@ public class SettingsCompanyBean implements Serializable {
 		announcement = announcementService.allAnnouncementByCompanyId(user.getCompany().getId());
 		System.out.println("$$$$$$$$$$$$$$$ findUserById " + announcement.size());
 	}
-	
-    @PostConstruct
-    public void init() {
-    	System.out.println("!!!!!!!!&&&&&&&&&&!!!!!! chamou @PostConstruct ");
-    	userLogged();
-    	createZoomModel();
-    }
+
+	@PostConstruct
+	public void init() {
+		System.out.println("!!!!!!!!&&&&&&&&&&!!!!!! chamou @PostConstruct ");
+		userLogged();
+		createZoomModel();
+	}
 
 	private void userLogged() {
 		FacesContext context = FacesContext.getCurrentInstance();
 		Client userLogged = (Client) context.getExternalContext().getSessionMap().get("userLogged");
 		if (userLogged != null) {
 			user = usuerService.findById(userLogged.getId());
-			announcement = announcementService.allAnnouncementByCompanyId(user.getCompany().getId());		
+			announcement = announcementService.allAnnouncementByCompanyId(user.getCompany().getId());
 		}
 	}
 
@@ -85,7 +88,7 @@ public class SettingsCompanyBean implements Serializable {
 	public void setAddress(Address address) {
 		this.address = address;
 	}
-    
+
 	public List<Announcement> getAnnouncement() {
 		return announcement;
 	}
@@ -112,67 +115,68 @@ public class SettingsCompanyBean implements Serializable {
 		user.getCompany().setAddress(address);
 		companyService.update(user.getCompany());
 	}
-	
-	public String editAnnouncement(){
+
+	public String editAnnouncement() {
 		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		String id = params.get("announcementUuId");
 		return "/restrict/settingsAnnouncement.xhtml?faces-redirect=true&id=" + id;
 	}
-	
-	public String announcementSubscriptions(){
+
+	public String announcementSubscriptions() {
 		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		String id = params.get("announcementUuId");
 		return "/restrict/settingsSubscribers.xhtml?faces-redirect=true&id=" + id;
 	}
-	
-    public LineChartModel getZoomModel() {
-        return zoomModel;
-    }
-    
-    private void createZoomModel() {
-    	zoomModel = new LineChartModel();
-    	System.out.println("################ chamou createZoomModel()");
-    	System.out.println("tamanho " + announcement.size());
-//    	for (Announcement a : announcement) {
-//    		LineChartSeries announcement1 = new LineChartSeries();
-//    		announcement1.setLabel(a.getTitle());
-//    		System.out.println("################# IdDoPlano: " + a.getId());
-//    		List<Subscription> assinaturas = subscriptionService.findSubscriptionsByAgreementIdActiveOrderDate(a.getId());
-//    		System.out.println("tamanho assinaturas " + assinaturas.size());
-//    		for (Subscription subscription : assinaturas) {
-//    			System.out.println("!!!!!!!!!!!!!!!! dia: " + subscription.getPaymentStartDate());
-//    			announcement1.set(subscription.getPaymentStartDate().toString(), 1);
-//			}
-//    		System.out.println("!!!!!!!!!!!!!!!!! adiciounu ao gráfico: " + announcement1.getLabel());
-//    		zoomModel.addSeries(announcement1);
-//		}
-        LineChartSeries series1 = new LineChartSeries();
-        series1.setLabel("Vinhos do Mundo");
-        series1.set("2017-11-01", 1);
-        series1.set("2017-11-06", 2);
-        series1.set("2017-11-12", 1);
-        series1.set("2017-11-18", 3);
-        zoomModel.addSeries(series1);
-        
-        LineChartSeries series2 = new LineChartSeries();
-        series2.setLabel("Livros Históricos");
-        series2.set("2017-11-02", 2);
-        series2.set("2017-11-05", 1);
-        series2.set("2017-11-08", 1);
-        series2.set("2017-11-15", 2);
-        series2.set("2017-11-19", 1);
-        zoomModel.addSeries(series2);
-         
-        zoomModel.setTitle("Planos de Assinatura Vendidos");
-        zoomModel.setZoom(true);
-        zoomModel.setLegendPosition("e");
-        zoomModel.getAxis(AxisType.Y).setLabel("Quantidade");
-        DateAxis axis = new DateAxis("Dias");
-        axis.setTickAngle(-50);
-        axis.setMax("2017-11-20");
-        axis.setTickFormat("%#d %b %y");
-         
-        zoomModel.getAxes().put(AxisType.X, axis);
-    }
-    
+
+	public LineChartModel getZoomModel() {
+		return zoomModel;
+	}
+
+	private void createZoomModel() {
+		zoomModel = new LineChartModel();
+		for (Announcement a : announcement) {
+			if (a.getState().equals("ACTIVE")) {// somente ACTIVE
+				LineChartSeries series = new LineChartSeries();
+				series.setLabel(a.getTitle());
+				System.out.println("################# IdDoPlano: " + a.getId());
+				List<Subscription> subs = subscriptionService.findSubscriptionsByAgreementIdActiveOrderDate(a.getId());
+				System.out.println("tamanho assinaturas " + subs.size());
+				if (subs != null && !subs.isEmpty()) {
+					buildDatas(series, subs);
+				} else {
+					String d = ZonedDateTime.now().toString();
+					series.set(d.substring(0, d.indexOf("T")), 0);
+				}
+				System.out.println("!!!!!!!!!!!!!!!!! adiciounu ao gráfico: " + series.getLabel());
+				zoomModel.addSeries(series);
+			}
+		}
+		zoomModel.setTitle("Planos de Assinatura Vendidos");
+		zoomModel.setZoom(true);
+		zoomModel.setLegendPosition("e");
+		zoomModel.getAxis(AxisType.Y).setLabel("Quantidade");
+		DateAxis axis = new DateAxis("Dias");
+		axis.setTickAngle(-50);
+		String s = ZonedDateTime.now().plus(1, ChronoUnit.DAYS).toString();
+		axis.setMax(s.substring(0, s.indexOf("T")));
+		axis.setTickFormat("%#d %b %y");
+
+		zoomModel.getAxes().put(AxisType.X, axis);
+	}
+
+	private void buildDatas(LineChartSeries series, List<Subscription> subs) {
+		int cont = 0;
+		Map<String, Integer> map = new HashMap<>();
+		String tempDate = "";
+		for (Subscription s : subs) {//2 - 21/11 ...... 1 - 22/11
+			if(!s.getPaymentStartDate().toString().equals(tempDate)){
+				tempDate = s.getPaymentStartDate().toString();
+				cont = 0;
+			}
+			map.put(s.getPaymentStartDate().toString(), ++cont);
+		}
+		for (Map.Entry<String, Integer> pair : map.entrySet()) {
+			series.set(pair.getKey(), pair.getValue());
+		}
+	}
 }
