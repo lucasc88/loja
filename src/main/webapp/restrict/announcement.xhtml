@@ -91,8 +91,20 @@
 						<br />
 						<p:message for="upload" />
 					</h:panelGrid>
-					<p:fieldset legend="Medidas da Embalagem" style="margin-bottom:20px">
-				        <h:panelGrid columns="2" cellpadding="5">
+					
+					<p:outputLabel for="typeAnnouncement" value="Escolha a 1ª opção para criar um plano que seja gerenciado pela Central da Assinatura. Escolha a 2ª opção para que os clientes sejam redirecionados para sua loja virtual." />
+					<p:selectOneRadio id="typeAnnouncement" value="#{announcementBean.typeAnnouncement}"
+						layout="responsive" columns="2" required="true">
+				        <f:selectItem itemLabel="Este plano será gerenciado pela Central da Assinatura" itemValue="novo" />
+	            		<f:selectItem itemLabel="Este plano redirecionará para sua Loja" itemValue="v" />
+            			<p:ajax update="fieldSetShipping" event="valueChange" process="typeAnnouncement"/>
+				    </p:selectOneRadio>
+				    <br />
+					<p:message for="typeAnnouncement" />
+					
+					<p:fieldset style="margin-bottom:20px" id="fieldSetShipping"
+						legend="#{announcementBean.typeAnnouncement == 'novo' ? 'Medidas da Embalagem' : 'Anúncio de Redirecionamento'}">
+				        <h:panelGrid columns="2" cellpadding="5" rendered="#{announcementBean.typeAnnouncement == 'novo'}">
 				            <p:outputLabel for="width" value="Largura (cm): " />
 					        <p:inputNumber id="width" value="#{announcementBean.announcement.widthBox}"
 					        	decimalPlaces="0" required="true"
@@ -121,12 +133,27 @@
 					        <br />
 							<p:message for="weightBox" />
 				        </h:panelGrid>
+				        <p:outputLabel for="redirect" value="Link do sue Plano:" rendered="#{announcementBean.typeAnnouncement != 'novo'}"/>
+						<p:inputText id="redirect" required="true" validator="#{announcementBean.checkUrlFormat}"
+							value="#{announcementBean.announcement.linkPlan}" rendered="#{announcementBean.typeAnnouncement != 'novo'}"/>
+						<br />
+						<p:message for="redirect" />
 				    </p:fieldset>
 				</p:panel>
 			</p:tab>
-			<p:commandButton value="Salvar" action="#{announcementBean.save}"
-				ajax="false" />
+			<p:commandButton value="Salvar" action="#{announcementBean.save}" ajax="false" onclick="PF('waitWid').show()"
+				oncomplete="PF('waitWid').hide()"/>
 		</h:form>
+		<p:dialog widgetVar="waitWid" modal="true" draggable="false"
+			closable="false" resizable="false" showHeader="false">
+			<div class="row">
+				<div>
+				<center>
+					<p:graphicImage library="img" name="ajax-loader.gif"/></center>
+				</div>
+				<p:outputLabel value="Criando plano ..." style="margin: 0 10px 0 10px;"/>
+			</div>
+		</p:dialog>
 		<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
 			closable="false" resizable="false" showHeader="false">
 			<div class="row">

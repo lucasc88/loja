@@ -52,4 +52,16 @@ public class AnnouncementService {
 	public void update(Announcement ann) {
 		announcementDao.update(ann);
 	}
+
+	public List<Announcement> findByCategories(List<Integer> categoriesSelected) {
+		return announcementDao.findByCategories(categoriesSelected);
+	}
+
+	public List<Announcement> findByKeyWord(String keyWord) {
+		return announcementDao.findByKeyWord(keyWord);
+	}
+
+	public List<Announcement> bestSellerAnnouncements() {
+		return announcementDao.bestSellerAnnouncements();
+	}
 }

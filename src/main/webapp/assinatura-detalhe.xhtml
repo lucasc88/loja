@@ -18,10 +18,10 @@
 		<div class="jumbotron">
 			<h1>#{subscriptionDetailBean.ann.title}</h1>
 			<p class="text-justify">#{subscriptionDetailBean.ann.description}</p>
-			<h:outputLink value="#{subscriptionDetailBean.ann.company.site}" target="_blank"
-			    styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
-			    <span class="ui-button-text">Site da Empresa</span>
-			</h:outputLink>
+			<h:form>
+				<p:commandButton value="Site da Empresa" rendered="#{subscriptionDetailBean.ann.company.site != null and subscriptionDetailBean.ann.company.site != ''}"
+					ajax="false" action="#{subscriptionDetailBean.redirectToCompanySite(subscriptionDetailBean.ann.company.site)}" onclick="this.form.target='_blank'"/>
+			</h:form>
 			<img class="img-thumbnail img-responsive" style="margin: 0 auto;"
 				src="#{request.contextPath}/file/#{subscriptionDetailBean.ann.path}"
 				alt="#{subscriptionDetailBean.ann.title}" />
@@ -36,62 +36,18 @@
 		</div>
 		<div class="col-sm-5" style="background-color: #a2a2a2;">
 			<div class="jumbotron">
-				<h2>Valor Total: R$ #{subscriptionDetailBean.ann.price}</h2>
+				<h3>Valor: R$ #{subscriptionDetailBean.ann.price}</h3>
+				<h3>Frequencia: #{subscriptionDetailBean.ann.frequency}</h3>
+				<h3>Total de Ciclos: #{subscriptionDetailBean.ann.frequency}</h3>
 			</div>
 
-			<h:form rendered="#{userLogged == null}">
-				<p:commandButton value="Login" styleClass="center-block"
-					action="#{subscriptionDetailBean.redirectTologin}" />
+			<h:form rendered="#{subscriptionDetailBean.ann.linkPlan == null}">
+				<p:commandButton value="Assinar" styleClass="center-block"
+					action="#{subscriptionDetailBean.redirect}"/>
 			</h:form>
-			<h:form rendered="#{userLogged != null}">
-				<p:wizard flowListener="#{subscriptionDetailBean.onFlowProcess}"
-					backLabel="Voltar" nextLabel="Próximo">
-					<p:tab id="personal" title="Dados Pessoais">
-						<p:panel header="Dados Pessoais">
-							<h:panelGrid columns="2" columnClasses="value">
-								<h:outputText value="Nome: " />
-								<p:outputLabel id="name"
-									value="#{subscriptionDetailBean.client.name}" />
-
-								<h:outputText value="Sobrenome: " />
-								<p:outputLabel id="surname"
-									value="#{subscriptionDetailBean.client.lastName}" />
-
-								<h:outputText value="Data de Nascimento: " />
-								<p:outputLabel id="birth"
-									value="#{subscriptionDetailBean.client.dateBirth}">
-									<f:convertDateTime pattern="dd-MM-yyyy" />
-								</p:outputLabel>
-
-								<h:outputText value="CPF: " />
-								<p:outputLabel id="cpf"
-									value="#{subscriptionDetailBean.client.cpf}" />
-							</h:panelGrid>
-						</p:panel>
-					</p:tab>
-					<p:tab id="address" title="Endereço">
-						<p:panel header="Endereço de Entrega">
-							<h:panelGrid columns="2" columnClasses="value">
-								<h:outputText value="Rua: " />
-								<p:outputLabel id="street"
-									value="#{subscriptionDetailBean.client.address.street}, #{subscriptionDetailBean.client.address.number}" />
-
-								<h:outputText value="Bairro: " />
-								<p:outputLabel id="neighborhood"
-									value="#{subscriptionDetailBean.client.address.neighborhood}" />
-
-								<h:outputText value="CEP: " />
-								<p:outputLabel id="cep"
-									value="#{subscriptionDetailBean.client.address.cep}" />
-
-								<h:outputText value="Estado: " />
-								<p:outputLabel id="state"
-									value="#{subscriptionDetailBean.client.address.state}" />
-							</h:panelGrid>
-						</p:panel>
-						<p:commandButton value="Assinar" styleClass="center-block" />
-					</p:tab>
-				</p:wizard>
+			<h:form target="_blank" rendered="#{subscriptionDetailBean.ann.linkPlan != null}">
+			    <p:commandButton value="Assinar" styleClass="center-block"
+			    	action="#{subscriptionDetailBean.redirectToSellerPage}" ajax="false" />
 			</h:form>
 		</div>
 	</ui:define>

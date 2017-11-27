@@ -13,6 +13,7 @@ import javax.inject.Named;
 
 import org.primefaces.event.FlowEvent;
 
+import br.com.centraldaassinatura.loja.bean.cart.ShoppingCartBean;
 import br.com.centraldaassinatura.loja.dao.announcement.AnnouncementService;
 import br.com.centraldaassinatura.loja.dao.client.ClientService;
 import br.com.centraldaassinatura.loja.dao.secundaryImages.SecundaryImagesService;
@@ -33,6 +34,8 @@ public class SubscriptionDetailBean implements Serializable {
 	private SecundaryImagesService secundaryImagesService;
 	@Inject
 	private ClientService clientService;
+	@Inject
+	private ShoppingCartBean shoppingCartBean;
 	private Client client = new Client();
 	private Announcement ann;
 	private Integer id;
@@ -94,6 +97,36 @@ public class SubscriptionDetailBean implements Serializable {
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 		try {
 			externalContext.redirect(ann.getCompany().getSite());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public String redirect(){
+		Client userLogged = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+				.get("userLogged");
+		if (userLogged == null) {
+			return "/login.xhtml?faces-redirect=true&id=" + id;
+		} else {
+			System.out.println("Adicionando ao Carrinho o " + ann.getTitle());
+			shoppingCartBean.add(id);
+			return "/cart.xhtml";
+		}
+	}
+
+	public void redirectToSellerPage(){
+		System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$ " + ann.getLinkPlan());
+		try {
+			FacesContext.getCurrentInstance().getExternalContext().redirect(ann.getLinkPlan());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void redirectToCompanySite(String url){
+		try {
+			System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$ " + url);
+			FacesContext.getCurrentInstance().getExternalContext().redirect(url);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

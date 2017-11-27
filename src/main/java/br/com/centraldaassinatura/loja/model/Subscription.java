@@ -8,9 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -33,8 +31,7 @@ public class Subscription {
 	private BigDecimal shipping;
 	@ManyToOne
 	private Client client;
-	@OneToOne
-	@JoinColumn(name = "announcement", nullable = false)
+	@ManyToOne
 	private Announcement announcement;
 
 	public Subscription() {

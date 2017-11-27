@@ -1,14 +1,18 @@
 package br.com.centraldaassinatura.loja.bean.home;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.primefaces.context.RequestContext;
 
 import br.com.centraldaassinatura.loja.dao.announcement.AnnouncementService;
 import br.com.centraldaassinatura.loja.dao.category.CategoryService;
@@ -30,8 +34,11 @@ public class HomeBean implements Serializable {
 	@Inject
 	private ClientService clientService;
 	private List<Announcement> announcements;
+	private List<Announcement> bestSellerAnnouncements;
 	private List<Category> categories;
 	private List<Category> categoriesSelected = new ArrayList<>();
+	private String keyWord = "";
+	private boolean indexPage = false;
 
 	public List<Category> getCategories() {
 		if (categories == null) {
@@ -51,12 +58,33 @@ public class HomeBean implements Serializable {
 		this.announcements = announcements;
 	}
 
+	public List<Announcement> getBestSellerAnnouncements() {
+		if (bestSellerAnnouncements == null) {
+			bestSellerAnnouncements = announcementService.bestSellerAnnouncements();
+		} else {
+			bestSellerAnnouncements = announcementService.lastAnnouncements();
+		}
+		return bestSellerAnnouncements;
+	}
+
+	public void setBestSellerAnnouncements(List<Announcement> bestSellerAnnouncements) {
+		this.bestSellerAnnouncements = bestSellerAnnouncements;
+	}
+
 	public List<Category> getCategoriesSelected() {
 		return categoriesSelected;
 	}
 
 	public void setCategoriesSelected(List<Category> categoriesSelected) {
 		this.categoriesSelected = categoriesSelected;
+	}
+
+	public String getKeyWord() {
+		return keyWord;
+	}
+
+	public void setKeyWord(String keyWord) {
+		this.keyWord = keyWord;
 	}
 
 	public RedirectView redirectAnnouncement() {
@@ -92,5 +120,59 @@ public class HomeBean implements Serializable {
 		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		String id = params.get("announcementId");
 		return "/assinatura-detalhe.xhtml?faces-redirect=true&id=" + id;
+	}
+
+	public void updatePlans() {
+		System.out.println(categoriesSelected.size());
+		List<Integer> ids = new ArrayList<>();
+		if (categoriesSelected.size() == 0) {
+			announcements = announcementService.lastAnnouncements();
+			return;
+		} else {
+			for (Category category : categoriesSelected) {
+				ids.add(category.getId());
+			}
+		}
+		System.out.println("mandou pro DAO: " + ids.size());
+		announcements = announcementService.findByCategories(ids);
+	}
+
+	public String findByKeyWord() {
+		String nomePagina = FacesContext.getCurrentInstance().getViewRoot().getViewId();
+		if (nomePagina.contains("index")) {
+			categoriesSelected.clear();
+			if (keyWord != null && keyWord.isEmpty()) {
+				announcements = announcementService.lastAnnouncements();
+				RequestContext.getCurrentInstance().update("formMain:announcements");
+				RequestContext.getCurrentInstance().update("formMain:grid2");
+				return "";
+			}
+			System.out.println("Executou o find " + keyWord);
+			announcements = announcementService.findByKeyWord(keyWord);
+			RequestContext.getCurrentInstance().update("formMain:announcements");
+			RequestContext.getCurrentInstance().update("formMain:grid2");
+			return "";
+		} else {
+			FacesMessage msg = new FacesMessage("Aviso", "Buscas somente na página inicial");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return "";
+		}
+	}
+	
+	public boolean isIndexPage() {
+		String nomePagina = FacesContext.getCurrentInstance().getViewRoot().getViewId();
+		if(nomePagina.contains("index")){
+			indexPage = true;
+		}
+		return indexPage;
+	}
+	
+	public void redirectToSellerPage(String url){
+		System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+		try {
+			FacesContext.getCurrentInstance().getExternalContext().redirect(url);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

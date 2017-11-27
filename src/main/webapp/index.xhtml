@@ -7,31 +7,30 @@
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
 <ui:composition template="_template.xhtml">
-
-	<ui:define name="content">
-
-		<h:head>
-			<style>
-.divContainerGrid .divBtns {
-	display: none;
-}
-
-.divContainerGrid:hover .divBtns {
-	display: flex;
-}
-</style>
-		</h:head>
-
+<ui:define name="content">
+	<h:head>
+		<style>
+			.divContainerGrid .divBtns {
+				display: none;
+			}
+			
+			.divContainerGrid:hover .divBtns {
+				display: flex;
+			}
+		</style>
+	</h:head>
 		<div class="ui-g-12">
 			<h:form id="formMain">
 				<div class="ui-g-12 ui-md-4 ui-lg-3">
 					<p:fieldset legend="Categorias" style="margin-bottom:20px"
 						toggleable="true" toggleSpeed="500">
 						<h:panelGrid columns="1" cellpadding="5">
-							<p:selectManyCheckbox id="grid2" layout="responsive"
+							<p:selectManyCheckbox id="grid2" layout="responsive" converter="categoryConverter"
 								value="#{homeBean.categoriesSelected}" columns="1">
 								<f:selectItems value="#{homeBean.categories}" var="cat"
 									itemLabel="#{cat.name}" itemValue="#{cat}" />
+									<p:ajax listener="#{homeBean.updatePlans}"
+										update="announcements"/>
 							</p:selectManyCheckbox>
 						</h:panelGrid>
 					</p:fieldset>
@@ -56,16 +55,18 @@
 									action="#{homeBean.details}">
 									<f:param name="announcementId" value="#{a.id}" />
 								</p:commandButton>
-								<p:commandButton value="Adicionar ao Carrinho"
+								<p:commandButton value="Adicionar ao Carrinho" rendered="#{a.linkPlan == null}"
 									actionListener="#{shoppingCartBean.add(a.id)}"
 									update=":formCart:totalAmount" />
+								<p:commandButton value="Assinar" rendered="#{a.linkPlan != null}" ajax="false"
+			    					action="#{homeBean.redirectToSellerPage(a.linkPlan)}" onclick="this.form.target='_blank'"/>
 							</div>
 						</div>
 					</p:dataGrid>
 				</div>
 
 				<div class="ui-g-12">
-					<p:carousel value="#{homeBean.announcements}" circular="true"
+					<p:carousel value="#{homeBean.bestSellerAnnouncements}" circular="true"
 						headerText="Mais Vendidos" var="a" itemStyle="text-align:center"
 						responsive="true">
 						<h:panelGrid columns="1" style="width:100%">

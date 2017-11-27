@@ -20,7 +20,7 @@
 				<h3>Estado: #{settingsSubscriptionBean.subscription.state}</h3>
 				<p:outputLabel style="font-size: 24px;margin-bottom: 32px;" title="Preço R$ #{settingsSubscriptionBean.subscription.announcement.price} / Frete R$ #{settingsSubscriptionBean.subscription.shipping}"
 					value="Total: #{settingsSubscriptionBean.subscription.announcement.price + settingsSubscriptionBean.subscription.shipping}"/>
-		       	<p:commandButton value="Cancelar" actionListener="#{settingsSubscriptionBean.cancelSubscription}"
+		       	<p:commandButton value="Cancelar a Assinatura" actionListener="#{settingsSubscriptionBean.cancelSubscription}"
 		       		update="@form" disabled="#{settingsSubscriptionBean.subscription.state == 'Cancelled'}">
 			        <p:confirm header="Confirmação" message="Será cancelada a assinatura. Confirma o cancelamento?" icon="ui-icon-alert" />
 			    </p:commandButton>

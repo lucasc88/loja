@@ -9,7 +9,9 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import br.com.centraldaassinatura.loja.dao.GenericDao;
 import br.com.centraldaassinatura.loja.model.Company;
@@ -42,14 +44,15 @@ public class CompanyDao {
 		dao.update(company);
 	}
 
-//	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-//	public Company findByEmail(String email) {
-//		TypedQuery<Company> query = em.createQuery("SELECT c FROM Client c WHERE c.email LIKE :email", Company.class);
-//		query.setParameter("email", email.trim());
-//		try {
-//			return query.getSingleResult();
-//		} catch (NoResultException nre) {//in case it does not find
-//			return null;
-//		}
-//	}
+	public Company findByCnpj(String cnpj) {
+		TypedQuery<Company> query = em.createQuery(
+				"SELECT a FROM Company a WHERE a.cnpj LIKE :cnpj", Company.class);
+		query.setParameter("cnpj", cnpj);
+		try {
+			return query.getSingleResult();
+		} catch (NoResultException nre) {
+			return null;
+		}
+	}
+
 }

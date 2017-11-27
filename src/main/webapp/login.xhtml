@@ -7,7 +7,11 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
 <ui:composition template="_template.xhtml">
-
+	
+	<f:metadata>
+		<f:viewParam value="#{loginBean.id}" name="id" />
+	</f:metadata>
+	
 	<ui:define name="content">
 		<h:form id="login">
 			<p:fieldset legend="Bem Vindo">
@@ -23,8 +27,7 @@
 						<p:message id="messageEmail" for="email" />
 					</div>
 					<p:commandButton value="Verificar Email" process="@this email"
-							actionListener="#{loginBean.checkUser}" update="@form"
-							rendered="#{!loginBean.showPasswordField and !loginBean.newUser}" />
+							actionListener="#{loginBean.checkUser}" update="@form"/>
 					<div class="ui-g-12 ui-md-12 ui-lg-12">
 						<p:outputLabel value="Digite sua Senha:" for="pass"
 							rendered="#{loginBean.showPasswordField}" />
@@ -63,7 +66,10 @@
 										<p:outputLabel for="cpf" value="CPF: " />
 										<p:inputMask id="cpf" value="#{loginBean.user.cpf}"
 											mask="999.999.999-99" required="true"
-											validator="#{userBean.isCpfValid}" />
+											validator="#{userBean.isCpfValid}">
+											<p:ajax event="blur" onstart="PF('statusDialog').show()" update="cpf"
+												listener="#{loginBean.checkCPF()}" oncomplete="PF('statusDialog').hide()"/>
+										</p:inputMask>
 										<br/>
 										<p:message for="cpf" />
 										
@@ -202,7 +208,7 @@
 				<center>
 					<p:graphicImage library="img" name="ajax-loader.gif"/></center>
 				</div>
-				<p:outputLabel value="Localizando endereço..." style="margin: 0 10px 0 10px;"/>
+				<p:outputLabel value="Validando ..." style="margin: 0 10px 0 10px;"/>
 			</div>
 		</p:dialog>
 		<p:dialog header="Aviso" widgetVar="addressNotFoundWid" modal="true" draggable="false" resizable="false" closable="false" height="100">
@@ -220,7 +226,7 @@
 			    	<p:commandButton value="Fechar" onclick="PF('connectionFailWid').hide()" update=":login"/>
 			    </h:form>				
 			</p:panelGrid>
-		</p:dialog>  
+		</p:dialog>
 	</ui:define>
 
 </ui:composition>

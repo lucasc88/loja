@@ -47,4 +47,8 @@ public class ClientService {
 	public Client findByIdWithSubscriptions(Integer id) {
 		return clientDao.findByIdWithSubscriptions(id);
 	}
+
+	public Client checkCpf(String cpf) {
+		return clientDao.checkCpf(cpf);
+	}
 }

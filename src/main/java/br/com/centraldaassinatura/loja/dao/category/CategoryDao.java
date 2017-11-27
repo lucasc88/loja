@@ -10,8 +10,10 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import br.com.centraldaassinatura.loja.dao.GenericDao;
+import br.com.centraldaassinatura.loja.model.Announcement;
 import br.com.centraldaassinatura.loja.model.Category;
 
 @Stateless

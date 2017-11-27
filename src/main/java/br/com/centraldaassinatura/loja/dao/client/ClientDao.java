@@ -71,4 +71,15 @@ public class ClientDao {
 			return null;
 		}
 	}
+
+	public Client checkCpf(String cpf) {
+		TypedQuery<Client> query = em.createQuery(
+				"SELECT c FROM Client c WHERE c.cpf = :cpf", Client.class);
+		query.setParameter("cpf", cpf);
+		try {
+			return query.getSingleResult();
+		} catch (NoResultException nre) {
+			return null;
+		}
+	}
 }

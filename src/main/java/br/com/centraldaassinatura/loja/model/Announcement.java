@@ -23,6 +23,7 @@ public class Announcement {
 	private Integer id;
 	private String title;
 	private String description;
+	private String linkPlan;
 	private BigDecimal price;
 	private String path;
 	private String type;
@@ -38,6 +39,8 @@ public class Announcement {
 	private String uuId;
 	@OneToMany(mappedBy = "ann", cascade = CascadeType.ALL)
 	private List<SecundaryImage> secundaryImage;
+	@OneToMany(mappedBy = "announcement")
+	private List<Subscription> subscriptions;
 	@ManyToOne
 	private Company company;
 	@ManyToOne
@@ -91,6 +94,14 @@ public class Announcement {
 
 	public void setState(String state) {
 		this.state = state;
+	}
+
+	public String getLinkPlan() {
+		return linkPlan;
+	}
+
+	public void setLinkPlan(String linkPlan) {
+		this.linkPlan = linkPlan;
 	}
 
 	public String getPath() {
@@ -149,6 +160,14 @@ public class Announcement {
 		this.cycles = cycles;
 	}
 	
+	public List<Subscription> getSubscriptions() {
+		return subscriptions;
+	}
+
+	public void setSubscriptions(List<Subscription> subscriptions) {
+		this.subscriptions = subscriptions;
+	}
+
 	public String getPlanId() {
 		return planId;
 	}

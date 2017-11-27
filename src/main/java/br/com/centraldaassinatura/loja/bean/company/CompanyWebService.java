@@ -37,7 +37,9 @@ public class CompanyWebService {
 				sb.append(line);
 			}
 			JSONObject json = new JSONObject(sb.toString());
-
+			if(json.getString("status").equalsIgnoreCase("error")){
+				return null;
+			}
 			String situacao = json.getString("situacao");
 			String situacaoEspacial = json.getString("situacao_especial");
 			if (situacaoEspacial.equalsIgnoreCase("FALIDO") || !situacao.equalsIgnoreCase("ATIVA")) {

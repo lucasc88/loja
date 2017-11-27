@@ -11,6 +11,7 @@ import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FlowEvent;
 
+import br.com.centraldaassinatura.loja.bean.cart.ShoppingCartBean;
 import br.com.centraldaassinatura.loja.dao.client.ClientService;
 import br.com.centraldaassinatura.loja.model.Address;
 import br.com.centraldaassinatura.loja.model.Client;
@@ -24,6 +25,8 @@ public class LoginBean implements Serializable {
 	private static final long serialVersionUID = -5842651762845034157L;
 	@Inject
 	private ClientService usuerService;
+	@Inject
+	private ShoppingCartBean shoppingCartBean;
 	private boolean newUser;
 	private boolean userAlreadyExists;
 	private boolean skip;
@@ -31,6 +34,8 @@ public class LoginBean implements Serializable {
 	private String password;
 	private Client user = new Client();
 	private Address address = new Address();
+	private boolean cpfInvalid = false;
+	private Integer id;
 
 	public boolean isNewUser() {
 		return newUser;
@@ -54,6 +59,14 @@ public class LoginBean implements Serializable {
 
 	public void setUser(Client user) {
 		this.user = user;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public Address getAddress() {
@@ -93,7 +106,10 @@ public class LoginBean implements Serializable {
 		if (c != null) {
 			setUserAlreadyExists(true);
 			setShowPasswordField(true);
+			setNewUser(false);
 		} else {
+			setUserAlreadyExists(false);
+			setShowPasswordField(false);
 			setNewUser(true);
 		}
 	}
@@ -107,6 +123,9 @@ public class LoginBean implements Serializable {
 	}
 
 	public String onFlowProcess(FlowEvent event) {
+		if(cpfInvalid){
+			return event.getOldStep();
+		}
 		return event.getNewStep();
 	}
 
@@ -123,7 +142,14 @@ public class LoginBean implements Serializable {
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Dados Incorretos", "Tente novamente"));
 			return new RedirectView("");
 		}
-		return new RedirectView("index");
+		System.out.println("######################### id: " + id);
+		if(id != null){
+			System.out.println("Adicionando ao Carrinho");
+			shoppingCartBean.add(id);
+			return new RedirectView("cart");
+		} else {
+			return new RedirectView("index");
+		}
 	}
 
 	public RedirectView logout() {
@@ -146,6 +172,17 @@ public class LoginBean implements Serializable {
 				RequestContext req = RequestContext.getCurrentInstance();
 				req.execute("PF('addressNotFoundWid').show()");
 			}
+		}
+	}
+	
+	public void checkCPF(){
+		Client c = usuerService.checkCpf(user.getCpf());
+		if(c != null){
+			cpfInvalid  = true;
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Dado Inválido", "Já existe usuário com este CPF"));
+		} else {
+			cpfInvalid = false;
 		}
 	}
 }

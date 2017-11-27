@@ -1,6 +1,8 @@
 package br.com.centraldaassinatura.loja.bean.announcement;
 
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +39,7 @@ public class AnnouncementBean implements Serializable {
 	private List<Category> categories;
 	private List<SecundaryImage> secundaryImages = new ArrayList<>();
 	private Category categorySelected;
+	private String typeAnnouncement = "novo";
 	private Announcement announcement = new Announcement();
 	private Part mainImage;
 	private Company company;
@@ -99,6 +102,14 @@ public class AnnouncementBean implements Serializable {
 
 	public void setCompany(Company company) {
 		this.company = company;
+	}
+
+	public String getTypeAnnouncement() {
+		return typeAnnouncement;
+	}
+
+	public void setTypeAnnouncement(String typeAnnouncement) {
+		this.typeAnnouncement = typeAnnouncement;
 	}
 
 	public Part getMainImage() {
@@ -197,20 +208,42 @@ public class AnnouncementBean implements Serializable {
 	}
 
 	public RedirectView save() {
+		
 		announcement.setCompany(company);
+		
+		if(typeAnnouncement.equals("novo")){
+			System.out.println("Chamou gateWay pra Criar Plano !!!!!!!!!!!!!!!!!!!!!!!!!");
+			String[] planIdAndChargeId = gateway.createPlan(announcement);
+			System.out.println("Id do Plano e Id do frete: " + planIdAndChargeId);
+			if(planIdAndChargeId[0] == null || planIdAndChargeId[1] == null){
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "Falha na Criação do Plano",
+								"Não foi possível criar o plano. Tente mais tarde."));
+				return new RedirectView("");
+			}
+			announcement.setPlanId(planIdAndChargeId[0]);
+			announcement.setChargeModelIdShipping(planIdAndChargeId[1]);
+		}
+		
 		String relativePath = FS.write(mainImage, "imagesUploaded/companyId" + announcement.getCompany().getId());
 		announcement.setPath(relativePath);
 		if (!secundaryImages.isEmpty()) {
 			announcement.setSecundaryImage(secundaryImages);
 		}
-		System.out.println("Chamou gateWay pra Criar Plano !!!!!!!!!!!!!!!!!!!!!!!!!");
-		String planIdAndChargeId = gateway.createPlan(announcement);
-		System.out.println("Id do Plano e Id do frete: " + planIdAndChargeId);
-		announcement.setPlanId(planIdAndChargeId.substring(0, planIdAndChargeId.indexOf(" ")));
-		announcement.setChargeModelIdShipping(
-				planIdAndChargeId.substring(planIdAndChargeId.indexOf(" ") + 1, planIdAndChargeId.length()));
+
 		announcement.setState("ACTIVE");
 		announcementService.save(announcement);
 		return new RedirectView("/index");
+	}
+	
+	public void checkUrlFormat(FacesContext fc, UIComponent component, Object valueParam) throws ValidatorException {
+		String url = valueParam.toString();
+		if (!url.isEmpty()) {
+			try {
+				new URL(url);
+			} catch (MalformedURLException e) {
+				throw new ValidatorException(new FacesMessage("Formato de URL inválido"));
+			}
+		}
 	}
 }

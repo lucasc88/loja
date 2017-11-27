@@ -30,9 +30,8 @@
 						<p:outputLabel for="cnpj" value="CNPJ: " />
 						<p:inputMask id="cnpj" value="#{companyBean.company.cnpj}"
 							mask="99.999.999/9999-99" validator="#{companyBean.isCnpjValid}" />
-						<p:commandButton value="Validar"
-							actionListener="#{companyBean.checkCNPJ}" update="@form"
-							process="@this cnpj" />
+						<p:commandButton value="Validar" onclick="PF('statusDialog').show()" oncomplete="PF('statusDialog').hide()"
+							actionListener="#{companyBean.checkCNPJ}" update="@form"/>
 					</h:panelGrid>
 				</p:panel>
 
@@ -45,8 +44,9 @@
 								<p:panel header="Dados da Empresa">
 									<h:panelGrid columns="2">
 										<p:outputLabel for="site" value="Site: " title="Opcional"/>
-										<p:inputText id="site" styleClass="inputFields"
-											value="#{companyBean.company.site}" type="text"/>
+										<p:inputText id="site" styleClass="inputFields" validator="#{companyBean.checkUrlFormat}"
+											value="#{companyBean.company.site}">
+										</p:inputText>
 										<br />
 										<p:message for="site" />
 										
@@ -88,9 +88,13 @@
 										<p:message for="neighborhood" />
 
 										<p:outputLabel for="cep" value="CEP: " />
-										<p:inputText id="cep" styleClass="inputFields"
-											value="#{companyBean.company.address.cep}" type="text"
-											required="true" />
+										<p:inputMask id="cep" styleClass="inputFields" mask="99.999-999" 
+											value="#{companyBean.company.address.cep}" required="true"
+											validator="#{companyBean.isCepValid}">
+											<p:ajax event="blur" update="@form"
+												onstart="PF('statusDialog').show()" onerror="PF('statusDialog').hide()"
+												listener="#{companyBean.findCEP()}" oncomplete="PF('statusDialog').hide()"/>
+										</p:inputMask>
 										<br />
 										<p:message for="cep" />
 
@@ -134,6 +138,9 @@
 												<p:outputLabel value="Site: " />
 												<p:outputLabel value="#{companyBean.company.site}" />
 												
+												<p:outputLabel value="CNPJ: " />
+												<p:outputLabel value="#{companyBean.company.cnpj}" />
+												
 												<p:outputLabel value="Nome Fantasia: " />
 												<p:outputLabel value="#{companyBean.company.nameFantasy}" />
 
@@ -173,6 +180,32 @@
 				</div>
 			</p:tab>
 		</h:form>
+		<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+			closable="false" resizable="false" showHeader="false">
+			<div class="row">
+				<div>
+				<center>
+					<p:graphicImage library="img" name="ajax-loader.gif"/></center>
+				</div>
+				<p:outputLabel value="Validando ..." style="margin: 0 10px 0 10px;"/>
+			</div>
+		</p:dialog>
+		<p:dialog header="Aviso" widgetVar="addressNotFoundWid" modal="true" draggable="false" resizable="false" closable="false" height="100">
+			<p:panelGrid columns="1" layout="grid">
+			    <h:outputText value="CEP não localizado. Tente novamente." />
+			    <h:form>
+			    	<p:commandButton value="Fechar" onclick="PF('addressNotFoundWid').hide()" update=":formAnnouncement"/>
+			    </h:form>
+			</p:panelGrid>
+		</p:dialog>  
+		<p:dialog header="Aviso" widgetVar="connectionFailWid" modal="true" draggable="false" resizable="false" closable="false" height="100">
+			<p:panelGrid columns="1" layout="grid">
+			    <h:outputText value="Falha de conexão. Verifique sua rede." />
+			    <h:form>
+			    	<p:commandButton value="Fechar" onclick="PF('connectionFailWid').hide()" update=":formAnnouncement"/>
+			    </h:form>				
+			</p:panelGrid>
+		</p:dialog>
 	</ui:define>
 </ui:composition>
 </html>

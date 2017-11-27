@@ -43,15 +43,19 @@ public class SettingsPersonalBean implements Serializable {
 			address = user.getAddress();
 		}
 	}
-	
+
 	@PostConstruct
-	public void init(){
+	public void init() {
 		Client c = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userLogged");
 		user = usuerService.findByIdWithSubscriptions(c.getId());
-		for (Subscription subscription : user.getSubscription()) {
-			if(subscription.getAgreementId() == null){
-				subscriptionService.remove(subscription);
+		if (user != null) {
+			for (Subscription subscription : user.getSubscription()) {
+				if (subscription.getAgreementId() == null) {
+					subscriptionService.remove(subscription);
+				}
 			}
+		} else {
+			user = new Client();
 		}
 	}
 

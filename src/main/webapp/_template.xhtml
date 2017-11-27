@@ -37,13 +37,14 @@
 					<b:navbarLinks styleClass="marginTopMenu">
 						<b:navLink value="Sobre" href="/about.xhtml" iconAwesome="fa-building-o"></b:navLink>
 					</b:navbarLinks>
-					<form class="navbar-form navbar-left hidden-md hidden-sm hidden-xs"
-						role="search">
+					<h:form class="navbar-form navbar-left hidden-md hidden-sm hidden-xs"
+						role="search" rendered="#{homeBean.indexPage}">
 						<div class="form-group">
-							<input type="text" class="form-control" placeholder="O que procuras?" />
+							<p:inputText class="form-control" placeholder="O que procuras?" value="#{homeBean.keyWord}" />
 						</div>
-						<p:button class="btn btn-default" icon="fa fa-fw fa-search"></p:button>
-					</form>
+						<p:commandButton class="btn btn-default" icon="fa fa-fw fa-search" title="Buscar"
+							actionListener="#{homeBean.findByKeyWord}"/>
+					</h:form>
 					<!-- Following line is needed for TBS 3.0.1 (panel content overflow issue) -->
 					<b:navbarLinks pull="right">
 						<b:navLink value="    " href="#"></b:navLink>

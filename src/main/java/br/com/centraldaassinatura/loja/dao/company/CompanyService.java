@@ -32,4 +32,8 @@ public class CompanyService {
 	public void update(Company company) {
 		companyDao.update(company);
 	}
+
+	public Company findByCnpj(String cnpj) {
+		return companyDao.findByCnpj(cnpj);
+	}
 }

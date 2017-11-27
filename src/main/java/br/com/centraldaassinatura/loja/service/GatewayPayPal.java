@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
-import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -46,7 +45,7 @@ import br.com.centraldaassinatura.loja.model.Client;
 @Model
 public class GatewayPayPal {
 
-	public String createPlan(Announcement announcement) {
+	public String[] createPlan(Announcement announcement) {
 		String clientId = announcement.getCompany().getClientId();
 		String clientSecret = announcement.getCompany().getClientSecret();
 		APIContext apiContext = createAPIContext(clientId, clientSecret, "sandbox");
@@ -124,18 +123,10 @@ public class GatewayPayPal {
 		} catch (PayPalRESTException e) {
 			e.printStackTrace();
 		}
-		return plan.getId() + " " + plan.getPaymentDefinitions().get(0).getChargeModels().get(0).getId();
-		// newClient is like the browser to request another URL
-		// javax.ws.rs.client.Client newClient = ClientBuilder.newClient();
-		// Pagamento pagamento = new Pagamento(total);
-		// String target = "https://book-payment.herokuapp.com/payment";
-		//// Entity transforma objeto em JSON
-		// Entity<Pagamento> entity = Entity.json(pagamento);
-		//// establish the target
-		// WebTarget webTarget = newClient.target(target);
-		//// send request with POST
-		// Response request = webTarget.request().post(entity);
-		// return request.getStatus();
+		String[] a = new String[2];
+		a[0] = plan.getId();
+		a[1] = plan.getPaymentDefinitions().get(0).getChargeModels().get(0).getId();
+		return a;
 	}
 
 	private String compressTexts(String text) {

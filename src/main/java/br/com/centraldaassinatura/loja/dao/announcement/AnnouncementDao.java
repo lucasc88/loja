@@ -37,8 +37,8 @@ public class AnnouncementDao {
 
 	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public List<Announcement> lastAnnouncements() {
-		TypedQuery<Announcement> query = em.createQuery("SELECT a FROM Announcement a WHERE a.state LIKE 'ACTIVE' ORDER BY a.id DESC",
-				Announcement.class);
+		TypedQuery<Announcement> query = em.createQuery(
+				"SELECT a FROM Announcement a WHERE a.state LIKE 'ACTIVE' ORDER BY a.id DESC", Announcement.class);
 		return query.setMaxResults(9).getResultList();
 	}
 
@@ -62,17 +62,19 @@ public class AnnouncementDao {
 	}
 
 	public List<Announcement> allAnnouncementByCompanyId(Integer id) {
-		TypedQuery<Announcement> query = em.createQuery("SELECT a FROM Announcement a WHERE a.company.id = :id", Announcement.class);
+		TypedQuery<Announcement> query = em.createQuery("SELECT a FROM Announcement a WHERE a.company.id = :id",
+				Announcement.class);
 		query.setParameter("id", id);
 		try {
 			return query.getResultList();
-		} catch (NoResultException nre) {//in case it does not find
+		} catch (NoResultException nre) {// in case it does not find
 			return null;
 		}
 	}
 
 	public Announcement findByUuId(String uuId) {
-		TypedQuery<Announcement> query = em.createQuery("SELECT a FROM Announcement a WHERE a.uuId = :uuId", Announcement.class);
+		TypedQuery<Announcement> query = em.createQuery("SELECT a FROM Announcement a WHERE a.uuId = :uuId",
+				Announcement.class);
 		query.setParameter("uuId", uuId);
 		try {
 			return query.getSingleResult();
@@ -83,5 +85,28 @@ public class AnnouncementDao {
 
 	public void update(Announcement ann) {
 		dao.update(ann);
+	}
+
+	public List<Announcement> findByCategories(List<Integer> categoriesSelected) {
+		TypedQuery<Announcement> query = em.createQuery(
+				"SELECT a FROM Announcement a WHERE a.category.id IN (:ids) AND a.state LIKE 'ACTIVE' ORDER BY a.id DESC",
+				Announcement.class);
+		query.setParameter("ids", categoriesSelected);
+		return query.getResultList();
+	}
+
+	public List<Announcement> findByKeyWord(String keyWord) {
+		TypedQuery<Announcement> query = em.createQuery(
+				"SELECT a FROM Announcement a WHERE LOWER(a.title) LIKE :name AND a.state LIKE 'ACTIVE' ORDER BY a.id DESC",
+				Announcement.class);
+		query.setParameter("name", "%" + keyWord.toLowerCase() + "%");
+		return query.getResultList();
+	}
+
+	public List<Announcement> bestSellerAnnouncements() {
+		TypedQuery<Announcement> query = em.createQuery(
+				"SELECT a FROM Announcement a JOIN FETCH a.subscriptions s WHERE a.state LIKE 'ACTIVE' GROUP BY a,s ORDER BY SIZE(a.subscriptions) DESC",
+				Announcement.class);
+		return query.getResultList();
 	}
 }
