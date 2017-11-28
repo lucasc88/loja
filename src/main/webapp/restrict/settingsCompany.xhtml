@@ -97,9 +97,10 @@
 			<br/>
 			<br/>
 			
-			<p:commandButton type="button" value="Reset no Gráfico" icon="ui-icon-cancel" onclick="PF('chart').resetZoom()"/>
+			<p:commandButton type="button" value="Reset no Gráfico" icon="ui-icon-cancel" onclick="PF('chart').resetZoom()"
+				rendered="#{not empty settingsCompanyBean.zoomModel.series}"/>
 			<p:chart id="chartSub" type="line" model="#{settingsCompanyBean.zoomModel}" style="height:400px;"
-				widgetVar="chart" responsive="true"/>
+				widgetVar="chart" responsive="true" rendered="#{not empty settingsCompanyBean.zoomModel.series}"/>
 			
 		</h:form>
 		<p:dialog widgetVar="statusDialog" modal="true" draggable="false"

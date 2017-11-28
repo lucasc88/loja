@@ -66,7 +66,7 @@ public class GatewayPayPal {
 		PaymentDefinition paymentDefinition = new PaymentDefinition();
 		paymentDefinition.setName("Pagamento Regular");
 		paymentDefinition.setType("REGULAR");
-		paymentDefinition.setFrequency(announcement.getFrequency());// DAY,
+		paymentDefinition.setFrequency(findFrequency(announcement.getFrequency()));// DAY,
 																	// WEEK,
 																	// MONTH,
 																	// YEAR
@@ -107,8 +107,8 @@ public class GatewayPayPal {
 		// pagamento
 		MerchantPreferences merchantPreferences = new MerchantPreferences();
 		merchantPreferences.setSetupFee(c);
-		merchantPreferences.setCancelUrl("http://localhost:8080/paymentcanceled.xhtml");
-		merchantPreferences.setReturnUrl("http://localhost:8080/paymentsuccess.xhtml");
+		merchantPreferences.setCancelUrl("https://centraldaassinatura.com.br/paymentcanceled.xhtml");
+		merchantPreferences.setReturnUrl("https://centraldaassinatura.com.br/paymentsuccess.xhtml");
 		// 0 permite inúmeras falhas de cobranca
 		merchantPreferences.setMaxFailAttempts("0");
 		// Permite a cobrança automática do valor pendente no próximo ciclo
@@ -127,6 +127,27 @@ public class GatewayPayPal {
 		a[0] = plan.getId();
 		a[1] = plan.getPaymentDefinitions().get(0).getChargeModels().get(0).getId();
 		return a;
+	}
+
+	private String findFrequency(String frequency) {
+		String v = "DAY";
+		switch (frequency) {
+		case "Diária":
+			v = "DAY";
+			break;
+		case "Senamal":
+			v = "WEEK";
+			break;
+		case "Mensal":
+			v = "MONTH";
+			break;
+		case "Anual":
+			v = "YEAR";
+			break;
+		default:
+			break;
+		}
+		return v;
 	}
 
 	private String compressTexts(String text) {
@@ -246,25 +267,17 @@ public class GatewayPayPal {
 
 		try {
 			APIContext apiContext = createAPIContext(clientId, clientSecret, "sandbox");
-			agreement = agreement.create(apiContext);
-			for (Links links : agreement.getLinks()) {
+			Agreement newAgreement = agreement.create(apiContext);
+			for (Links links : newAgreement.getLinks()) {
 				if ("approval_url".equals(links.getRel())) {
 					System.out.println("URL do PayPal: " + links.getHref());
 					String urlWithToken = links.getHref();
 					System.out.println("link do PayPal p/ pagar: " + urlWithToken);
 					String[] urlAndAgreementId = new String[3];
 					urlAndAgreementId[0] = urlWithToken;
-					urlAndAgreementId[1] = agreement.getId();
-					urlAndAgreementId[2] = agreement.getStartDate();
+					urlAndAgreementId[1] = newAgreement.getId();
+					urlAndAgreementId[2] = newAgreement.getStartDate();
 					return urlAndAgreementId;
-					// PRIMEIRO redirecionar p/ pagar no PayPal, depois do
-					// pagamento daí ativa
-					// @SuppressWarnings("unused")
-					// URL url = new URL(urlWithToken);
-					// REDIRECT USER TO url, no fim da url tem o token
-					// exemplo:
-					// https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=EC-9L961879N4220104M
-					// break;
 				}
 			}
 		} catch (PayPalRESTException e) {
@@ -434,8 +447,9 @@ public class GatewayPayPal {
 		refreshToken(clientId, clientSecret);
 		Plan newPlan = getPlan(planId, apiContext);
 		newPlan = inactivePlan(apiContext, newPlan);
-		System.out.println(newPlan.toString());
-		return newPlan.getState();
+		Plan updatedPlan = getPlan(planId, apiContext);
+		System.out.println(updatedPlan.toString());
+		return "INACTIVE";
 	}
 
 }

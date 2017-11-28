@@ -117,6 +117,7 @@ public class CheckoutBean implements Serializable {
 
 	public String sendPayment() {
 		String[] datas = gateway.newAgreement(user, itemToBeFinalized.getAnnouncement(), getShipping());
+		System.out.println("$$$$$$$$$$$$$$$$$$$$$$$ retorno das assinatura criada" + datas.toString());
 		String url = datas[0];
 		String agreementId = datas[1];
 		String paymentStartDate = datas[2];
@@ -126,6 +127,7 @@ public class CheckoutBean implements Serializable {
 		// ao chegar em paymentsuccess.xhtml ativar a assinatura e atualiza-la
 		Subscription s = new Subscription(agreementId, "PENDING", gateway.extractedTokenFromURL(url), user,
 				itemToBeFinalized.getAnnouncement(), payStartDate, payLastDate, getShipping());
+		s.setAnnouncement(itemToBeFinalized.getAnnouncement());
 		subscriptionService.save(s);
 		shoppingCart.remove(itemToBeFinalized);
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
@@ -148,17 +150,16 @@ public class CheckoutBean implements Serializable {
 		System.out.println("Cálculo último dia: frequenci: " + frequency);
 		Instant instant = null;
 		switch (frequency) {
-		case "DAY":
+		case "Diária":
 			instant = ZonedDateTime.now().plus(qtd, ChronoUnit.DAYS).toInstant();
 			break;
-		case "WEEK":
+		case "Semanal":
 			instant = ZonedDateTime.now().plus(qtd, ChronoUnit.WEEKS).toInstant();
 			break;
-		case "MONTH":
+		case "Mensal":
 			instant = ZonedDateTime.now().plus(qtd, ChronoUnit.MONTHS).toInstant();
-//			ZonedDateTime.now().plus(qtd, ChronoUnit.MONTHS);
 			break;
-		case "YEAR":
+		case "Anual":
 			instant = ZonedDateTime.now().plus(qtd, ChronoUnit.YEARS).toInstant();
 			break;
 		default:

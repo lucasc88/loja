@@ -21,11 +21,23 @@
 				<p:outputLabel style="font-size: 24px;margin-bottom: 32px;"
 					value="Preço: #{settingsAnnouncementBean.ann.price}"/>
 		       	<p:commandButton value="Cancelar" actionListener="#{settingsAnnouncementBean.cancelAnnouncement}"
-		       		update="@form" disabled="#{settingsAnnouncementBean.ann.state == 'INACTIVE'}">
+		       		update="@form" disabled="#{settingsAnnouncementBean.ann.state == 'INACTIVE'}" onclick="PF('statusDialogPlan').show()"
+		       		oncomplete="PF('statusDialogPlan').hide()">
 			        <p:confirm header="Confirmação" message="Será cancelado o Plano, mas assinantes desse plano ainda ficarão ativos. Confirma o cancelamento?" icon="ui-icon-alert" />
 			    </p:commandButton>
 			</h:panelGrid>
 		</h:form>
+		<p:dialog widgetVar="statusDialogPlan" modal="true" draggable="false"
+			closable="false" resizable="false" showHeader="false">
+			<div class="row">
+				<div>
+				<center>
+					<p:graphicImage library="img" name="ajax-loader.gif"/></center>
+				</div>
+				<p:outputLabel value="Cancelando o plano ..." style="margin: 0 10px 0 10px;"/>
+			</div>
+		</p:dialog>
+		
 		<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
 			closable="false" resizable="false" showHeader="false">
 			<div class="row">

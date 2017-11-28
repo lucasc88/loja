@@ -6,6 +6,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.context.RequestContext;
+
 import br.com.centraldaassinatura.loja.dao.announcement.AnnouncementService;
 import br.com.centraldaassinatura.loja.model.Announcement;
 import br.com.centraldaassinatura.loja.service.GatewayPayPal;
@@ -25,14 +27,15 @@ public class SettingsAnnouncementBean implements Serializable{
 	public void findAnnouncementByUuId(){
 		System.out.println("!!!!!!!!!!!!!!! UuId: " + uuId);
 		ann = announcementService.findByUuId(uuId);
-		System.out.println("!!!!!!!!!!!!!!! ann.getCompany().getClientId(): " + ann.getCompany().getClientId());
-		String status = gateway.showAnnouncementDetails(ann.getCompany().getClientId(),
-				ann.getCompany().getClientSecret(),
-				ann.getPlanId());
-		System.out.println("!!!!!!!!!!!!!!! status do plano: " + status);
-		if(!ann.getState().equalsIgnoreCase(status)){
-			ann.setState(status);
-			announcementService.update(ann);
+		if(ann.getPlanId() != null && !ann.getPlanId().isEmpty()){
+			String status = gateway.showAnnouncementDetails(ann.getCompany().getClientId(),
+					ann.getCompany().getClientSecret(),
+					ann.getPlanId());
+			System.out.println("!!!!!!!!!!!!!!! status do plano: " + status);
+			if(!ann.getState().equalsIgnoreCase(status)){
+				ann.setState(status);
+				announcementService.update(ann);
+			}
 		}
 	}
 
@@ -53,8 +56,15 @@ public class SettingsAnnouncementBean implements Serializable{
 	}
 
 	public void cancelAnnouncement(){
-		String state = gateway.cancelPlan(ann.getCompany().getClientId(), ann.getCompany().getClientSecret(), ann.getPlanId());
-		ann.setState(state);
-		announcementService.update(ann);
+		if(ann.getPlanId() != null && !ann.getPlanId().isEmpty()){
+			String state = gateway.cancelPlan(ann.getCompany().getClientId(), ann.getCompany().getClientSecret(), ann.getPlanId());
+			System.out.println("@@@@@@@@@@@@@@@@@@@@ status cancelado? " + state);
+			ann.setState(state);
+			announcementService.update(ann);
+		} else {
+			ann.setState("INACTIVE");
+			announcementService.update(ann);
+		}
+		RequestContext.getCurrentInstance().update("formSettings");
 	}
 }
